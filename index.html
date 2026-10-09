@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mary Chickering</title>
+  <meta name="description" content="Mary Chickering: projects, roles, and writing.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Mary Chickering",
+    "url": "https://marychickering.com",
+    "image": "https://marychickering.com/mary-chickering.jpg",
+    "affiliation": "Greenwich Country Day School",
+    "sameAs": [
+      "https://www.linkedin.com/in/mary-chickering-a65706243",
+      "https://github.com/mchickering08"
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --surface: #ffffff;
+      --text: #1c1917;
+      --muted: #78716c;
+      --accent: #c2410c;
+      --accent-soft: #fde7d9;
+      --line: #ece6dd;
+      --shadow: 0 1px 2px rgba(28, 25, 23, .04), 0 8px 24px rgba(28, 25, 23, .06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #12110f;
+        --surface: #1c1a17;
+        --text: #f5f2ed;
+        --muted: #a8a29e;
+        --accent: #fb923c;
+        --accent-soft: #3a2416;
+        --line: #2c2925;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.65 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: 880px; margin: 0 auto; padding: 14px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 1.15rem; }
+    .nav-links { display: flex; gap: 22px; font-size: .92rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--accent); }
+
+    main { max-width: 880px; margin: 0 auto; padding: 0 24px 96px; }
+
+    /* Hero */
+    .hero {
+      padding: 72px 0 8px;
+      display: grid; grid-template-columns: auto 1fr; gap: 36px; align-items: center;
+    }
+    .avatar {
+      width: 148px; height: 148px; border-radius: 50%;
+      background: linear-gradient(135deg, #f97316, #c2410c 60%, #7c2d12);
+      object-fit: cover; border: 4px solid var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .eyebrow {
+      display: inline-block; font-size: .8rem; font-weight: 600; letter-spacing: .04em;
+      color: var(--accent); background: var(--accent-soft);
+      padding: 4px 12px; border-radius: 999px; margin-bottom: 14px;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif; font-weight: 600;
+      font-size: clamp(2.4rem, 6vw, 3.6rem); line-height: 1.05; margin: 0 0 22px;
+      letter-spacing: -.02em;
+    }
+    .tagline { color: var(--muted); font-size: 1.12rem; max-width: 520px; margin: 0 0 24px; }
+    .socials { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 10px; font-size: .92rem; font-weight: 500;
+      background: var(--surface); border: 1px solid var(--line);
+      transition: transform .15s, border-color .15s, color .15s;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--accent); }
+    .btn svg { width: 16px; height: 16px; fill: currentColor; }
+    .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .btn.primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* Sections */
+    section { padding-top: 56px; scroll-margin-top: 60px; }
+    h2 {
+      font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 1.7rem;
+      margin: 0 0 24px; display: flex; align-items: center; gap: 14px;
+    }
+    h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+    /* Timeline (roles) */
+    .timeline { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--line); }
+    .timeline li { position: relative; padding: 0 0 30px 28px; }
+    .timeline li:last-child { padding-bottom: 0; }
+    .timeline li::before {
+      content: ""; position: absolute; left: -7px; top: 7px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--accent);
+    }
+    .role-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .role-title { font-weight: 600; font-size: 1.05rem; }
+    .role-title a { color: var(--accent); }
+    .role-title a:hover { text-decoration: underline; }
+    .date { color: var(--muted); font-size: .88rem; white-space: nowrap; }
+    .desc { color: var(--muted); margin-top: 4px; }
+
+    /* Cards (projects) */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .card {
+      display: block; background: var(--surface); border: 1px solid var(--line);
+      border-radius: 16px; padding: 22px; box-shadow: var(--shadow);
+      transition: transform .2s, border-color .2s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .card h3 { margin: 0 0 6px; font-size: 1.08rem; display: flex; justify-content: space-between; }
+    .card h3 .arrow { color: var(--muted); transition: transform .2s, color .2s; }
+    .card:hover .arrow { transform: translate(3px, -3px); color: var(--accent); }
+    .card p { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
+    .card.wide { grid-column: 1 / -1; }
+    .card.wide:hover { transform: none; }
+    .card-foot { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .card-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .award {
+      display: inline-flex; align-items: center; gap: 8px; margin: 0 0 12px;
+      font-size: .85rem; font-weight: 600; color: var(--accent);
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: .76rem; font-weight: 500; padding: 3px 10px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--accent);
+    }
+
+    /* Press */
+    .press { list-style: none; padding: 0; margin: 0; }
+    .press li a {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 18px 4px; border-bottom: 1px solid var(--line); transition: padding .2s;
+    }
+    .press li:first-child a { border-top: 1px solid var(--line); }
+    .press li a:hover { padding-left: 12px; }
+    .press li a:hover .press-title { color: var(--accent); }
+    .press-title { font-weight: 500; }
+    .press-meta { color: var(--muted); font-size: .88rem; white-space: nowrap; }
+
+    footer {
+      max-width: 880px; margin: 0 auto; padding: 28px 24px 48px;
+      border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { gap: 14px; font-size: .85rem; }
+      .hero { grid-template-columns: 1fr; padding: 48px 0 0; gap: 24px; }
+      .avatar { width: 96px; height: 96px; font-size: 2rem; }
+      .grid { grid-template-columns: 1fr; }
+      .press li a { flex-direction: column; align-items: flex-start; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="logo">Mary Chickering</a>
+      <div class="nav-links">
+        <a href="#projects">Projects/Roles</a>
+        <a href="#press">Articles</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <img class="avatar" src="mary-chickering.jpg" alt="Mary Chickering">
+      <div>
+        <span class="eyebrow">Greenwich Country Day School · Class of 2027</span>
+        <h1>Mary Chickering</h1>
+        <div class="socials">
+          <a class="btn primary" href="mailto:mchickering08@gmail.com">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>
+            Email me
+          </a>
+          <a class="btn" href="https://www.linkedin.com/in/mary-chickering-a65706243">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM8.3 18.3H5.7V9.7h2.6v8.6zM7 8.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm11.3 9.8h-2.6v-4.2c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2v4.3h-2.6V9.7h2.5v1.2c.4-.7 1.2-1.4 2.5-1.4 2.7 0 3.2 1.8 3.2 4.1v4.7z"/></svg>
+            LinkedIn
+          </a>
+          <a class="btn" href="https://github.com/mchickering08">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <section id="projects">
+      <h2>Projects/Roles</h2>
+      <div class="grid">
+        <a class="card" href="https://tiger-hacks.net/team/" target="_blank" rel="noopener">
+          <h3>TigerHacks <span class="arrow">↗</span></h3>
+          <p>Co-Lead of TigerHacks 2026, a student-run coding competition for high schoolers hosted at Greenwich Country Day School.</p>
+          <div class="tags"><span class="tag">Co-Lead</span><span class="tag">Hackathon</span></div>
+        </a>
+        <a class="card" href="https://gemsexplorerpost911.org/our-leadership/" target="_blank" rel="noopener">
+          <h3>Greenwich EMS Explorer Post 911 <span class="arrow">↗</span></h3>
+          <p>President of the student Executive Board for this youth EMS program sponsored by Greenwich EMS.</p>
+          <div class="tags"><span class="tag">President</span><span class="tag">EMS</span></div>
+        </a>
+        <div class="card wide">
+          <div class="award">🏆 2026 NCWIT Aspirations in Computing Award · Connecticut Affiliate Winner</div>
+          <h3>Detecting Parkinson’s with AI</h3>
+          <p>Junior thesis: an interpretable dual-input convolutional neural network that classifies Parkinson’s disease from DaTSCAN brain scans, reaching 95.5% AUC and 90.7% accuracy.</p>
+          <div class="card-foot">
+            <div class="tags"><span class="tag">Research</span><span class="tag">Machine Learning</span></div>
+            <div class="card-actions">
+              <a class="btn" href="https://www.gcds.net/news/2026-10-06/mary-chickering-27-teaching-a-computer-to-see-parkinson-s" target="_blank" rel="noopener">Read article</a>
+              <a class="btn primary" href="thesis.pdf" target="_blank" rel="noopener">Read paper ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="press">
+      <h2>Articles</h2>
+      <ul class="press">
+        <li><a href="https://www.gcds.net/news/2026-10-06/mary-chickering-27-teaching-a-computer-to-see-parkinson-s" target="_blank" rel="noopener"><span class="press-title">Mary Chickering ’27: Teaching a Computer to See Parkinson’s</span><span class="press-meta">GCDS · Oct 2026</span></a></li>
+        <li><a href="https://www.greenwichsentinel.com/2026/05/22/news-briefs-may-22/" target="_blank" rel="noopener"><span class="press-title">GCDS Students Earn Technology Honors</span><span class="press-meta">Greenwich Sentinel · May 2026</span></a></li>
+        <li><a href="https://www.gcds.net/news/2026-05-20/gcds-juniors-mary-chickering-and-kaki-weiksner-win-ct-computing-awards" target="_blank" rel="noopener"><span class="press-title">GCDS Juniors Mary Chickering and Kaki Weiksner Win CT Computing Awards</span><span class="press-meta">GCDS · May 2026</span></a></li>
+        <li><a href="https://greenwichfreepress.com/schools/gcds-juniors-recognized-by-the-national-center-for-women-information-technology-247898/" target="_blank" rel="noopener"><span class="press-title">GCDS Juniors Recognized by the National Center for Women &amp; Information Technology</span><span class="press-meta">Greenwich Free Press · May 2026</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Mary Chickering</span>
+    <span>marychickering.com</span>
+  </footer>
+</body>
+</html>
