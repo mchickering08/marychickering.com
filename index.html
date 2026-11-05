@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mary Chickering</title>
-  <meta name="description" content="Mary Chickering: projects, roles, and writing.">
+  <title>Mary Chickering | Greenwich Country Day School</title>
+  <meta name="description" content="Mary Chickering, Greenwich Country Day School Class of 2027: Parkinson’s disease AI research, 2026 NCWIT Aspirations in Computing Connecticut Affiliate winner, TigerHacks Co-Lead, and President of Greenwich EMS Explorer Post 911.">
   <script>
     if (location.protocol === "http:" && location.hostname.endsWith("marychickering.com")) {
       location.replace("https://" + location.host + location.pathname + location.search + location.hash);
@@ -23,18 +23,113 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "https://marychickering.com/",
+  "primaryImageOfPage": "https://marychickering.com/mary-chickering.jpg",
+  "image": [
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/mary-chickering.jpg",
+      "caption": "Mary Chickering"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/mary-chickering-parkinsons-science-fair-poster.jpg",
+      "caption": "Science fair poster by Mary Chickering on classifying Parkinson’s disease from DaTSCAN images"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-parkinsons-research-uconn-health.jpg",
+      "caption": "Mary Chickering presenting her Parkinson’s disease research at UConn Health"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-student-speaker-upper-school-open-house.jpg",
+      "caption": "Mary Chickering, student speaker at the Greenwich Country Day School Upper School Open House"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-tigerhacks-team.jpg",
+      "caption": "Mary Chickering with the TigerHacks Team"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-student-panel.jpg",
+      "caption": "Mary Chickering speaking on a student panel"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-student-speaker-lower-middle-school-open-house.jpg",
+      "caption": "Mary Chickering, student speaker at the Greenwich Country Day School Lower and Middle School Open House"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-academic-award.jpg",
+      "caption": "Mary Chickering holding an academic award from Greenwich Country Day School"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-panel-discussion.jpg",
+      "caption": "Mary Chickering holding a microphone during a panel discussion"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-middle-school-computer-science-class.jpg",
+      "caption": "Mary Chickering working with a middle school computer science class"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-student-speaker-lower-middle-school-open-house-stage.jpg",
+      "caption": "Mary Chickering on stage as student speaker at the Greenwich Country Day School Lower and Middle School Open House"
+    },
+    {
+      "@type": "ImageObject",
+      "contentUrl": "https://marychickering.com/photos/mary-chickering-teaching-computer-science-middle-school.jpg",
+      "caption": "Mary Chickering teaching computer science to middle school students"
+    }
+  ],
+  "mainEntity": {
     "@type": "Person",
     "name": "Mary Chickering",
-    "url": "https://marychickering.com",
+    "url": "https://marychickering.com/",
     "image": "https://marychickering.com/mary-chickering.jpg",
-    "affiliation": "Greenwich Country Day School",
+    "affiliation": {
+      "@type": "EducationalOrganization",
+      "name": "Greenwich Country Day School"
+    },
+    "award": "2026 NCWIT Aspirations in Computing High School Award, Connecticut Affiliate Winner",
+    "knowsAbout": [
+      "Machine learning",
+      "Computer science",
+      "Parkinson’s disease research",
+      "Emergency medical services"
+    ],
     "sameAs": [
       "https://www.linkedin.com/in/mary-chickering-a65706243",
       "https://github.com/mchickering08"
+    ],
+    "subjectOf": [
+      {
+        "@type": "Article",
+        "url": "https://www.gcds.net/news/2026-10-06/mary-chickering-27-teaching-a-computer-to-see-parkinson-s"
+      },
+      {
+        "@type": "Article",
+        "url": "https://www.greenwichsentinel.com/2026/05/22/news-briefs-may-22/"
+      },
+      {
+        "@type": "Article",
+        "url": "https://www.gcds.net/news/2026-05-20/gcds-juniors-mary-chickering-and-kaki-weiksner-win-ct-computing-awards"
+      },
+      {
+        "@type": "Article",
+        "url": "https://greenwichfreepress.com/schools/gcds-juniors-recognized-by-the-national-center-for-women-information-technology-247898/"
+      }
     ]
   }
+}
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -186,6 +281,35 @@
     .press-title { font-weight: 500; }
     .press-meta { color: var(--muted); font-size: .88rem; white-space: nowrap; }
 
+    /* Photo gallery */
+    .gallery { padding-top: 56px; scroll-margin-top: 60px; }
+    .gallery-viewport { position: relative; }
+    .gallery-window { overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; cursor: grab; }
+    .gallery-window::-webkit-scrollbar { display: none; }
+    .gallery-window.dragging { cursor: grabbing; user-select: none; }
+    .gallery-track { display: flex; width: max-content; }
+    .gallery-arrow {
+      position: absolute; top: calc(50% - 26px); z-index: 2; width: 44px; height: 44px; padding: 0;
+      border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--text);
+      font-size: 1.2rem; line-height: 1; cursor: pointer; box-shadow: var(--shadow);
+      transition: color .15s, border-color .15s;
+    }
+    .gallery-arrow:hover, .gallery-arrow:focus-visible { color: var(--accent); border-color: var(--accent); }
+    .gallery-arrow.prev { left: 12px; }
+    .gallery-arrow.next { right: 12px; }
+    .photo { position: relative; margin: 0 16px 0 0; flex: none; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+    .photo img { display: block; height: 280px; width: auto; }
+    .photo figcaption {
+      position: absolute; left: 0; right: 0; bottom: 0; padding: 36px 14px 12px;
+      text-align: center; color: #fff; font-size: .85rem; font-weight: 500; line-height: 1.35;
+      background: linear-gradient(transparent, rgba(0, 0, 0, .72)); pointer-events: none;
+    }
+
+    /* Poster on the thesis card */
+    .poster { margin: 18px 0 0; max-width: 560px; }
+    .poster img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); }
+    .poster figcaption { color: var(--muted); font-size: .85rem; margin-top: 8px; }
+
     footer {
       max-width: 880px; margin: 0 auto; padding: 28px 24px 48px;
       border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem;
@@ -197,6 +321,7 @@
       .hero { grid-template-columns: 1fr; padding: 48px 0 0; gap: 24px; }
       .avatar { width: 96px; height: 96px; font-size: 2rem; }
       .grid { grid-template-columns: 1fr; }
+      .photo img { height: 210px; }
       .press li a { flex-direction: column; align-items: flex-start; gap: 2px; }
     }
   </style>
@@ -214,7 +339,7 @@
 
   <main>
     <header class="hero">
-      <img class="avatar" src="mary-chickering.jpg?v=3" alt="Mary Chickering">
+      <img class="avatar" src="mary-chickering.jpg" alt="Mary Chickering" width="640" height="640">
       <div>
         <span class="eyebrow">Greenwich Country Day School · Class of 2027</span>
         <h1>Mary Chickering</h1>
@@ -259,6 +384,10 @@
               <a class="btn primary" href="thesis.pdf" target="_blank" rel="noopener">Read paper ↗</a>
             </div>
           </div>
+          <figure class="poster">
+            <a href="mary-chickering-parkinsons-science-fair-poster.jpg" target="_blank" rel="noopener"><img src="mary-chickering-parkinsons-science-fair-poster.jpg" alt="Science fair poster by Mary Chickering: Convolutional Neural Network Classification of DaTSCAN Images for Parkinson’s Disease with Interpretability Analysis" width="2000" height="1500" loading="lazy" decoding="async"></a>
+            <figcaption>Mary Chickering’s science fair poster: Convolutional Neural Network Classification of DaTSCAN Images for Parkinson’s Disease with Interpretability Analysis. Click to view full size.</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -274,9 +403,149 @@
     </section>
   </main>
 
+  <section id="photos" class="gallery" aria-label="Photos of Mary Chickering">
+    <div class="gallery-viewport">
+    <button class="gallery-arrow prev" type="button" aria-label="Previous photos">←</button>
+    <button class="gallery-arrow next" type="button" aria-label="Next photos">→</button>
+    <div class="gallery-window">
+      <div class="gallery-track">
+        <figure class="photo">
+          <a href="photos/mary-chickering-parkinsons-research-uconn-health.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-parkinsons-research-uconn-health.jpg" alt="Mary Chickering presenting her Parkinson’s disease research at UConn Health" width="708" height="1000" decoding="async"></a>
+          <figcaption>Presenting Parkinson’s research at UConn Health</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-student-speaker-upper-school-open-house.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-student-speaker-upper-school-open-house.jpg" alt="Mary Chickering, student speaker at the Greenwich Country Day School Upper School Open House" width="1400" height="934" decoding="async"></a>
+          <figcaption>Student speaker, Upper School Open House</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-tigerhacks-team.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-tigerhacks-team.jpg" alt="Mary Chickering with the TigerHacks Team" width="1400" height="934" decoding="async"></a>
+          <figcaption>TigerHacks Team</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-student-panel.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-student-panel.jpg" alt="Mary Chickering speaking on a student panel" width="1400" height="934" decoding="async"></a>
+          <figcaption>Speaking on a student panel</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-student-speaker-lower-middle-school-open-house.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-student-speaker-lower-middle-school-open-house.jpg" alt="Mary Chickering, student speaker at the Greenwich Country Day School Lower and Middle School Open House" width="1400" height="934" decoding="async"></a>
+          <figcaption>Student speaker, Lower/Middle School Open House</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-academic-award.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-academic-award.jpg" alt="Mary Chickering holding an academic award from Greenwich Country Day School" width="1400" height="933" decoding="async"></a>
+          <figcaption>Academic award at Greenwich Country Day School</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-panel-discussion.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-panel-discussion.jpg" alt="Mary Chickering holding a microphone during a panel discussion" width="667" height="1000" decoding="async"></a>
+          <figcaption>Panel discussion</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-middle-school-computer-science-class.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-middle-school-computer-science-class.jpg" alt="Mary Chickering working with a middle school computer science class" width="1400" height="933" decoding="async"></a>
+          <figcaption>Working with a middle school CS class</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-student-speaker-lower-middle-school-open-house-stage.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-student-speaker-lower-middle-school-open-house-stage.jpg" alt="Mary Chickering on stage as student speaker at the Greenwich Country Day School Lower and Middle School Open House" width="1400" height="934" decoding="async"></a>
+          <figcaption>Student speaker, Lower/Middle School Open House</figcaption>
+        </figure>
+        <figure class="photo">
+          <a href="photos/mary-chickering-teaching-computer-science-middle-school.jpg" target="_blank" rel="noopener"><img src="photos/mary-chickering-teaching-computer-science-middle-school.jpg" alt="Mary Chickering teaching computer science to middle school students" width="1400" height="933" decoding="async"></a>
+          <figcaption>Teaching computer science to middle school students</figcaption>
+        </figure>
+      </div>
+    </div>
+    </div>
+  </section>
+
   <footer>
     <span>© 2026 Mary Chickering</span>
     <span>marychickering.com</span>
   </footer>
+  <script>
+    (() => {
+      const viewport = document.querySelector(".gallery-viewport");
+      const win = viewport.querySelector(".gallery-window");
+      const track = viewport.querySelector(".gallery-track");
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const speed = 40; // pixels per second
+
+      // Duplicate the photos so the row loops with no gap
+      if (!reduced) {
+        [...track.children].forEach(photo => {
+          const copy = photo.cloneNode(true);
+          copy.setAttribute("aria-hidden", "true");
+          copy.querySelector("img").alt = "";
+          copy.querySelector("a").tabIndex = -1;
+          track.append(copy);
+        });
+      }
+
+      const loop = () => (reduced ? 0 : track.scrollWidth / 2);
+      let pos = 0, hovering = false, focused = false, dragging = false, resumeAt = 0, last;
+
+      // Hold the auto-slide briefly after someone scrolls by hand
+      const hold = () => { resumeAt = performance.now() + 2500; };
+
+      function wrap() {
+        const w = loop();
+        if (!w) return;
+        if (win.scrollLeft >= w) win.scrollLeft -= w;
+        else if (win.scrollLeft <= 0) win.scrollLeft += w;
+      }
+
+      function tick(now) {
+        const dt = last === undefined ? 0 : (now - last) / 1000;
+        last = now;
+        if (!reduced && !hovering && !focused && !dragging && now >= resumeAt) {
+          pos += speed * dt;
+          if (pos >= loop()) pos -= loop();
+          win.scrollLeft = pos;
+        } else {
+          pos = win.scrollLeft;
+        }
+        requestAnimationFrame(tick);
+      }
+
+      win.addEventListener("scroll", () => { if (hovering || dragging || performance.now() < resumeAt) wrap(); }, { passive: true });
+      win.addEventListener("touchstart", hold, { passive: true });
+      win.addEventListener("touchmove", hold, { passive: true });
+      viewport.addEventListener("mouseenter", () => { hovering = true; });
+      viewport.addEventListener("mouseleave", () => { hovering = false; });
+      viewport.addEventListener("focusin", () => { focused = true; });
+      viewport.addEventListener("focusout", () => { focused = false; });
+
+      // Arrow buttons: jump the loop first so the slide never hits an end
+      viewport.querySelectorAll(".gallery-arrow").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const dir = btn.classList.contains("next") ? 1 : -1;
+          const step = Math.max(320, win.clientWidth * 0.7);
+          const w = loop();
+          if (w && dir > 0 && win.scrollLeft + step >= w) win.scrollLeft -= w;
+          if (w && dir < 0 && win.scrollLeft - step <= 0) win.scrollLeft += w;
+          hold();
+          win.scrollBy({ left: dir * step, behavior: reduced ? "auto" : "smooth" });
+        });
+      });
+
+      // Click and drag with a mouse
+      let startX = 0, startLeft = 0, moved = false;
+      win.addEventListener("pointerdown", e => {
+        if (e.pointerType !== "mouse" || e.button !== 0) return;
+        dragging = true; moved = false;
+        startX = e.clientX; startLeft = win.scrollLeft;
+      });
+      addEventListener("pointermove", e => {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 5) { moved = true; win.classList.add("dragging"); }
+        if (moved) win.scrollLeft = startLeft - dx;
+      });
+      addEventListener("pointerup", () => {
+        if (!dragging) return;
+        dragging = false; win.classList.remove("dragging"); hold();
+      });
+      win.addEventListener("click", e => { if (moved) { e.preventDefault(); moved = false; } }, true);
+      win.addEventListener("dragstart", e => e.preventDefault());
+
+      requestAnimationFrame(tick);
+    })();
+  </script>
 </body>
 </html>

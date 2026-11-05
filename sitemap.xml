@@ -3,9 +3,42 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://marychickering.com/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <image:image>
       <image:loc>https://marychickering.com/mary-chickering.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/mary-chickering-parkinsons-science-fair-poster.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-parkinsons-research-uconn-health.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-student-speaker-upper-school-open-house.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-tigerhacks-team.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-student-panel.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-student-speaker-lower-middle-school-open-house.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-academic-award.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-panel-discussion.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-middle-school-computer-science-class.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-student-speaker-lower-middle-school-open-house-stage.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://marychickering.com/photos/mary-chickering-teaching-computer-science-middle-school.jpg</image:loc>
     </image:image>
   </url>
 </urlset>
