@@ -316,6 +316,9 @@
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
     }
 
+    .quiet-link { color: var(--muted); opacity: .45; font-size: .72rem; margin-left: 10px; text-decoration: none; }
+    .quiet-link:hover, .quiet-link:focus-visible { opacity: 1; text-decoration: underline; }
+
     @media (max-width: 640px) {
       .nav-links { gap: 14px; font-size: .85rem; }
       .hero { grid-template-columns: 1fr; padding: 48px 0 0; gap: 24px; }
@@ -456,7 +459,7 @@
 
   <footer>
     <span>© 2026 Mary Chickering</span>
-    <span>marychickering.com</span>
+    <span>marychickering.com <a class="quiet-link" href="/facecard/">log in</a></span>
   </footer>
   <script>
     (() => {

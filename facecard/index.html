@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Face Card: scan your skin, get your card, duel your friends.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Face Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<style>
+/* Layout: game HUD (level, XP, streak) → scan form beside a face map + 8-sign analysis → skin age → routine loadout → daily quests. One column on phones. */
+:root{
+  --bg:#000000; --surface:#0A0A0A; --sunk:#151515; --ink:#FFFFFF; --muted:#8C8C8C; --line:#232323;
+  --accent:#FFFFFF; --accent-ink:#000000; --xp:#FFFFFF;
+  --good:#FFFFFF; --warn:#9A9A9A; --bad:#5C5C5C;
+  --display:"Poppins", "Helvetica Neue", Arial, sans-serif;
+  --body:"Poppins", "Helvetica Neue", Arial, sans-serif;
+  --mono:"Poppins", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05}
+.label{font-size:12px;letter-spacing:.06em;text-transform:lowercase;color:var(--muted)}
+button,input{font:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(0,0,0,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px))}
+.hud-in{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.logo .dot{width:10px;height:10px;background:var(--ink)}
+.hud-stats{margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.lvl{font-weight:500;font-size:12px;background:var(--ink);color:var(--accent-ink);padding:4px 12px;border-radius:999px}
+.xpbar{width:150px;height:8px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--xp);width:0;transition:width .5s}
+.xptext,.streak{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.streak b{color:var(--xp)}
+
+.hero{padding-block:36px 24px;display:grid;gap:10px}
+.hero h1{font-size:clamp(32px,6vw,56px);font-weight:600;letter-spacing:-.035em;max-width:15ch}
+.hero h1 em{font-style:normal;color:var(--muted)}
+.hero p{color:var(--muted);max-width:58ch;margin:0;font-size:16px}
+
+.grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:24px;display:grid;gap:18px;min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.panel-head h2{font-size:22px;font-weight:600;letter-spacing:-.01em}
+
+.drop{display:flex;gap:14px;align-items:center;border:1.5px dashed var(--line);border-radius:20px;padding:14px;cursor:pointer;background:var(--sunk)}
+.drop:hover{border-color:var(--accent)}
+.thumb{width:64px;height:64px;border-radius:20px;background:var(--surface);border:1px solid var(--line);flex:none;overflow:hidden;display:grid;place-items:center;color:var(--muted);font-family:var(--mono);font-size:10px}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.drop b{display:block}
+.drop span{color:var(--muted);font-size:13px}
+.q{display:grid;gap:8px;border:0;padding:0;margin:0;min-width:0}
+.q legend{font-weight:600;padding:0;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:14px;cursor:pointer;background:var(--surface);user-select:none}
+.chips input:checked+label{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chips input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
+.agerow{display:flex;align-items:center;gap:10px;font-weight:600}
+.agerow input{width:76px;padding:8px 10px;border:1px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink);font-family:var(--mono)}
+.btn{appearance:none;border:1px solid var(--accent);border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:500;padding:13px 24px;cursor:pointer;font-size:16px}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-size:14px;padding:9px 14px}
+.fine{font-size:12px;color:var(--muted);margin:0}
+
+/* results */
+.top{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:520px){.top{grid-template-columns:minmax(0,1fr)}}
+.facemap{position:relative;width:100%;max-width:240px;aspect-ratio:3/4;border-radius:20px;overflow:hidden;background:var(--sunk);justify-self:center}
+.facemap img,.facemap svg.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pin{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:4px;pointer-events:none}
+.pin i{width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3);flex:none}
+.pin span{font-family:var(--mono);font-size:10px;font-weight:600;background:rgba(10,12,24,.82);color:#fff;padding:2px 5px;border-radius:20px;white-space:nowrap}
+.pin.l{flex-direction:row-reverse}
+.verdict{display:grid;gap:10px;min-width:0}
+.scorerow{display:flex;align-items:center;gap:16px}
+.ring{position:relative;width:104px;height:104px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .num{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .num b{font-family:var(--display);font-size:36px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.ring .num span{display:block;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.tier{font-family:var(--display);font-size:28px;font-weight:600;letter-spacing:-.02em}
+.roast{color:var(--muted);margin:0;font-size:14px}
+.skinage{display:flex;gap:16px;background:var(--sunk);border-radius:20px;padding:10px 14px;align-items:baseline;flex-wrap:wrap}
+.skinage b{font-family:var(--display);font-size:30px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.skinage span{font-size:13px;color:var(--muted)}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:20px;background:var(--sunk);color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px}
+@media (max-width:520px){.stats{grid-template-columns:minmax(0,1fr)}}
+.stat{text-transform:lowercase;display:grid;grid-template-columns:minmax(0,1fr) 30px;gap:4px 10px;font-size:14px}
+.stat .bar{grid-column:1/-1;height:8px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.stat .bar i{display:block;height:100%;border-radius:99px;transition:width .6s}
+.stat .v{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.weak{font-size:14px;background:var(--sunk);border-radius:20px;padding:10px 12px;margin:0}
+.weak b{color:var(--xp)}
+.share{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.section{margin-top:28px;display:grid;gap:14px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.section-head h2{font-size:28px;font-weight:600;letter-spacing:-.02em}
+.tabs{display:flex;gap:4px;background:var(--sunk);border-radius:999px;padding:4px}
+.tabs button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;color:var(--muted)}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.loadout{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;display:grid;grid-template-rows:auto auto 1fr auto;gap:6px;min-width:0}
+.item .slot{display:flex;justify-content:space-between;gap:8px}
+.item .slot .label:last-child{color:var(--xp)}
+.item .brand{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.item .brand b{color:var(--accent);font-weight:600}
+.item .brand span{color:var(--muted)}
+.item h3{font-family:var(--body);font-size:16px;font-weight:700;line-height:1.25}
+.item p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.item .fix{font-size:12px;font-family:var(--mono);color:var(--muted)}
+.item a{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;justify-self:start}
+.item a:hover{text-decoration:underline}
+
+.quests{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.quest{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:12px 14px;cursor:pointer}
+.quest input{width:20px;height:20px;accent-color:var(--xp);flex:none}
+.quest span{flex:1;min-width:0}
+.quest small{font-family:var(--mono);color:var(--xp);font-size:12px}
+.quest.done span{text-decoration:line-through;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:20px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:20}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.online{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.online b{color:var(--good)}
+.modes{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.modes button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:10px 16px;font-weight:700;cursor:pointer;display:grid;text-align:left;gap:0}
+.modes button small{font-weight:500;color:var(--muted);font-size:12px}
+.modes button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.modes button[aria-pressed="true"] small{color:var(--surface);opacity:.75}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.codein{width:110px;padding:11px 12px;border:1px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink);font-family:var(--mono);font-size:16px;text-transform:lowercase;letter-spacing:.15em}
+.codebox{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--sunk);border-radius:20px;padding:12px 14px;flex-wrap:wrap}
+.codebox b{font-family:var(--mono);font-size:30px;letter-spacing:.25em;line-height:1}
+.players{display:grid;gap:6px}
+.player{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:20px}
+.player img{width:28px;height:28px;border-radius:50%}
+.player .nm{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player .nm small{font-family:var(--mono);font-weight:500;color:var(--muted);margin-left:6px}
+.player .st{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.player.win{border-color:var(--xp);background:color-mix(in srgb,var(--xp) 10%,var(--surface))}
+.clock{text-align:center;padding:14px;border-radius:20px;background:var(--sunk)}
+.clock b{display:block;font-family:var(--display);font-size:48px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.clock span{font-size:14px;color:var(--muted)}
+.clock.live b{color:var(--xp)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.ladder{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow-x:auto}
+.ladder table{width:100%;border-collapse:collapse;font-size:14px;min-width:460px}
+.ladder th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:500}
+.ladder td{padding:10px 14px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.ladder tr:last-child td{border-bottom:0}
+.ladder tr.me td{background:color-mix(in srgb,var(--accent) 9%,var(--surface))}
+.ladder .who{display:flex;align-items:center;gap:8px;font-weight:600}
+.ladder .who img{width:24px;height:24px;border-radius:50%}
+.ladder .pos{font-family:var(--mono);color:var(--muted);width:40px}
+.ladder .elo{font-family:var(--mono);font-weight:600}
+.empty{padding:22px 16px;color:var(--muted);text-align:center;margin:0}
+.cam{position:relative;width:100%;max-width:340px;aspect-ratio:3/4;margin:0 auto;background:var(--sunk);border-radius:32px;overflow:hidden}
+.cam video,.cam img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam video{transform:scaleX(-1)}
+.cam .overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.cam.found .guide ellipse{opacity:.25}
+.cam .guide ellipse{transition:opacity .4s}
+.cam .guide{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.cam .guide ellipse{fill:none;stroke:#fff;stroke-width:1;stroke-dasharray:3 3;opacity:.85}
+.camlive{position:absolute;top:12px;left:12px;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25);color:#fff;padding:5px 12px;border-radius:999px;backdrop-filter:blur(6px);font-size:12px}
+.camlive span{letter-spacing:.1em;opacity:.8}
+.camlive span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#fff;margin-right:6px;vertical-align:middle;animation:blink 1.2s infinite}
+.camlive b{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+@keyframes blink{50%{opacity:.2}}
+.camoff{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px;padding:20px;text-align:center}
+.camoff span{font-size:13px;color:var(--muted);max-width:26ch}
+.nav{display:flex;gap:2px;flex-wrap:wrap}
+.nav a{color:var(--muted);text-decoration:none;font-weight:400;font-size:14px;padding:6px 14px;border-radius:999px;text-transform:lowercase}
+.nav a:hover{color:var(--ink)}
+.nav a[aria-current="page"]{color:var(--accent-ink);background:var(--ink)}
+.logo{color:var(--ink);text-decoration:none;text-transform:lowercase;font-weight:500}
+.view{padding-block:28px 0}
+.viewhead{display:grid;gap:4px;margin-bottom:24px;padding-top:12px}
+.viewhead h2{font-size:clamp(28px,5vw,40px);font-weight:600;letter-spacing:-.035em;text-transform:lowercase}
+.viewhead p{margin:0;color:var(--muted)}
+.home{min-height:calc(100vh - 200px);display:grid;align-content:center;gap:14px;padding-block:24px}
+.home h1{font-size:clamp(36px,7vw,64px);font-weight:600;letter-spacing:-.03em;max-width:14ch}
+.home>p{margin:0;color:var(--muted);font-size:17px;max-width:44ch}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px;max-width:720px}
+@media (max-width:600px){.choices{grid-template-columns:minmax(0,1fr)}}
+.choiceX{position:relative;display:grid;gap:4px;padding:22px;border:1px solid var(--line);border-radius:20px;color:var(--ink);text-decoration:none;background:var(--surface);transition:border-color .15s,background .15s}
+.choice:hover{border-color:var(--ink)}
+.choice b{font-size:22px;font-weight:600;letter-spacing:-.01em}
+.choice>span:not(.label){color:var(--muted);font-size:14px;max-width:30ch}
+.choice i{position:absolute;top:20px;right:22px;font-style:normal;font-size:20px}
+.duelgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:860px){.duelgrid{grid-template-columns:minmax(0,1fr)}}
+.mark{width:18px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;flex:none}
+.mark .f{fill:currentColor;stroke:none}
+.homelogo .mark{width:54px;height:72px;stroke-width:1.2}
+.hero{min-height:calc(100svh - 70px);display:grid;place-content:center;justify-items:center;text-align:center;gap:10px;position:relative;padding-block:40px}
+.heromark .mark{width:88px;height:116px;stroke-width:1}
+.heromark.small .mark{width:44px;height:58px;stroke-width:1.3}
+.float{animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px) rotate(-3deg)}}
+.word{font-size:clamp(52px,12vw,112px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin-top:10px}
+.tag{margin:0;color:var(--muted);font-size:18px}
+.cta{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center}
+.cta .btn,.block .btn{text-decoration:none;display:inline-block}
+.scrollhint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--muted);letter-spacing:.2em}
+.scrollhint::after{content:"";display:block;width:1px;height:28px;background:var(--muted);margin:8px auto 0;animation:drip 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.block{min-height:70svh;display:grid;align-content:center;justify-items:center;text-align:center;gap:14px;padding-block:60px;border-top:1px solid var(--line)}
+.block h2{font-size:clamp(30px,6vw,56px);font-weight:600;letter-spacing:-.04em;line-height:1.05}
+.block .sub{margin:0;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;max-width:880px;margin-top:20px}
+@media (max-width:700px){.steps{grid-template-columns:minmax(0,1fr)}}
+.step{border:1px solid var(--line);border-radius:28px;padding:26px 22px;display:grid;gap:6px;justify-items:start;text-align:left;background:var(--surface)}
+.step .n{width:30px;height:30px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-size:13px;margin-bottom:10px}
+.step b{font-size:20px;font-weight:500}
+.step p{margin:0;color:var(--muted);font-size:14px}
+.signs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:620px;margin-top:16px}
+.signs span{border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-size:15px}
+.ranks{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:8px;width:100%;max-width:420px}
+.ranks li{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:999px;padding:12px 22px;color:var(--muted)}
+.ranks li small{font-size:12px;font-variant-numeric:tabular-nums}
+.ranks li.top{background:var(--ink);color:var(--accent-ink);border-color:var(--ink);font-weight:500}
+.block.end{border-top:0}
+/* scroll reveal: CSS scroll timelines where supported, small JS fallback otherwise */
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
+  }
+  .reveal.pre{opacity:0;transform:translateY(28px) scale(.98);filter:blur(6px)}
+  .reveal.in{transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1),filter .8s}
+}
+@keyframes rise{from{opacity:0;transform:translateY(28px) scale(.98);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.cta .btn.ghost{padding:13px 24px;font-size:16px;color:var(--ink)}
+.btn{text-transform:lowercase}
+.panel-head h2,.tier{text-transform:lowercase}
+.pin span{border-radius:999px;padding:3px 8px;background:rgba(0,0,0,.7);backdrop-filter:blur(4px)}
+.searching{display:grid;justify-items:center;gap:8px;padding:26px 16px;border-radius:28px;background:var(--sunk);text-align:center}
+.searching b{font-weight:500;font-size:17px}
+.searching>span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.radar{position:relative;width:96px;height:96px;margin-bottom:8px}
+.radar i{position:absolute;inset:0;border:1px solid var(--ink);border-radius:50%;opacity:0;animation:ping 2.4s cubic-bezier(.2,.6,.3,1) infinite}
+.radar i:nth-child(2){animation-delay:.8s}.radar i:nth-child(3){animation-delay:1.6s}
+.radar .me{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--ink);box-shadow:0 0 18px rgba(255,255,255,.7)}
+@keyframes ping{0%{transform:scale(.15);opacity:.9}100%{transform:scale(1);opacity:0}}
+.dots i{font-style:normal;animation:dot 1.4s infinite}.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,60%,100%{opacity:.2}30%{opacity:1}}
+.player.ghostrow{border-style:dashed;color:var(--muted)}
+.player.ghostrow .av{width:28px;height:28px;border-radius:50%;border:1px dashed var(--muted);animation:dot 1.6s infinite}
+@media (prefers-reduced-motion:reduce){.radar i,.dots i,.float,.player.ghostrow .av{animation:none}.radar i{opacity:.3}}
+.btn.small{padding:7px 16px;font-size:13px;text-decoration:none}
+.linkbtn{background:none;border:0;color:var(--muted);cursor:pointer;font-size:13px;padding:6px 4px}
+.linkbtn:hover{color:var(--ink)}
+.acct{font-size:13px;color:var(--ink);white-space:nowrap}
+.authwrap{max-width:420px;margin:0 auto;display:grid;justify-items:center;text-align:center;gap:10px;padding-block:24px 40px}
+.authwrap h2{font-size:clamp(30px,6vw,44px);font-weight:600;letter-spacing:-.04em}
+.authwrap .sub{margin:0;color:var(--muted)}
+.authform{width:100%;text-align:left;margin-top:14px}
+.authform .tabs{justify-self:start}
+.field{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.field input{width:100%;padding:13px 16px;border-radius:16px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);font:inherit;font-size:16px}
+.field input:focus{border-color:var(--ink);outline:none}
+.formerr{margin:0;font-size:14px;color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:16px;padding:10px 14px}
+.player .av{width:28px;height:28px;border-radius:50%;background:var(--ink)}
+body.out .nav,body.out .hud-stats{display:none!important}
+@media (max-width:640px){.hud-in{gap:8px 12px}.nav{order:3;width:100%}.xpbar,.acct{display:none!important}}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:grid;gap:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hud">
+  <div class="hud-in">
+    <a class="logo" href="#home"><svg class="mark" viewBox="0 0 24 32" aria-hidden="true"><rect x="1" y="1" width="22" height="30" rx="3"/><path d="M5 5.5h2.6M5 5.5v3M18.4 26.5H19M19 26.5v-3"/><ellipse cx="12" cy="16" rx="5.2" ry="6.4"/><circle class="f" cx="10" cy="15" r=".9"/><circle class="f" cx="14" cy="15" r=".9"/><path d="M10.2 18.6q1.8 1.3 3.6 0"/></svg>face card</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#home" data-v="home">home</a>
+      <a href="#solo" data-v="solo">solo</a>
+      <a href="#duel" data-v="duel">duel</a>
+      <a href="#routine" data-v="routine">routine</a>
+    </nav>
+    <div class="hud-stats">
+      <span class="lvl" id="lvl">LV 1 · NPC</span>
+      <div class="xpbar" aria-hidden="true"><i id="xpfill"></i></div>
+      <a class="btn small" href="#login" id="loginLink">log in</a>
+      <span class="acct" id="acctName" hidden></span>
+      <button class="linkbtn" type="button" id="logoutBtn" hidden>log out</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="view" id="view-home">
+    <div class="hero">
+      <div class="heromark float"><svg class="mark" viewBox="0 0 24 32" aria-hidden="true"><rect x="1" y="1" width="22" height="30" rx="3"/><path d="M5 5.5h2.6M5 5.5v3M18.4 26.5H19M19 26.5v-3"/><ellipse cx="12" cy="16" rx="5.2" ry="6.4"/><circle class="f" cx="10" cy="15" r=".9"/><circle class="f" cx="14" cy="15" r=".9"/><path d="M10.2 18.6q1.8 1.3 3.6 0"/></svg></div>
+      <h1 class="word">face card</h1>
+      <p class="tag">does yours decline?</p>
+      <div class="cta">
+        <a class="btn" href="#solo">solo scan</a>
+        <a class="btn ghost" href="#duel">live duel</a>
+      </div>
+      <span class="scrollhint" aria-hidden="true">scroll</span>
+    </div>
+
+    <div class="block reveal">
+      <span class="label">how it works</span>
+      <h2>three steps. zero effort.</h2>
+      <div class="steps">
+        <div class="step reveal"><span class="n">1</span><b>scan</b><p>look at your camera. it reads your skin zone by zone, live.</p></div>
+        <div class="step reveal"><span class="n">2</span><b>get your card</b><p>a score out of 100, your rank, and your skin age.</p></div>
+        <div class="step reveal"><span class="n">3</span><b>glow up</b><p>a simple routine made only from L'Oréal brands.</p></div>
+      </div>
+    </div>
+
+    <div class="block reveal">
+      <span class="label">what it reads</span>
+      <h2>eight signs.</h2>
+      <div class="signs">
+        <span class="reveal">blemishes</span><span class="reveal">pores</span><span class="reveal">oil</span><span class="reveal">redness</span>
+        <span class="reveal">texture</span><span class="reveal">dark marks</span><span class="reveal">radiance</span><span class="reveal">hydration</span>
+      </div>
+    </div>
+
+    <div class="block reveal">
+      <span class="label">the ranks</span>
+      <h2>where do you land?</h2>
+      <ol class="ranks">
+        <li class="reveal"><span>fully cooked</span><small>0–44</small></li>
+        <li class="reveal"><span>medium rare</span><small>45–59</small></li>
+        <li class="reveal"><span>mid</span><small>60–71</small></li>
+        <li class="reveal"><span>clear-ish</span><small>72–81</small></li>
+        <li class="reveal"><span>glazed</span><small>82–90</small></li>
+        <li class="reveal top"><span>face card ✦</span><small>91–100</small></li>
+      </ol>
+    </div>
+
+    <div class="block reveal">
+      <span class="label">live duel</span>
+      <h2>send a code.<br>same 30 seconds.<br>higher score wins.</h2>
+      <p class="sub">winner takes the elo. everyone else takes notes.</p>
+      <a class="btn" href="#duel">start a duel</a>
+    </div>
+
+    <div class="block end reveal">
+      <div class="heromark small"><svg class="mark" viewBox="0 0 24 32" aria-hidden="true"><rect x="1" y="1" width="22" height="30" rx="3"/><path d="M5 5.5h2.6M5 5.5v3M18.4 26.5H19M19 26.5v-3"/><ellipse cx="12" cy="16" rx="5.2" ry="6.4"/><circle class="f" cx="10" cy="15" r=".9"/><circle class="f" cx="14" cy="15" r=".9"/><path d="M10.2 18.6q1.8 1.3 3.6 0"/></svg></div>
+      <h2>ready?</h2>
+      <a class="btn" href="#solo">scan my face</a>
+    </div>
+  </section>
+
+  <section class="view" id="view-login" hidden>
+    <div class="authwrap">
+      <div class="heromark small"><svg class="mark" viewBox="0 0 24 32" aria-hidden="true"><rect x="1" y="1" width="22" height="30" rx="3"/><path d="M5 5.5h2.6M5 5.5v3M18.4 26.5H19M19 26.5v-3"/><ellipse cx="12" cy="16" rx="5.2" ry="6.4"/><circle class="f" cx="10" cy="15" r=".9"/><circle class="f" cx="14" cy="15" r=".9"/><path d="M10.2 18.6q1.8 1.3 3.6 0"/></svg></div>
+      <h2 id="authTitle">log in</h2>
+      <p class="sub">members only.</p>
+      <form class="panel authform" id="authForm" novalidate>
+        <label class="field" for="authUser"><span>username</span><input id="authUser" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="40"></label>
+        <label class="field" for="authPass"><span>password</span><input id="authPass" name="password" type="password" autocomplete="current-password"></label>
+        <label class="field" for="authName"><span>your player name</span><input id="authName" name="player" autocomplete="nickname" autocapitalize="none" spellcheck="false" maxlength="20" placeholder="what shows on the ladder"></label>
+        <p class="formerr" id="authErr" role="alert" hidden></p>
+        <p class="formerr" id="authNote" hidden></p>
+        <button class="btn" type="submit" id="authBtn">log in</button>
+        <p class="fine">player names are 3–20 letters, numbers or _. on a new phone, type the same player name to get your stats back.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="view" id="view-solo" hidden>
+    <div class="viewhead"><h2>solo analysis</h2><p>scan as many times as you want. your best score goes on the ladder.</p></div>
+    <div class="grid">
+    <form class="panel" id="scanForm" novalidate>
+      <div class="panel-head"><h2>scan</h2><span class="label">+50 xp</span></div>
+
+      <div id="camSlot-solo">
+        <div class="cam" id="camStage">
+          <video id="camVid" playsinline muted autoplay></video>
+          <img id="camShot" alt="Your selfie" hidden>
+          <svg class="guide" viewBox="0 0 150 200" aria-hidden="true"><ellipse cx="75" cy="100" rx="44" ry="60"/></svg>
+          <canvas id="camOverlay" class="overlay" width="300" height="400"></canvas>
+          <div class="camlive" id="camLive" hidden><span>LIVE</span><b id="liveScore">--</b></div>
+          <div class="camoff" id="camOff">
+            <button class="btn" type="button" id="camStart">turn on camera</button>
+            <label class="btn ghost" for="snapInput" id="snapBtn" hidden>take a selfie</label>
+            <span id="camMsg">line your face up with the oval. nothing is recorded.</span>
+          </div>
+        </div>
+        <input type="file" id="snapInput" accept="image/*" capture="user" hidden>
+      </div>
+
+      <button class="btn" type="submit">scan now</button>
+      <p class="fine">face mapping finds your forehead, nose, cheeks and chin, then scores color, shine and texture in each zone over about a second of video. lighting still moves the numbers. not a diagnosis; see a dermatologist for anything painful, cystic or spreading.</p>
+    </form>
+
+    <section class="panel" aria-live="polite" id="results">
+      <div class="panel-head"><h2>your analysis</h2><span class="badge" id="srcBadge">no scan yet</span></div>
+      <div class="top">
+        <div class="facemap" id="facemap"></div>
+        <div class="verdict">
+          <div class="scorerow">
+            <div class="ring">
+              <svg width="104" height="104" viewBox="0 0 104 104" aria-hidden="true">
+                <circle cx="52" cy="52" r="44" fill="none" stroke="var(--sunk)" stroke-width="10"/>
+                <circle id="ringArc" cx="52" cy="52" r="44" fill="none" stroke="var(--xp)" stroke-width="10" stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="276.46" style="transition:stroke-dashoffset .8s"/>
+              </svg>
+              <div class="num"><div><b id="scoreNum">0</b><span>/ 100</span></div></div>
+            </div>
+            <div style="min-width:0"><div class="label">rank</div><div class="tier" id="tier">…</div></div>
+          </div>
+          <p class="roast" id="roast"></p>
+          <div class="skinage"><div><div class="label">skin age</div><b id="skinAge">17</b></div><span id="skinAgeTxt"></span></div>
+        </div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <p class="weak" id="weak"></p>
+      <a class="btn" id="toRoutine" href="#routine" style="text-align:center;text-decoration:none">see my routine</a>
+      <div class="share">
+        <button class="btn ghost" type="button" id="copyBtn">copy my score</button>
+        <span class="fine" id="shareText"></span>
+      </div>
+    </section>
+    </div>
+  </section>
+
+  <section class="view" id="view-duel" hidden>
+    <div class="viewhead"><h2>live duel</h2><p>camera-only scoring. winner takes +100 xp and the elo. <span class="online" id="online" hidden>· <b>1</b> online</span></p></div>
+    <div class="grid duelgrid">
+    <section class="panel" id="duelPanel">
+      <div class="panel-head"><h2>duel</h2><span class="label">win +100 xp</span></div>
+
+
+      <div id="duelLobby" style="display:grid;gap:14px">
+        <p class="roast" style="font-size:15px">get matched with whoever's online, or start a private duel and send the code. up to 6 per duel.</p>
+        <button class="btn" type="button" id="quickMatch">find a match</button>
+        <button class="btn ghost" type="button" id="createDuel">create a private duel</button>
+        <div class="row">
+          <input class="codein" id="joinCode" maxlength="4" placeholder="code" autocomplete="off" aria-label="Duel code">
+          <button class="btn ghost" type="button" id="joinDuel">join</button>
+        </div>
+      </div>
+
+      <div id="duelRoom" hidden style="display:grid;gap:14px">
+        <div class="codebox" id="codebox"><div><div class="label" id="codeLabel">duel code</div><b id="duelCode">----</b></div><button class="btn ghost" type="button" id="copyCode">copy code</button></div>
+        <div class="searching" id="searching" hidden>
+          <div class="radar" aria-hidden="true"><i></i><i></i><i></i><span class="me"></span></div>
+          <b id="searchTitle">waiting for an opponent<span class="dots"><i>.</i><i>.</i><i>.</i></span></b>
+          <span id="searchTime">0:00</span>
+        </div>
+        <div class="players" id="players"></div>
+        <div class="clock" id="clock"><b id="clockBig">—</b><span id="clockTxt">Waiting for at least 2 players.</span></div>
+        <div id="camSlot-duel"></div>
+        <div class="row">
+          <button class="btn" type="button" id="startRound">start round</button>
+          <button class="btn" type="button" id="lockIn" disabled hidden>lock in my scan</button>
+          <button class="btn" type="button" id="rematch" hidden>rematch</button>
+          <button class="btn ghost" type="button" id="leaveDuel">leave</button>
+        </div>
+      </div>
+      <p class="fine">scores are checked and elo is worked out on the server, so nobody can edit their own rank. use a solo scan to find your best light first.</p>
+    </section>
+
+    <section class="section" style="margin-top:0">
+    <div class="section-head">
+      <div><span class="label">live · updates as people duel</span><h2>the ladder</h2></div>
+      <span class="fine">start at 1000 elo. beat higher-rated players to climb faster.</span>
+    </div>
+    <div class="ladder" id="ladder"><p class="empty">loading the ladder…</p></div>
+  </section>
+    </div>
+  </section>
+
+  <section class="view" id="view-routine" hidden>
+    <div class="viewhead"><h2>your routine</h2><p>built from your last scan. every product is from a L'Oréal brand. <span class="xptext" id="xptext">0 / 200 XP</span></p></div>
+    <section class="section" style="margin-top:0">
+    <div class="section-head">
+      <div><span class="label" id="skinType">Loadout for oily skin</span></div>
+      <div class="tabs" role="group" aria-label="Routine time">
+        <button type="button" id="tab-am" aria-pressed="true">AM</button>
+        <button type="button" id="tab-pm" aria-pressed="false">PM</button>
+        <button type="button" id="tab-wk" aria-pressed="false">Weekly</button>
+      </div>
+    </div>
+    <div class="loadout" id="loadout"></div>
+  </section>
+    
+  </section>
+
+  <footer>
+    <span>Face Card is a student concept prototype for the GCDS × L'Oréal Luxe skincare case. Not affiliated with or endorsed by L'Oréal or its brands.</span>
+    <span>Every recommended product is from a L'Oréal-owned brand. Picks are rule-based; patch test new actives and check ingredients if you have sensitivities.</span>
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
