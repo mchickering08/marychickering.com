@@ -365,7 +365,8 @@ const cam={stream:null,img:null,timer:null,live:null,
   sample(){
     if(scanning) return;
     const src=this.source();if(!src) return;
-    const z=analyze(src);
+    const z=analyze(src);this.lastRes=z&&z.zones?z:null;
+    if(typeof duel!=="undefined") duel.local(this.lastRes,src===$('camVid'));
     const o=$('camOverlay'),x=o.getContext('2d');x.clearRect(0,0,o.width,o.height);
     const found=!!(z&&z.zones);
     $('camStage').classList.toggle('found',found);
@@ -383,13 +384,13 @@ const cam={stream:null,img:null,timer:null,live:null,
     const on=!!(this.stream||this.img);
     $('camOff').hidden=on;$('camLive').hidden=!on;$('camVid').hidden=!this.stream;
   },
-  grab(){
+  grab(w=300,h=400,q=.85){
     const src=this.source();if(!src) return null;
     const iw=src.naturalWidth||src.videoWidth,ih=src.naturalHeight||src.videoHeight,[sx,sy,sw,sh]=cropRect(iw,ih);
-    const cv=document.createElement('canvas');cv.width=300;cv.height=400;const x=cv.getContext('2d');
-    if(src===$('camVid')){x.translate(300,0);x.scale(-1,1)}
-    x.drawImage(src,sx,sy,sw,sh,0,0,300,400);
-    try{return cv.toDataURL("image/jpeg",.85)}catch(e){return null}
+    const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
+    if(src===$('camVid')){x.translate(w,0);x.scale(-1,1)}
+    x.drawImage(src,sx,sy,sw,sh,0,0,w,h);
+    try{return cv.toDataURL("image/jpeg",q)}catch(e){return null}
   }
 };
 $('camStart').addEventListener('click',()=>cam.start());
@@ -575,9 +576,49 @@ $('authForm').addEventListener('submit',async e=>{
   }finally{$('authBtn').disabled=false}
 });
 
+/* ---------- what shows in the popups and the end report ---------- */
+const POP_WORD={blemish:"breakout",pores:"pores",oil:"shiny",redness:"red",texture:"bumpy",even:"marks",radiance:"dull",hydration:"dry"};
+const ZONE_WORD={forehead:"forehead",nose:"nose",lcheek:"cheek",rcheek:"cheek",chin:"chin"};
+const WHY={blemish:"active breakouts and clogged spots",pores:"pores showing, mostly nose and cheeks",oil:"shine building up on the t-zone",redness:"redness and irritation, usually the cheeks",texture:"bumpy, uneven surface",even:"dark marks and uneven tone",radiance:"skin looking dull and tired",hydration:"skin looking dry or dehydrated"};
+const FIX={blemish:["pressClear"],pores:["pressClear","rareEarth"],oil:["ffWash","gelCream","rareEarth"],redness:["drgRed","drgSun"],texture:["mandelic"],even:["darkSpot","spf"],radiance:["dreamMask","darkSpot"],hydration:["b5","ufCream"]};
+/* worst sign in each zone, for the popups. x/y are where it shows on the picture people see */
+function flagsFrom(res,mirrored){
+  if(!res||!res.zones) return [];
+  const {zs}=score(res.zones,res.kind);const out=[];
+  for(const z of Object.keys(ZONE_SIGNS)){
+    const v=zs&&zs[z];const p=res.pins&&res.pins[z];if(!v||!p) continue;
+    let worst=null;for(const sg of ZONE_SIGNS[z]) if(v[sg]!=null&&(!worst||v[sg]<worst[1])) worst=[sg,v[sg]];
+    if(worst&&worst[1]<80) out.push({z,sign:worst[0],v:worst[1],x:mirrored?1-p.cx:p.cx,y:p.cy});
+  }
+  const seen=new Set();
+  return out.sort((a,b)=>a.v-b.v).filter(f=>!seen.has(f.sign)&&seen.add(f.sign)).slice(0,3);
+}
+function drawPops(box,flags){
+  if(!box) return;
+  const keep=new Set();
+  for(const f of flags||[]){
+    if(!(f.x>.04&&f.x<.96&&f.y>.08&&f.y<.98)) continue;
+    keep.add(f.z);
+    let el=box.querySelector(`[data-z="${f.z}"]`);
+    const label=`${POP_WORD[f.sign]||f.sign} · ${f.v}`;
+    if(!el){el=document.createElement('span');el.className="pop";el.dataset.z=f.z;box.appendChild(el)}
+    else if(el.dataset.sign!==f.sign){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')}
+    el.dataset.sign=f.sign;el.textContent=label;el.style.left=(f.x*100)+"%";el.style.top=(f.y*100)+"%";
+  }
+  box.querySelectorAll('.pop').forEach(el=>{if(!keep.has(el.dataset.z)) el.remove()});
+}
+function picksFor(s){
+  const all=Object.keys(FIX).filter(k=>s[k]!=null).sort((a,b)=>s[a]-s[b]);
+  let weak=all.filter(k=>s[k]<85).slice(0,3);if(!weak.length) weak=all.slice(0,1);
+  const used=new Set(),out=[];
+  for(const k of weak){const key=FIX[k].find(x=>!used.has(x));if(key){used.add(key);out.push({sign:k,p:P[key]})}}
+  return {weak,picks:out};
+}
+
 /* ---------- duels ---------- */
 const duel={
   m:null,players:[],chan:null,poll:null,ticker:null,finishing:0,waitingSince:0,locked:false,result:null,
+  peers:{},finals:{},chanReady:false,sender:null,myScan:null,myFlags:[],
   reset(){this.leaveLocal()},
   async rpc(name,args){
     const {data,error}=await sb.rpc(name,args);
@@ -587,25 +628,106 @@ const duel={
   async enter(m){
     if(!m) return;
     if(this.m&&this.m.id!==m.id) this.unwatch();
-    this.m=m;this.locked=false;this.result=null;this.waitingSince=Date.now();
+    this.m=m;this.locked=false;this.result=null;this.waitingSince=Date.now();this.peers={};this.finals={};this.myScan=null;
+    $('duelReport').hidden=true;$('duelReport').innerHTML="";$('tileMe').classList.remove('win','lead');
     $('duelLobby').hidden=true;$('duelRoom').hidden=false;
+    if(!cam.source()) toast("turn on your camera so they can see you.");
     $('codebox').hidden=m.is_public;$('duelCode').textContent=m.code;
-    $('searchTitle').firstChild.textContent=m.is_public?"finding you an opponent":"waiting for an opponent";
     try{localStorage.setItem('fc_match',m.id)}catch(e){}
     this.watch();await this.refresh();
     if(!this.ticker) this.ticker=setInterval(()=>this.tick(),250);
   },
   watch(){
     const id=this.m.id;
-    this.chan=sb.channel('match-'+id)
+    this.chanReady=false;
+    this.chan=sb.channel('match-'+id,{config:{broadcast:{self:false}}})
       .on('postgres_changes',{event:'*',schema:'public',table:'matches',filter:'id=eq.'+id},()=>this.refresh())
       .on('postgres_changes',{event:'*',schema:'public',table:'match_players',filter:'match_id=eq.'+id},()=>this.refresh())
-      .subscribe();
+      .on('broadcast',{event:'frame'},({payload})=>this.onFrame(payload))
+      .on('broadcast',{event:'final'},({payload})=>this.onFinal(payload))
+      .subscribe(st=>{this.chanReady=st==="SUBSCRIBED"});
+    clearInterval(this.sender);this.sender=setInterval(()=>this.sendFrame(),500);
     this.poll=setInterval(()=>this.refresh(),2000); // backup for anything realtime misses (like someone leaving)
   },
-  unwatch(){if(this.chan){sb.removeChannel(this.chan);this.chan=null}clearInterval(this.poll);this.poll=null},
+  unwatch(){if(this.chan){sb.removeChannel(this.chan);this.chan=null}clearInterval(this.poll);this.poll=null;clearInterval(this.sender);this.sender=null;this.chanReady=false},
+  /* faces: about 2 small snapshots a second go to the other players in this duel. nothing is saved. */
+  sendFrame(){
+    if(!this.chan||!this.chanReady||!this.m||!live.me||this.m.status==="done") return;
+    const img=cam.grab(180,240,.6);if(!img) return;
+    this.chan.send({type:'broadcast',event:'frame',payload:{pid:live.me.id,img,score:cam.live,flags:this.myFlags}});
+  },
+  onFrame(p){
+    if(!p||typeof p.pid!=="string"||!this.players.some(x=>x.user_id===p.pid)) return;
+    if(typeof p.img!=="string"||!p.img.startsWith("data:image/jpeg")||p.img.length>200000) return;
+    this.peers[p.pid]={img:p.img,score:Number.isFinite(p.score)?Math.round(p.score):null,flags:Array.isArray(p.flags)?p.flags.slice(0,3):[],t:Date.now()};
+    this.updateTile(p.pid);
+  },
+  onFinal(p){
+    if(!p||typeof p.pid!=="string"||typeof p.img!=="string"||!p.img.startsWith("data:image/jpeg")||p.img.length>300000) return;
+    this.finals[p.pid]={img:p.img};
+    if(this.m&&this.m.status==="done") this.renderReport();
+  },
+  local(res,mirrored){
+    if(!this.m) return;
+    this.myFlags=flagsFrom(res,mirrored).map(f=>({z:f.z,sign:f.sign,v:f.v,x:+f.x.toFixed(3),y:+f.y.toFixed(3)}));
+    drawPops($('popsMe'),this.myFlags);
+    $('meScore').textContent=cam.live==null?"–":cam.live;
+  },
+  renderTiles(){
+    const box=$('oppTiles'),others=this.players.filter(p=>p.user_id!==live.me.id);
+    box.querySelectorAll('.tile').forEach(t=>{if(!others.some(o=>o.user_id===t.dataset.pid)) t.remove()});
+    for(const o of others){
+      let t=box.querySelector(`.tile[data-pid="${o.user_id}"]`);
+      if(!t){t=document.createElement('div');t.className="tile";t.dataset.pid=o.user_id;
+        t.innerHTML='<div class="stale">waiting for their camera…</div><img alt="" hidden><div class="pops" aria-hidden="true"></div><div class="tag"><span></span><b>–</b></div>';
+        box.appendChild(t)}
+      t.querySelector('.tag span').textContent=o.profiles.username;
+      t.classList.toggle('win',this.m.status==="done"&&!!o.won);
+      this.updateTile(o.user_id);
+    }
+    let ph=box.querySelector('.tile.empty');
+    if(!others.length&&!ph){ph=document.createElement('div');ph.className="tile empty";
+      ph.innerHTML='<div class="radar" aria-hidden="true"><i></i><i></i><i></i><span class="me"></span></div><b>'+(this.m.is_public?"finding you an opponent":"waiting for an opponent")+'<span class="dots"><i>.</i><i>.</i><i>.</i></span></b><span class="ptime">0:00</span>';
+      box.appendChild(ph)}
+    if(others.length&&ph) ph.remove();
+    $('tileMe').classList.toggle('win',this.m.status==="done"&&!!(this.players.find(p=>p.user_id===live.me.id)||{}).won);
+  },
+  updateTile(pid){
+    const t=$('oppTiles').querySelector(`.tile[data-pid="${pid}"]`);if(!t) return;
+    const f=this.peers[pid],row=this.players.find(p=>p.user_id===pid)||{};
+    const img=t.querySelector('img'),stale=t.querySelector('.stale');
+    const fresh=f&&Date.now()-f.t<4000;
+    if(f&&img.src!==f.img) img.src=f.img;
+    img.hidden=!f;stale.hidden=!!fresh;
+    stale.textContent=f?"camera paused":"waiting for their camera…";
+    if(f) stale.hidden=fresh;
+    const shown=this.m&&this.m.status==="done"?row.score:(row.score!=null&&this.m.status==="live"?"locked":f&&f.score!=null?f.score:"–");
+    t.querySelector('.tag b').textContent=shown==null?"–":shown;
+    drawPops(t.querySelector('.pops'),this.m&&this.m.status==="done"?[]:(fresh?f.flags:[]));
+  },
+  renderReport(){
+    const box=$('duelReport');if(!this.m||this.m.status!=="done") return;
+    const me=live.me.id,ordered=this.players.slice().sort((a,b)=>(b.score??-1)-(a.score??-1));
+    const mine=this.myScan||(cam.lastRes?(()=>{const sc=score(cam.lastRes.zones,cam.lastRes.kind);return {s:sc.s,total:sc.total}})():null);
+    let html='<h3>'+(this.result&&this.result.won?"you won.":"good fight.")+'</h3><div class="finals">';
+    for(const p of ordered){
+      const img=p.user_id===me?(this.myFinal||cam.grab()):(this.finals[p.user_id]||this.peers[p.user_id]||{}).img;
+      html+=`<div class="final${p.won?" win":""}">${img?`<img alt="" src="${img}">`:""}<div class="tag"><span data-n="${p.user_id}"></span><b>${p.score??"–"}</b></div></div>`;
+    }
+    html+='</div>';
+    if(mine){
+      const {weak,picks}=picksFor(mine.s);
+      html+='<h3>what held you back</h3><div class="weakrows">'+weak.map(k=>`<div class="weakrow"><span>${NAME[k].toLowerCase()}</span><b>${mine.s[k]}</b><div class="bar"><i style="width:${mine.s[k]}%"></i></div><small>${WHY[k]}</small></div>`).join("")+'</div>';
+      html+='<h3>fix it with</h3><div class="recs">'+picks.map(({sign,p})=>`<article class="item"><div class="brand"><b>${esc(p.brand)}</b><span>${esc(p.div)}</span></div><div><h3 style="font-size:16px">${esc(p.name)}</h3><p>${esc(p.why)}</p></div><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><span class="fix">for your ${NAME[sign].toLowerCase()}</span><a href="https://www.google.com/search?q=${encodeURIComponent(p.brand+" "+p.name)}" target="_blank" rel="noopener">find it →</a></div></article>`).join("")+'</div>';
+      html+='<a class="btn ghost" href="#routine" style="justify-self:start;text-decoration:none">see my full routine</a>';
+    }else html+='<p class="fine">you didn\'t lock in a scan this round, so there\'s no breakdown. lock in next round to get your fixes.</p>';
+    box.innerHTML=html;
+    box.querySelectorAll('[data-n]').forEach(el=>{const p=this.players.find(x=>x.user_id===el.dataset.n);el.textContent=p?p.profiles.username+(p.user_id===me?" (you)":""):""});
+    box.hidden=false;
+  },
   leaveLocal(){
-    this.unwatch();clearInterval(this.ticker);this.ticker=null;this.m=null;this.players=[];this.result=null;
+    this.unwatch();clearInterval(this.ticker);this.ticker=null;this.m=null;this.players=[];this.result=null;this.peers={};this.finals={};
+    $('oppTiles').innerHTML="";$('duelReport').hidden=true;$('arena').hidden=false;drawPops($('popsMe'),[]);
     try{localStorage.removeItem('fc_match')}catch(e){}
     $('duelLobby').hidden=false;$('duelRoom').hidden=true;
   },
@@ -639,6 +761,9 @@ const duel={
     toast(mine.won?"w. +100 xp":"l. run it back");
   },
   render(){
+    this.renderTiles();
+    $('arena').hidden=this.m.status==="done";
+    if(this.m.status==="done") this.renderReport(); else $('duelReport').hidden=true;
     const box=$('players');box.innerHTML="";
     const st=this.m.status;
     this.players.forEach(p=>{
@@ -662,12 +787,13 @@ const duel={
     const m=this.m,now=live.now(),n=this.players.length;
     const start=m.start_at?new Date(m.start_at).getTime():0,end=m.end_at?new Date(m.end_at).getTime():0;
     const waiting=m.status==="waiting"&&n<2;
-    $('searching').hidden=!waiting;$('clock').hidden=waiting;
+    $('clock').hidden=waiting;
+    for(const pid in this.peers) if(Date.now()-this.peers[pid].t>4000&&Date.now()-this.peers[pid].t<4400) this.updateTile(pid);
     $('startRound').hidden=m.status!=="waiting";$('startRound').disabled=n<2;
     $('lockIn').hidden=m.status!=="live";$('lockIn').disabled=!(m.status==="live"&&now>=start&&now<=end&&!this.locked);
     $('rematch').hidden=m.status!=="done";$('rematch').textContent=m.next_code?"join the rematch":"rematch";
     $('clock').classList.toggle('live',m.status==="live"&&now>=start);
-    if(waiting){const t=Math.floor((Date.now()-this.waitingSince)/1000);$('searchTime').textContent=`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`;return}
+    if(waiting){const t=Math.floor((Date.now()-this.waitingSince)/1000),pt=$('oppTiles').querySelector('.ptime');if(pt) pt.textContent=`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`;return}
     if(m.status==="waiting"){$('clockBig').textContent=n;$('clockTxt').textContent=`${n} players in. anyone can start the round.`}
     else if(m.status==="live"){
       if(now<start){$('clockBig').textContent=Math.ceil((start-now)/1000);$('clockTxt').textContent="get your face in the light…"}
@@ -703,7 +829,8 @@ $('lockIn').addEventListener('click',async()=>{
   if(!r){duel.tick();return}
   const m=await duel.rpc('submit_score',{p_match:duel.m.id,p_score:r.total});
   if(!m){duel.tick();return}
-  duel.locked=true;
+  duel.locked=true;duel.myScan=r;duel.myFinal=photoURL;
+  if(duel.chan&&duel.chanReady&&photoURL) duel.chan.send({type:'broadcast',event:'final',payload:{pid:live.me.id,img:photoURL}});
   state.last={...r,zs:null,photo:false,fromPhoto:true};save();
   renderResult(r,false);$('srcBadge').textContent="duel scan";
   toast("locked in: "+r.total);

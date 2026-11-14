@@ -202,7 +202,7 @@ button,input{font:inherit}
 .choice b{font-size:22px;font-weight:600;letter-spacing:-.01em}
 .choice>span:not(.label){color:var(--muted);font-size:14px;max-width:30ch}
 .choice i{position:absolute;top:20px;right:22px;font-style:normal;font-size:20px}
-.duelgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.duelgrid{grid-template-columns:minmax(0,1fr);max-width:980px;margin:0 auto}
 @media (max-width:860px){.duelgrid{grid-template-columns:minmax(0,1fr)}}
 .mark{width:18px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;flex:none}
 .mark .f{fill:currentColor;stroke:none}
@@ -277,6 +277,43 @@ button,input{font:inherit}
 .player .av{width:28px;height:28px;border-radius:50%;background:var(--ink)}
 body.out .nav,body.out .hud-stats{display:none!important}
 @media (max-width:640px){.hud-in{gap:8px 12px}.nav{order:3;width:100%}.xpbar,.acct{display:none!important}}
+
+.arena{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px}
+.opps{display:contents}
+.tile{position:relative;aspect-ratio:3/4;border-radius:28px;overflow:hidden;background:var(--sunk);min-width:0}
+.tile .cam{max-width:none;border-radius:0;aspect-ratio:auto;position:absolute;inset:0;height:100%}
+.tile #camSlot-duel{position:absolute;inset:0}
+.tile>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile .tag{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:7px 14px;font-size:14px;z-index:4}
+.tile .tag span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tile .tag b{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.tile.lead{box-shadow:0 0 0 2px #fff}
+.tile.win .tag b::before{content:"♛ ";font-size:15px}
+.tile .stale{position:absolute;inset:0;display:grid;place-content:center;color:var(--muted);font-size:13px;text-align:center;padding:20px}
+.tile.empty{display:grid;place-content:center;justify-items:center;gap:8px;text-align:center;border:1px dashed var(--line);background:transparent;padding:20px}
+.tile.empty b{font-weight:500}
+.tile.empty span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tile .camlive{display:none!important}
+.pops{position:absolute;inset:0;pointer-events:none;z-index:3}
+.pop{position:absolute;transform:translate(-50%,-130%);background:#fff;color:#000;font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.35);animation:popin .35s cubic-bezier(.2,1.4,.4,1)}
+.pop::after{content:"";position:absolute;left:50%;bottom:-4px;width:8px;height:8px;background:#fff;transform:translateX(-50%) rotate(45deg)}
+.pop.bump{animation:bump .3s ease}
+@keyframes popin{from{opacity:0;transform:translate(-50%,-90%) scale(.6)}to{opacity:1;transform:translate(-50%,-130%) scale(1)}}
+@keyframes bump{50%{transform:translate(-50%,-130%) scale(1.12)}}
+.report{display:grid;gap:18px;border:1px solid var(--line);border-radius:28px;padding:22px;background:var(--surface)}
+.report h3{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0;text-transform:lowercase}
+.finals{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,200px));gap:12px}
+.final{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;background:var(--sunk)}
+.final img{width:100%;height:100%;object-fit:cover}
+.final .tag{position:absolute;left:8px;right:8px;bottom:8px;display:flex;justify-content:space-between;background:rgba(0,0,0,.6);color:#fff;border-radius:999px;padding:5px 12px;font-size:13px}
+.final.win{box-shadow:0 0 0 2px #fff}
+.weakrows{display:grid;gap:10px}
+.weakrow{display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:4px 10px;font-size:14px}
+.weakrow small{grid-column:1/-1;color:var(--muted);font-size:13px}
+.weakrow .bar{grid-column:1/-1;height:6px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.weakrow .bar i{display:block;height:100%;background:var(--ink);border-radius:99px}
+.recs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px}
+@media (prefers-reduced-motion:reduce){.pop,.pop.bump{animation:none}}
 footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:grid;gap:4px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -452,14 +489,17 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:v
 
       <div id="duelRoom" hidden style="display:grid;gap:14px">
         <div class="codebox" id="codebox"><div><div class="label" id="codeLabel">duel code</div><b id="duelCode">----</b></div><button class="btn ghost" type="button" id="copyCode">copy code</button></div>
-        <div class="searching" id="searching" hidden>
-          <div class="radar" aria-hidden="true"><i></i><i></i><i></i><span class="me"></span></div>
-          <b id="searchTitle">waiting for an opponent<span class="dots"><i>.</i><i>.</i><i>.</i></span></b>
-          <span id="searchTime">0:00</span>
+        <div class="clock" id="clock"><b id="clockBig">–</b><span id="clockTxt">waiting for at least 2 players.</span></div>
+        <div class="arena" id="arena">
+          <div class="tile mine" id="tileMe">
+            <div id="camSlot-duel"></div>
+            <div class="pops" id="popsMe" aria-hidden="true"></div>
+            <div class="tag"><span>you</span><b id="meScore">–</b></div>
+          </div>
+          <div class="opps" id="oppTiles"></div>
         </div>
+        <div class="report" id="duelReport" hidden></div>
         <div class="players" id="players"></div>
-        <div class="clock" id="clock"><b id="clockBig">—</b><span id="clockTxt">Waiting for at least 2 players.</span></div>
-        <div id="camSlot-duel"></div>
         <div class="row">
           <button class="btn" type="button" id="startRound">start round</button>
           <button class="btn" type="button" id="lockIn" disabled hidden>lock in my scan</button>
