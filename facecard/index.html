@@ -289,7 +289,8 @@ body.out .nav,body.out .hud-stats{display:none!important}
 .tile .tag b{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
 .tile.lead{box-shadow:0 0 0 2px #fff}
 .tile.win .tag b::before{content:"♛ ";font-size:15px}
-.tile .stale{position:absolute;inset:0;display:grid;place-content:center;color:var(--muted);font-size:13px;text-align:center;padding:20px}
+.tile .stale{position:absolute;inset:0;display:grid;place-content:center;color:#cfcfcf;font-size:14px;text-align:center;padding:24px;z-index:2}
+.linkstatus{text-align:center}
 .tile.empty{display:grid;place-content:center;justify-items:center;gap:8px;text-align:center;border:1px dashed var(--line);background:transparent;padding:20px}
 .tile.empty b{font-weight:500}
 .tile.empty span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -498,6 +499,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:v
           </div>
           <div class="opps" id="oppTiles"></div>
         </div>
+        <p class="fine linkstatus" id="linkStatus" aria-live="polite" hidden></p>
         <div class="report" id="duelReport" hidden></div>
         <div class="players" id="players"></div>
         <div class="row">

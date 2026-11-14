@@ -342,7 +342,10 @@ function analyze(src){
 /* ================= camera ================= */
 let scanning=false;
 const cam={stream:null,img:null,timer:null,live:null,
-  attach(where){const slot=$('camSlot-'+where);if(slot&&$('camStage').parentNode!==slot) slot.appendChild($('camStage'));this.paint()},
+  attach(where){
+    const slot=$('camSlot-'+where);
+    if(slot&&$('camStage').parentNode!==slot){slot.appendChild($('camStage'));if(this.stream) $('camVid').play().catch(()=>{})}
+    this.paint()},
   async start(){
     loadLandmarker();
     $('camMsg').textContent="starting camera…";
@@ -384,12 +387,14 @@ const cam={stream:null,img:null,timer:null,live:null,
     const on=!!(this.stream||this.img);
     $('camOff').hidden=on;$('camLive').hidden=!on;$('camVid').hidden=!this.stream;
   },
-  grab(w=300,h=400,q=.85){
+  grab(w=300,h=400,q=.85,skipDark=false){
     const src=this.source();if(!src) return null;
+    if(src.tagName==="VIDEO"&&(src.readyState<2||src.paused)){src.play().catch(()=>{});if(skipDark) return null}
     const iw=src.naturalWidth||src.videoWidth,ih=src.naturalHeight||src.videoHeight,[sx,sy,sw,sh]=cropRect(iw,ih);
     const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
     if(src===$('camVid')){x.translate(w,0);x.scale(-1,1)}
     x.drawImage(src,sx,sy,sw,sh,0,0,w,h);
+    if(skipDark){try{const d=x.getImageData(0,0,w,h).data;let t=0;for(let i=0;i<d.length;i+=64) t+=d[i]+d[i+1]+d[i+2];if(t/(d.length/64)/3<10) return null}catch(e){}}
     try{return cv.toDataURL("image/jpeg",q)}catch(e){return null}
   }
 };
@@ -618,7 +623,7 @@ function picksFor(s){
 /* ---------- duels ---------- */
 const duel={
   m:null,players:[],chan:null,poll:null,ticker:null,finishing:0,waitingSince:0,locked:false,result:null,
-  peers:{},finals:{},chanReady:false,sender:null,myScan:null,myFlags:[],
+  peers:{},finals:{},chanReady:false,sender:null,myScan:null,myFlags:[],chanStatus:"",dbMissing:false,dbTick:0,dbPoll:null,lastVia:"",lastSeen:0,
   reset(){this.leaveLocal()},
   async rpc(name,args){
     const {data,error}=await sb.rpc(name,args);
@@ -645,21 +650,43 @@ const duel={
       .on('postgres_changes',{event:'*',schema:'public',table:'match_players',filter:'match_id=eq.'+id},()=>this.refresh())
       .on('broadcast',{event:'frame'},({payload})=>this.onFrame(payload))
       .on('broadcast',{event:'final'},({payload})=>this.onFinal(payload))
-      .subscribe(st=>{this.chanReady=st==="SUBSCRIBED"});
+      .subscribe(st=>{this.chanStatus=st;this.chanReady=st==="SUBSCRIBED"});
     clearInterval(this.sender);this.sender=setInterval(()=>this.sendFrame(),500);
+    clearInterval(this.dbPoll);this.dbPoll=setInterval(()=>this.pullFrames(),1000);
     this.poll=setInterval(()=>this.refresh(),2000); // backup for anything realtime misses (like someone leaving)
   },
-  unwatch(){if(this.chan){sb.removeChannel(this.chan);this.chan=null}clearInterval(this.poll);this.poll=null;clearInterval(this.sender);this.sender=null;this.chanReady=false},
+  unwatch(){if(this.chan){sb.removeChannel(this.chan);this.chan=null}clearInterval(this.poll);this.poll=null;clearInterval(this.sender);this.sender=null;clearInterval(this.dbPoll);this.dbPoll=null;this.chanReady=false;this.chanStatus=""},
   /* faces: about 2 small snapshots a second go to the other players in this duel. nothing is saved. */
   sendFrame(){
-    if(!this.chan||!this.chanReady||!this.m||!live.me||this.m.status==="done") return;
-    const img=cam.grab(180,240,.6);if(!img) return;
-    this.chan.send({type:'broadcast',event:'frame',payload:{pid:live.me.id,img,score:cam.live,flags:this.myFlags}});
+    if(!this.m||!live.me||this.m.status==="done"||this.players.length<2) return;
+    const img=cam.grab(180,240,.6,true);if(!img) return;
+    const payload={pid:live.me.id,img,score:cam.live,flags:this.myFlags};
+    if(this.chan&&this.chanReady) this.chan.send({type:'broadcast',event:'frame',payload});
+    // backup route through the database, about once a second, for networks where the live link doesn't get through
+    if(!this.dbMissing&&(this.dbTick++%2===0)){
+      sb.rpc('push_frame',{p_match:this.m.id,p_img:img,p_score:cam.live==null?null:cam.live,p_flags:this.myFlags}).then(({error})=>{
+        if(error&&/push_frame|function|schema cache/i.test(errText(error))) this.dbMissing=true;
+      });
+    }
   },
-  onFrame(p){
+  async pullFrames(){
+    if(!this.m||this.dbMissing||this.m.status==="done"||this.players.length<2) return;
+    const {data,error}=await sb.from('match_frames').select('user_id,img,score,flags,updated_at').eq('match_id',this.m.id);
+    if(error){if(/match_frames|relation|schema cache/i.test(errText(error))) this.dbMissing=true;return}
+    for(const r of data||[]){
+      if(r.user_id===live.me.id) continue;
+      const at=new Date(r.updated_at).getTime(),cur=this.peers[r.user_id];
+      if(live.now()-at>5000) continue;                  // old snapshot
+      if(cur&&cur.via==="live"&&Date.now()-cur.t<1500) continue; // live link is already faster
+      if(cur&&cur.dbAt===at) continue;
+      this.onFrame({pid:r.user_id,img:r.img,score:r.score,flags:r.flags},"backup",at);
+    }
+  },
+  onFrame(p,via="live",dbAt=0){
     if(!p||typeof p.pid!=="string"||!this.players.some(x=>x.user_id===p.pid)) return;
     if(typeof p.img!=="string"||!p.img.startsWith("data:image/jpeg")||p.img.length>200000) return;
-    this.peers[p.pid]={img:p.img,score:Number.isFinite(p.score)?Math.round(p.score):null,flags:Array.isArray(p.flags)?p.flags.slice(0,3):[],t:Date.now()};
+    this.peers[p.pid]={img:p.img,score:Number.isFinite(p.score)?Math.round(p.score):null,flags:Array.isArray(p.flags)?p.flags.slice(0,3):[],t:Date.now(),via,dbAt};
+    this.lastVia=via;this.lastSeen=Date.now();
     this.updateTile(p.pid);
   },
   onFinal(p){
@@ -704,6 +731,17 @@ const duel={
     const shown=this.m&&this.m.status==="done"?row.score:(row.score!=null&&this.m.status==="live"?"locked":f&&f.score!=null?f.score:"–");
     t.querySelector('.tag b').textContent=shown==null?"–":shown;
     drawPops(t.querySelector('.pops'),this.m&&this.m.status==="done"?[]:(fresh?f.flags:[]));
+  },
+  linkStatus(){
+    const el=$('linkStatus');if(!el) return;
+    let t="";
+    if(this.m&&this.m.status!=="done"&&this.players.length>=2){
+      if(!cam.source()) t="turn on your camera so they can see you.";
+      else if(Date.now()-this.lastSeen<3000) t=this.lastVia==="live"?"seeing them live.":"seeing them through the backup route (about once a second).";
+      else if(this.dbMissing&&!this.chanReady) t="can't reach them. the live link is "+(this.chanStatus||"off").toLowerCase().replace(/_/g," ")+" and the backup route isn't set up yet (run update-1.sql in supabase).";
+      else t="no picture from them yet. make sure their camera is on and they're on the duel tab, in front of the window (not a background tab).";
+    }
+    el.textContent=t;el.hidden=!t;
   },
   renderReport(){
     const box=$('duelReport');if(!this.m||this.m.status!=="done") return;
@@ -793,6 +831,7 @@ const duel={
     $('lockIn').hidden=m.status!=="live";$('lockIn').disabled=!(m.status==="live"&&now>=start&&now<=end&&!this.locked);
     $('rematch').hidden=m.status!=="done";$('rematch').textContent=m.next_code?"join the rematch":"rematch";
     $('clock').classList.toggle('live',m.status==="live"&&now>=start);
+    this.linkStatus();
     if(waiting){const t=Math.floor((Date.now()-this.waitingSince)/1000),pt=$('oppTiles').querySelector('.ptime');if(pt) pt.textContent=`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`;return}
     if(m.status==="waiting"){$('clockBig').textContent=n;$('clockTxt').textContent=`${n} players in. anyone can start the round.`}
     else if(m.status==="live"){
