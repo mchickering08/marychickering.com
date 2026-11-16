@@ -28,6 +28,35 @@ const P={
   dreamMask:{brand:"Youth to the People",div:"L'Oréal Luxe",name:"Superberry Hydrate + Glow Dream Mask",why:"Overnight mask for dull, dehydrated skin.",fixes:["radiance","hydration"]}
 };
 
+/* official pages. img: paste a product photo address here to show it on the card */
+const LINKS={
+  ffWash:["https://www.kiehls.com/search?q=facial%20fuel%20energizing%20face%20wash",""],
+  ufCleanser:["https://www.kiehls.com/skincare/face-cleansers-scrubs/ultra-facial-cleanser/714.html",""],
+  yttpCleanser:["https://www.youthtothepeople.com/skincare/cleansers/superfood-cleanser/YTTP-10100.html",""],
+  gelCream:["https://www.kiehls.com/skincare/moisturizers/ultra-facial-oil-free-gel-cream/10003.html",""],
+  ufCream:["https://www.kiehls.com/search?q=ultra%20facial%20cream",""],
+  ffMoist:["https://www.kiehls.com/search?q=facial%20fuel%20energizing%20moisture%20treatment",""],
+  spf:["https://www.kiehls.com/search?q=ultra%20light%20daily%20uv%20defense",""],
+  drgSun:["https://www.google.com/search?q=Dr.G%20Green%20Mild%20Up%20Sun%2B%20SPF50",""],
+  pressClear:["https://www.medik8.com/products/press-clear",""],
+  drgRed:["https://www.google.com/search?q=Dr.G%20Red%20Blemish%20Clear%20Soothing%20Cream",""],
+  mandelic:["https://www.youthtothepeople.com/search?q=mandelic",""],
+  darkSpot:["https://www.kiehls.com/Clearly-Corrective-Dark-Spot-Solution/842.html",""],
+  b5:["https://int.medik8.com/products/hydr8-b5-intense",""],
+  rareEarth:["https://www.kiehls.com/search?q=rare%20earth%20deep%20pore%20cleansing%20masque",""],
+  dreamMask:["https://www.youthtothepeople.com/search?q=superberry%20dream%20mask",""]
+};
+for(const k in LINKS){P[k].url=LINKS[k][0];P[k].img=LINKS[k][1]}
+const SITE=u=>{try{const h=new URL(u).hostname.replace(/^www\.|^int\./,"");return h==="google.com"?"":h}catch(e){return ""}};
+function shopLink(p){const s=SITE(p.url);return `<a href="${esc(p.url)}" target="_blank" rel="noopener">${s?"shop on "+s:"find it"} →</a>`}
+const KIND=p=>/cleanser|wash/i.test(p.name)?"cleanser":/spf|sun|uv/i.test(p.name)?"spf":/mask|masque/i.test(p.name)?"mask":/cream|moisture|gel/i.test(p.name)?"moisturizer":"treatment";
+function prodPic(p){
+  const label=`<b>${esc(p.brand)}</b><span>${KIND(p)}</span>`;
+  if(!p.img) return `<div class="pimg ph" aria-hidden="true">${label}</div>`;
+  // if the photo fails to load, the card falls back to the brand label
+  return `<div class="pimg"><img src="${esc(p.img)}" alt="${esc(p.brand+" "+p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('ph');this.remove()">${label}</div>`;
+}
+
 function buildRoutine(type,weak,goal,acne){
   const focus=goal||weak;
   const cleanser = type==="dry"?P.ufCleanser : (type==="oily"||acne>=1)?P.ffWash : P.yttpCleanser;
@@ -222,12 +251,13 @@ function shareLine(){if(!result) return "";return `I scored ${result.total} (${t
 function renderLoadout(){
   if(!result) return;
   $('loadout').innerHTML=result.routine[tab].map(([slot,p,xp],i)=>`<article class="item">
-    <div class="slot"><span class="label">${tab==="wk"?"Weekly":"Step "+(i+1)} · ${slot}</span><span class="label">+${xp} XP</span></div>
+    <div class="slot"><span class="label">${tab==="wk"?"weekly":"step "+(i+1)} · ${slot.toLowerCase()}</span><span class="label">+${xp} xp</span></div>
+    ${prodPic(p)}
     <div class="brand"><b>${esc(p.brand)}</b><span>${esc(p.div)}</span></div>
     <div><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></div>
     <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center">
-      <span class="fix">Targets: ${p.fixes.map(f=>NAME[f].toLowerCase()).join(", ")}</span>
-      <a href="https://www.google.com/search?q=${encodeURIComponent(p.brand+" "+p.name)}" target="_blank" rel="noopener">Find it →</a>
+      <span class="fix">targets: ${p.fixes.map(f=>NAME[f].toLowerCase()).join(", ")}</span>
+      ${shopLink(p)}
     </div>
   </article>`).join("");
   ["am","pm","wk"].forEach(k=>$('tab-'+k).setAttribute('aria-pressed',String(k===tab)));
@@ -766,7 +796,7 @@ const duel={
     if(mine){
       const {weak,picks}=picksFor(mine.s);
       html+='<h3>what held you back</h3><div class="weakrows">'+weak.map(k=>`<div class="weakrow"><span>${NAME[k].toLowerCase()}</span><b>${mine.s[k]}</b><div class="bar"><i style="width:${mine.s[k]}%"></i></div><small>${WHY[k]}</small></div>`).join("")+'</div>';
-      html+='<h3>fix it with</h3><div class="recs">'+picks.map(({sign,p})=>`<article class="item"><div class="brand"><b>${esc(p.brand)}</b><span>${esc(p.div)}</span></div><div><h3 style="font-size:16px">${esc(p.name)}</h3><p>${esc(p.why)}</p></div><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><span class="fix">for your ${NAME[sign].toLowerCase()}</span><a href="https://www.google.com/search?q=${encodeURIComponent(p.brand+" "+p.name)}" target="_blank" rel="noopener">find it →</a></div></article>`).join("")+'</div>';
+      html+='<h3>fix it with</h3><div class="recs">'+picks.map(({sign,p})=>`<article class="item">${prodPic(p)}<div class="brand"><b>${esc(p.brand)}</b><span>${esc(p.div)}</span></div><div><h3 style="font-size:16px">${esc(p.name)}</h3><p>${esc(p.why)}</p></div><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><span class="fix">for your ${NAME[sign].toLowerCase()}</span>${shopLink(p)}</div></article>`).join("")+'</div>';
       html+='<a class="btn ghost" href="#routine" style="justify-self:start;text-decoration:none">see my full routine</a>';
     }else html+='<p class="fine">you didn\'t lock in a scan this round, so there\'s no breakdown. lock in next round to get your fixes.</p>';
     box.innerHTML=html;
