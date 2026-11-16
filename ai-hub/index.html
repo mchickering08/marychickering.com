@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GCDS US AI Learning Hub</title>
+<meta name="description" content="AI study tools for Greenwich Country Day Upper School classes, built to make you think instead of doing the work for you.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --surface: #ffffff;
+    --sunk: #efede7;
+    --ink: #14161c;
+    --muted: #61646e;
+    --line: #e2dfd7;
+    --radius: 18px;
+    --shadow: 0 1px 2px rgba(20,22,28,.04), 0 10px 30px rgba(20,22,28,.06);
+    /* subject colors follow the master schedule's department colors */
+    --math: #b0399b;   --math-soft: #f6e3f2;
+    --sci: #2f7d32;    --sci-soft: #e2f1df;
+    --cs: #5b4bc4;     --cs-soft: #e9e6fa;
+    --eng: #1f6fb2;    --eng-soft: #dfecf8;
+    --hist: #c2600a;   --hist-soft: #fbe9d6;
+    --accent: var(--ink);
+    --accent-soft: var(--sunk);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: "Space Grotesk", Inter, sans-serif; letter-spacing: -.02em; line-height: 1.1; margin: 0; }
+  button, input, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 22px; }
+
+  /* top bar */
+  .top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .top .wrap { display: flex; align-items: center; gap: 14px; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.05rem; }
+  .mark { width: 30px; height: 30px; border-radius: 9px; background: var(--ink); color: var(--bg);
+    display: grid; place-items: center; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+  .crumbs { margin-left: auto; font-size: .9rem; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { color: var(--ink); }
+
+  main.wrap { padding-top: 40px; padding-bottom: 80px; min-height: 70vh; }
+  main:focus { outline: none; }
+
+  /* hero */
+  .eyebrow { display: inline-block; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-soft); padding: 5px 12px; border-radius: 999px; margin-bottom: 16px; }
+  .hero h1 { font-size: clamp(2.3rem, 6vw, 3.8rem); max-width: 16ch; }
+  .hero p.lede { font-size: 1.15rem; color: var(--muted); max-width: 60ch; margin: 18px 0 0; }
+
+  .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 34px 0 44px; }
+  .rule { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+  .rule b { display: block; font-family: "Space Grotesk", sans-serif; font-size: 1.05rem; margin-bottom: 4px; }
+  .rule span { color: var(--muted); font-size: .94rem; }
+
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .section-head h2 { font-size: 1.5rem; }
+  .section-head .count { color: var(--muted); font-size: .9rem; }
+
+  /* subject cards */
+  .subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .subjects.secondary { grid-template-columns: repeat(2, 1fr); margin-top: 16px; }
+  .subj { position: relative; display: flex; flex-direction: column; gap: 10px; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: var(--shadow);
+    transition: transform .15s, border-color .15s; overflow: hidden; min-height: 190px; }
+  .subj:hover { transform: translateY(-2px); border-color: var(--c); }
+  .subj .glyph { width: 46px; height: 46px; border-radius: 14px; background: var(--c-soft); color: var(--c);
+    display: grid; place-items: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.15rem; }
+  .subj h3 { font-size: 1.35rem; }
+  .subj p { margin: 0; color: var(--muted); font-size: .94rem; }
+  .subj .meta { margin-top: auto; font-size: .85rem; font-weight: 600; color: var(--c); }
+  .subjects.secondary .subj { min-height: 0; flex-direction: row; align-items: center; gap: 16px; }
+  .subjects.secondary .subj .txt { display: grid; gap: 2px; }
+  .subjects.secondary .subj .meta { margin: 0 0 0 auto; white-space: nowrap; }
+  .stem-tag { position: absolute; top: 18px; right: 18px; font-size: .7rem; font-weight: 700; letter-spacing: .08em;
+    color: var(--muted); border: 1px solid var(--line); padding: 2px 8px; border-radius: 999px; }
+
+  .note { display: flex; gap: 14px; align-items: flex-start; margin-top: 30px; padding: 16px 20px;
+    background: var(--sunk); border-radius: var(--radius); font-size: .93rem; color: var(--muted); }
+  .note b { color: var(--ink); }
+  .note .i { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--bg);
+    display: grid; place-items: center; font-weight: 700; font-size: .8rem; margin-top: 1px; }
+
+  /* subject page */
+  .page-head { display: grid; gap: 12px; margin-bottom: 30px; }
+  .page-head h1 { font-size: clamp(2rem, 5vw, 3rem); }
+  .page-head p { margin: 0; color: var(--muted); max-width: 62ch; font-size: 1.05rem; }
+  .group { margin-top: 28px; }
+  .group h2 { font-size: .8rem; font-family: Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .courses { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .course { display: flex; align-items: center; justify-content: space-between; gap: 10px; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; transition: border-color .15s, transform .15s; }
+  .course:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .course b { font-weight: 600; }
+  .course small { display: block; color: var(--muted); font-size: .82rem; }
+  .arrow { color: var(--accent); font-weight: 700; }
+
+  /* course page */
+  .course-grid { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 22px; align-items: start; }
+  .toollist { display: grid; gap: 8px; position: sticky; top: 80px; }
+  .toollist .label { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px 4px; }
+  .tool-btn { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer;
+    display: grid; gap: 2px; transition: border-color .15s, background .15s; }
+  .tool-btn b { font-weight: 600; font-size: .98rem; }
+  .tool-btn span { color: var(--muted); font-size: .84rem; line-height: 1.4; }
+  .tool-btn:hover { border-color: var(--accent); }
+  .tool-btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 26px; box-shadow: var(--shadow); display: grid; gap: 18px; }
+  .panel h2 { font-size: 1.6rem; }
+  .panel .why { margin: 6px 0 0; color: var(--muted); }
+  .field { display: grid; gap: 6px; }
+  .field label { font-weight: 600; font-size: .92rem; }
+  .field label i { font-style: normal; font-weight: 400; color: var(--muted); }
+  .field input, .field textarea { width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; }
+  .field textarea { min-height: 110px; resize: vertical; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+
+  .preview { background: var(--sunk); border-radius: 14px; padding: 16px; }
+  .preview .label { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .preview pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; font: .88rem/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; max-height: 260px; overflow: auto; }
+  .preview pre mark { background: color-mix(in srgb, var(--accent) 16%, transparent); color: inherit; border-radius: 4px; padding: 0 2px; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--surface); font-weight: 600; font-size: .94rem; cursor: pointer; text-decoration: none; transition: transform .1s, border-color .15s; }
+  .btn:hover { border-color: var(--accent); }
+  .btn:active { transform: scale(.98); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .hint { font-size: .85rem; color: var(--muted); margin: 0; }
+
+  .about { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+  .card p, .card li { color: var(--muted); font-size: .93rem; margin: 0; }
+  .card ol { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+  .res { display: grid; gap: 8px; }
+  .res a { display: flex; justify-content: space-between; gap: 10px; text-decoration: none; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; }
+  .res a:hover { border-color: var(--accent); }
+
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: var(--ink); color: #fff;
+    padding: 10px 18px; border-radius: 999px; font-size: .9rem; font-weight: 500; transition: .2s; pointer-events: none; z-index: 20; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  footer { border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font-size: .85rem; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 860px) {
+    .subjects, .rules { grid-template-columns: 1fr; }
+    .subjects.secondary { grid-template-columns: 1fr; }
+    .course-grid { grid-template-columns: 1fr; }
+    .toollist { position: static; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    .toollist .label { grid-column: 1 / -1; }
+    .about { grid-template-columns: 1fr; }
+    .crumbs { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#/"><span class="mark">US</span>GCDS AI Learning Hub</a>
+    <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+  </div>
+</header>
+
+<main class="wrap" id="app" tabindex="-1"></main>
+
+<footer>
+  <div class="wrap">
+    <span>A student project by Mary Chickering for the GCDS AI competition. Not an official GCDS site.</span>
+    <span>Always follow your teacher's AI policy and the Honor Code.</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA: edit this part to add courses or class-made tools.
+   resources: [{ title: "...", url: "https://...", note: "..." }]
+   ============================================================ */
+const SUBJECTS = [
+  {
+    id: "math", name: "Math", glyph: "∑", stem: true, tools: "math",
+    blurb: "Hints instead of answers, step-by-step work checks, and practice quizzes.",
+    groups: [
+      { name: "Core sequence", courses: [
+        ["algebra-1", "Algebra I"], ["geometry-concepts", "Geometry Concepts"], ["geometry", "Geometry"],
+        ["algebra-2", "Algebra II"], ["algebra-2-trig", "Algebra II & Trig"], ["precalc-concepts", "Pre-Calc Concepts"],
+        ["precalc", "Pre-Calc"], ["calculus", "Calculus"], ["statistics", "Statistics"] ] },
+      { name: "Honors", courses: [
+        ["honors-geometry", "Honors Geometry"], ["honors-algebra-2", "Honors Algebra II"],
+        ["honors-precalc", "Honors Pre-Calc"], ["honors-calculus", "Honors Calculus"] ] },
+      { name: "Advanced (AAM)", courses: [
+        ["aam-adv-calc", "AAM: Advanced Calculus"], ["aam-adv-stats", "AAM: Advanced Statistics"],
+        ["aam-multivariable", "AAM: Multivariable"], ["aam-discrete", "AAM: Discrete"] ] }
+    ]
+  },
+  {
+    id: "science", name: "Science", glyph: "⚗", stem: true, tools: "science",
+    blurb: "Concept checks, problem hints, and lab report feedback that doesn't rewrite your work.",
+    groups: [
+      { name: "Core", courses: [
+        ["biology", "Biology"], ["chemistry", "Chemistry"], ["physics", "Physics"] ] },
+      { name: "Honors", courses: [
+        ["honors-chemistry", "Honors Chemistry"], ["honors-physics", "Honors Physics"],
+        ["honors-environmental", "Honors Environmental Science"] ] },
+      { name: "Electives", courses: [
+        ["environmental", "Environmental Science"], ["psychology", "Psychology"],
+        ["marine-science", "Marine Science"], ["intro-stem", "Intro to STEM"] ] },
+      { name: "Advanced (AAS)", courses: [
+        ["aas-biology", "AAS: Biology"], ["aas-chemistry", "AAS: Chemistry"],
+        ["aas-physics-eng", "AAS: Physics & Engineering"], ["aas-eco-eng", "AAS: Eco Engineering"] ] }
+    ]
+  },
+  {
+    id: "cs", name: "CS & Engineering", glyph: "</>", stem: true, tools: "cs",
+    blurb: "A debugging coach that points you at the bug without fixing it for you.",
+    groups: [
+      { name: "Computer Science", courses: [
+        ["cs-1", "Computer Science I"], ["cs-2", "Computer Science II"], ["csx", "CSX"],
+        ["csda", "CSDA"], ["adv-csda", "Advanced CSDA"], ["csal", "CSAL"] ] },
+      { name: "Engineering", courses: [
+        ["fund-engineering", "Fundamentals of Engineering"] ] }
+    ]
+  },
+  {
+    id: "english", name: "English", glyph: "Aa", stem: false, tools: "english",
+    blurb: "English 9 and 10 only. Reading checks, close reading, Harkness prep, and essay feedback.",
+    groups: [
+      { name: "Grade-level courses", courses: [
+        ["english-9", "English 9", "Identity & Society",
+          "Taught with History 9 as part of the 9th grade Global Studies program, through the lens of personal identity."],
+        ["english-10", "English 10", "American Studies: Literature",
+          "Taught with History 10 as part of the 10th grade American Studies program."] ] }
+    ]
+  },
+  {
+    id: "history", name: "History", glyph: "⌛", stem: false, tools: "history",
+    blurb: "History 9 and 10 only. Source analysis, debate practice, and thesis testing.",
+    groups: [
+      { name: "Grade-level courses", courses: [
+        ["history-9", "History 9", "Global History",
+          "Social Sciences 9. Covers how societies are organized, trade and migration, revolutions and empires, cultural achievements, and imperialism and colonialism. Taught with English 9."],
+        ["history-10", "History 10", "American Studies: History",
+          "Social Sciences 10. American history from the 1600s through the 1900s, built around power and systems: freedom, progress, and democracy. Taught with English 10."] ] }
+    ]
+  }
+];
+
+// Class-made tools for specific courses go here, keyed by course id.
+const RESOURCES = {
+  // "biology": [{ title: "Unit 1 Study Guide", url: "https://...", note: "Macromolecules, enzymes" }],
+};
+
+/* ============================================================
+   TOOLS: every prompt tells the AI to coach, not do the work.
+   ============================================================ */
+const T = {
+  hint: {
+    name: "Hint tutor", short: "Stuck on a problem? Get one hint at a time.",
+    why: "You get unstuck without getting the answer handed to you.",
+    fields: [
+      { k: "problem", label: "The problem", area: true, ph: "Paste or type the problem exactly as written" },
+      { k: "tried", label: "What you've tried so far", opt: true, area: true, ph: "Even a wrong start helps the AI see where you're stuck" }
+    ],
+    build: (c, v) => `${intro(c)} I'm stuck on this problem:
+
+${v.problem}
+${v.tried ? `\nHere's what I've tried so far:\n${v.tried}\n` : ""}
+Rules for helping me:
+- Do NOT give me the final answer or solve the whole thing.
+- Give me ONE small hint at a time, then wait for me to try the next step.
+- If I make a mistake, point to where it is and ask a question that helps me see it.
+- Only confirm the answer after I've gotten there myself.`
+  },
+  check: {
+    name: "Check my work", short: "Find the first mistake in your solution.",
+    why: "You find out exactly where you went wrong, then fix it yourself.",
+    fields: [
+      { k: "problem", label: "The problem", area: true, ph: "Paste the problem" },
+      { k: "work", label: "Your full solution", area: true, ph: "Write out every step, not just the answer" }
+    ],
+    build: (c, v) => `${intro(c)} Here's a problem and my full solution. Check it step by step.
+
+Problem:
+${v.problem}
+
+My work:
+${v.work}
+
+Rules:
+- If everything is right, tell me and ask me one harder follow-up question on the same idea.
+- If there's a mistake, tell me which step it's in and why it's wrong, but do NOT redo the problem for me.
+- Let me fix it and send it back, then check it again.`
+  },
+  quiz: {
+    name: "Practice quiz", short: "Get quizzed one question at a time.",
+    why: "Testing yourself beats rereading notes. This is how you actually remember stuff.",
+    fields: [
+      { k: "topic", label: "Unit or topics", ph: "e.g. limiting reagents, stoichiometry" },
+      { k: "notes", label: "Notes or vocab from class", opt: true, area: true, ph: "Paste class notes so the questions match what your teacher covered" }
+    ],
+    build: (c, v) => `${intro(c)} Quiz me on: ${v.topic}.
+${v.notes ? `\nUse these class notes so the questions match what we covered:\n${v.notes}\n` : ""}
+Rules:
+- Ask ONE question at a time and wait for my answer.
+- Mix quick recall with questions that make me explain my reasoning or apply the idea.
+- After each answer, tell me if I'm right and briefly explain any mistake. Then ask the next one.
+- If I miss something, come back to it later in a different form.
+- After 10 questions, tell me what I'm solid on and what I should review.`
+  },
+  explain: {
+    name: "Explain it back", short: "Teach the AI a concept. It finds your gaps.",
+    why: "If you can't explain it, you don't know it yet. This shows you exactly what's missing.",
+    fields: [
+      { k: "concept", label: "Concept", ph: "e.g. how enzymes lower activation energy" },
+      { k: "explanation", label: "Your explanation, in your own words", area: true, ph: "Write it like you're teaching a friend who missed class" }
+    ],
+    build: (c, v) => `${intro(c)} I'm going to explain a concept in my own words: ${v.concept}.
+
+My explanation:
+${v.explanation}
+
+Rules:
+- Don't re-explain the whole concept to me.
+- Tell me what I got right, what's missing, and anything that's wrong or vague.
+- Then ask me 2 follow-up questions that test whether I really get it, one at a time.`
+  },
+  plan: {
+    name: "Test prep plan", short: "Turn a test date into a daily study plan.",
+    why: "Spreading out practice works way better than cramming the night before.",
+    fields: [
+      { k: "when", label: "When is the test?", ph: "e.g. next Friday" },
+      { k: "topics", label: "What's on it", area: true, ph: "List the topics or paste the study guide" },
+      { k: "time", label: "Time you have per day", opt: true, ph: "e.g. 30 minutes" }
+    ],
+    build: (c, v) => `${intro(c)} I have a test ${v.when}. It covers:
+${v.topics}
+${v.time ? `\nI have about ${v.time} per day to study.\n` : ""}
+Make me a day-by-day study plan using active recall and spaced practice, not rereading notes. For each day, tell me exactly what to practice and how. Put my hardest topics earlier so I have time to come back to them.
+
+Then start Day 1 right now by quizzing me, one question at a time.`
+  },
+  lab: {
+    name: "Lab report coach", short: "Feedback on claim, evidence, and reasoning.",
+    why: "You learn what a strong lab argument looks like, and it's still your writing.",
+    fields: [
+      { k: "lab", label: "What was the lab?", ph: "e.g. catalase and hydrogen peroxide concentration" },
+      { k: "section", label: "Which section", ph: "e.g. conclusion, error analysis" },
+      { k: "draft", label: "Your draft", area: true, ph: "Paste your section" }
+    ],
+    build: (c, v) => `${intro(c)} I'm writing a lab report on: ${v.lab}. Here's my ${v.section || "section"}:
+
+${v.draft}
+
+Give me feedback using claim, evidence, and reasoning:
+- Is my claim clear and does it actually answer the question?
+- Is it backed by my specific data, or am I being vague?
+- Does my reasoning explain WHY, using the science?
+- Point out any science that's wrong.
+
+Do NOT rewrite any sentences for me. Give specific comments I can act on, and quote the part of my draft each comment is about.`
+  },
+  debug: {
+    name: "Debug coach", short: "Find your own bug with guided questions.",
+    why: "Debugging is the actual skill. This trains it instead of skipping it.",
+    fields: [
+      { k: "lang", label: "Language", ph: "e.g. Python, Java" },
+      { k: "goal", label: "What should it do?", ph: "e.g. return the largest number in the list" },
+      { k: "happens", label: "What happens instead / error message", area: true, ph: "Paste the error or describe the wrong output" },
+      { k: "code", label: "Your code", area: true, ph: "Paste the code" }
+    ],
+    build: (c, v) => `${intro(c)} My ${v.lang || "code"} isn't working.
+
+What it should do: ${v.goal}
+What happens instead: ${v.happens}
+
+My code:
+${v.code}
+
+Rules:
+- Do NOT rewrite my code or give me a fixed version.
+- Ask me questions that help me find the bug myself (like what a variable holds at a certain line).
+- Narrow it down one step at a time. Point me to the right area, not the exact fix.
+- Once I've fixed it, ask me one question about why the bug happened so I don't repeat it.`
+  },
+  reading: {
+    name: "Reading check", short: "Make sure you actually got the reading.",
+    why: "No summaries. It asks you questions and sends you back to the text when you miss.",
+    fields: [
+      { k: "text", label: "What you're reading", ph: "Title and author" },
+      { k: "section", label: "Section you just read", ph: "e.g. chapters 4-6" }
+    ],
+    build: (c, v) => `${intro(c)} I'm reading ${v.text} and just finished ${v.section}.
+
+Do NOT summarize it for me. Ask me 6 questions, one at a time:
+- Start with what happened and who's involved.
+- Move to why characters act the way they do.
+- End with bigger questions about themes and what the author is doing.
+
+If I get something wrong, tell me what part of the text to go reread instead of giving me the answer.`
+  },
+  close: {
+    name: "Close reading coach", short: "Work through a passage line by line.",
+    why: "You build your own analysis instead of borrowing one.",
+    fields: [
+      { k: "text", label: "Book or text", ph: "Title and author" },
+      { k: "passage", label: "The passage", area: true, ph: "Paste the passage or quote" }
+    ],
+    build: (c, v) => `${intro(c)} Help me close read this passage from ${v.text}:
+
+"${v.passage}"
+
+Do NOT analyze it for me. Instead:
+- Ask me questions one at a time about specific word choices, images, structure, and tone.
+- Push me to connect what I notice to a bigger theme or idea in the book.
+- At the end, have me write 2-3 sentences of analysis and give me feedback on them.`
+  },
+  harkness: {
+    name: "Harkness prep", short: "Pressure-test your points before discussion.",
+    why: "You walk in with sharper ideas and good questions, and they're still yours.",
+    fields: [
+      { k: "topic", label: "Text or topic for discussion", ph: "e.g. The Great Gatsby, chapters 1-3" },
+      { k: "ideas", label: "Points you're thinking of bringing up", area: true, ph: "Rough is fine" }
+    ],
+    build: (c, v) => `${intro(c)} I have a Harkness discussion on ${v.topic}. Here's what I'm thinking of bringing up:
+
+${v.ideas}
+
+Act like a sharp classmate at the table:
+- Push back on my points one at a time and let me respond.
+- Ask me what specific evidence supports each one.
+- Bring up a counterargument I'd have to answer.
+- At the end, help me turn my ideas into 2 open questions I could ask the table.
+
+Do NOT give me new points to say. Help me sharpen mine.`
+  },
+  thesis: {
+    name: "Thesis stress test", short: "Find out if your thesis can hold up.",
+    why: "Fixing the thesis first saves you from rewriting the whole essay later.",
+    fields: [
+      { k: "prompt", label: "Essay prompt", area: true, ph: "Paste the prompt" },
+      { k: "thesis", label: "Your thesis", area: true, ph: "Paste your thesis" }
+    ],
+    build: (c, v) => `${intro(c)} Here's my essay prompt:
+${v.prompt}
+
+My thesis:
+${v.thesis}
+
+Stress test it:
+- Is it arguable, specific, and actually answering the prompt?
+- What's the strongest counterargument someone could make?
+- What would I need to prove in my body paragraphs?
+- Ask me questions that help me make it sharper.
+
+Do NOT write a new thesis for me.`
+  },
+  paragraph: {
+    name: "Paragraph feedback", short: "Comments only. No rewriting.",
+    why: "You get a teacher-style read on your writing without losing your voice.",
+    fields: [
+      { k: "prompt", label: "Essay prompt or thesis", opt: true, area: true, ph: "Helps the feedback stay on target" },
+      { k: "para", label: "Your paragraph", area: true, ph: "Paste one body paragraph" }
+    ],
+    build: (c, v) => `${intro(c)} Here's a body paragraph from my essay.
+${v.prompt ? `\nPrompt/thesis: ${v.prompt}\n` : ""}
+Paragraph:
+${v.para}
+
+Give me feedback on:
+- Topic sentence: is the claim clear?
+- Evidence: is it the strongest choice, and is it set up well?
+- Analysis: am I explaining HOW the evidence proves my point, or just summarizing?
+- Flow and clarity.
+
+Comment only. Do NOT rewrite any of my sentences. Quote the part each comment is about.`
+  },
+  source: {
+    name: "Source analysis coach", short: "Work through a primary source.",
+    why: "Sourcing is the core history skill. This makes you do it, not watch it.",
+    fields: [
+      { k: "info", label: "Source info", ph: "Who made it, when, what kind of source" },
+      { k: "text", label: "The source", area: true, ph: "Paste the text, or describe the image" }
+    ],
+    build: (c, v) => `${intro(c)} I'm analyzing this source: ${v.info}
+
+${v.text}
+
+Coach me through it one question at a time:
+- Sourcing: who made it and why does that matter?
+- Context: what was going on at the time?
+- Purpose and audience: who was it for and what was it trying to do?
+- Point of view: what's missing or slanted?
+
+Do NOT tell me the answers. At the end, ask me what this source can and can't tell a historian, and give me feedback.`
+  },
+  debate: {
+    name: "Debate the other side", short: "Argue against an AI that disagrees with you.",
+    why: "You find the weak spots in your argument before your teacher does.",
+    fields: [
+      { k: "claim", label: "Your argument", area: true, ph: "e.g. Trade did more to spread ideas than empire did" }
+    ],
+    build: (c, v) => `${intro(c)} I'm arguing that:
+${v.claim}
+
+Take the opposite side and argue against me using real historical evidence. Go one round at a time and wait for me to respond. Keep it accurate and tell me if I state something that isn't true.
+
+After 4 rounds, tell me which of my points held up, which were weakest, and what evidence I should look into.`
+  }
+};
+
+const TOOLSETS = {
+  math: ["hint", "check", "quiz", "explain", "plan"],
+  science: ["hint", "explain", "quiz", "lab", "plan"],
+  cs: ["debug", "hint", "explain", "quiz", "plan"],
+  english: ["reading", "close", "harkness", "thesis", "paragraph"],
+  history: ["source", "debate", "harkness", "thesis", "quiz"]
+};
+
+const COLORS = {
+  math: ["--math", "--math-soft"], science: ["--sci", "--sci-soft"], cs: ["--cs", "--cs-soft"],
+  english: ["--eng", "--eng-soft"], history: ["--hist", "--hist-soft"]
+};
+
+/* ============================================================ */
+const COURSES = {};
+SUBJECTS.forEach(s => s.groups.forEach(g => g.courses.forEach(([id, name, sub, desc]) => {
+  COURSES[id] = { id, name, sub, desc, subject: s };
+})));
+
+let current = null;
+function intro(c) {
+  const full = c.sub ? `${c.name}: ${c.sub}` : c.name;
+  return `I'm a high school student at Greenwich Country Day School taking ${full}.`;
+}
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
+function setTheme(subjectId) {
+  const root = document.documentElement.style;
+  if (subjectId && COLORS[subjectId]) {
+    root.setProperty("--accent", `var(${COLORS[subjectId][0]})`);
+    root.setProperty("--accent-soft", `var(${COLORS[subjectId][1]})`);
+  } else {
+    root.setProperty("--accent", "var(--ink)");
+    root.setProperty("--accent-soft", "var(--sunk)");
+  }
+}
+
+function crumbs(items) {
+  $("#crumbs").innerHTML = items.map(([label, href]) =>
+    href ? `<a href="${href}">${esc(label)}</a><span>/</span>` : `<span style="color:var(--ink)">${esc(label)}</span>`).join("");
+}
+
+function subjCard(s) {
+  const n = s.groups.reduce((a, g) => a + g.courses.length, 0);
+  const [c, cs] = COLORS[s.id];
+  return `<a class="subj" href="#/${s.id}" style="--c:var(${c});--c-soft:var(${cs})">
+    ${s.stem ? '<span class="stem-tag">STEM</span>' : ""}
+    <span class="glyph">${esc(s.glyph)}</span>
+    <span class="txt"><h3>${esc(s.name)}</h3><p>${esc(s.blurb)}</p></span>
+    <span class="meta">${n} course${n === 1 ? "" : "s"} →</span>
+  </a>`;
+}
+
+function renderHome() {
+  setTheme(null); crumbs([]);
+  document.title = "GCDS US AI Learning Hub";
+  const stem = SUBJECTS.filter(s => s.stem), other = SUBJECTS.filter(s => !s.stem);
+  $("#app").innerHTML = `
+    <section class="hero">
+      <span class="eyebrow">Upper School</span>
+      <h1>AI that makes you think, not skip the thinking.</h1>
+      <p class="lede">Pick your class and get study tools built for it: hint-only tutoring, practice quizzes, debugging coaches, and feedback that never rewrites your work. Every tool is set up so the AI coaches you instead of doing it for you.</p>
+    </section>
+    <div class="rules">
+      <div class="rule"><b>1. Pick your class</b><span>Choose a subject, then your course.</span></div>
+      <div class="rule"><b>2. Choose a tool</b><span>Fill in what you're working on. The hub writes the prompt.</span></div>
+      <div class="rule"><b>3. Open it in an AI</b><span>Copy it or open it in Claude or ChatGPT and start working.</span></div>
+    </div>
+    <div class="section-head"><h2>Subjects</h2><span class="count">STEM first</span></div>
+    <div class="subjects">${stem.map(subjCard).join("")}</div>
+    <div class="subjects secondary">${other.map(subjCard).join("")}</div>
+    <div class="note"><span class="i">i</span><div><b>Not every course is here.</b> The hub covers classes that share a standard curriculum across sections, so the tools fit what every section is learning. Electives with section-specific content and Seminar aren't included. Want your class added? Ask your teacher to reach out.</div></div>
+  `;
+}
+
+function renderSubject(s) {
+  setTheme(s.id); crumbs([["Hub", "#/"], [s.name]]);
+  document.title = `${s.name} · GCDS AI Learning Hub`;
+  $("#app").innerHTML = `
+    <section class="page-head">
+      <span class="eyebrow" style="justify-self:start">${esc(s.name)}</span>
+      <h1>Choose your ${esc(s.name)} class</h1>
+      <p>${esc(s.blurb)}</p>
+    </section>
+    ${s.groups.map(g => `
+      <div class="group"><h2>${esc(g.name)}</h2>
+        <div class="courses">${g.courses.map(([id, name, sub]) =>
+          `<a class="course" href="#/${s.id}/${id}"><span><b>${esc(name)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</span><span class="arrow">→</span></a>`).join("")}
+        </div>
+      </div>`).join("")}
+    <div class="note"><span class="i">i</span><div><b>Don't see your class?</b> Only courses with a shared curriculum across sections are included right now.</div></div>
+  `;
+}
+
+function renderCourse(c) {
+  const s = c.subject;
+  setTheme(s.id); crumbs([["Hub", "#/"], [s.name, `#/${s.id}`], [c.name]]);
+  document.title = `${c.name} · GCDS AI Learning Hub`;
+  const tools = TOOLSETS[s.tools];
+  const res = RESOURCES[c.id] || [];
+  $("#app").innerHTML = `
+    <section class="page-head">
+      <span class="eyebrow" style="justify-self:start">${esc(s.name)}</span>
+      <h1>${esc(c.name)}${c.sub ? `<span style="color:var(--muted);font-weight:500">: ${esc(c.sub)}</span>` : ""}</h1>
+      ${c.desc ? `<p>${esc(c.desc)}</p>` : `<p>Study tools for ${esc(c.name)}. Pick one, fill in what you're working on, and open it in an AI.</p>`}
+    </section>
+    <div class="course-grid">
+      <div class="toollist" role="group" aria-label="Tools">
+        <div class="label">Tools</div>
+        ${tools.map((t, i) => `<button class="tool-btn" data-tool="${t}" aria-pressed="${i === 0}"><b>${esc(T[t].name)}</b><span>${esc(T[t].short)}</span></button>`).join("")}
+      </div>
+      <div>
+        <div class="panel" id="panel"></div>
+        <div class="about">
+          <div class="card"><h3>How to use it</h3><ol>
+            <li>Fill in the boxes. Blank boxes show up as [brackets] you can fill in later.</li>
+            <li>Hit Open in Claude or Open in ChatGPT, or copy the prompt.</li>
+            <li>Answer the AI's questions yourself. That's where the learning happens.</li>
+          </ol></div>
+          <div class="card"><h3>Class-made tools</h3>${res.length
+            ? `<div class="res">${res.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener"><span><b>${esc(r.title)}</b>${r.note ? `<br><small style="color:var(--muted)">${esc(r.note)}</small>` : ""}</span><span class="arrow">↗</span></a>`).join("")}</div>`
+            : `<p>Study guides, practice tests, and simulations made for ${esc(c.name)} will show up here.</p>`}</div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.querySelectorAll(".tool-btn").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".tool-btn").forEach(x => x.setAttribute("aria-pressed", x === b));
+    showTool(c, b.dataset.tool);
+    if (window.innerWidth <= 860) $("#panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+  showTool(c, tools[0]);
+}
+
+const drafts = {};
+function showTool(c, toolId) {
+  const t = T[toolId];
+  const key = c.id + ":" + toolId;
+  const vals = drafts[key] || (drafts[key] = {});
+  current = { c, t, vals };
+  $("#panel").innerHTML = `
+    <div><h2>${esc(t.name)}</h2><p class="why">${esc(t.why)}</p></div>
+    ${t.fields.map(f => `<div class="field">
+      <label for="f-${f.k}">${esc(f.label)}${f.opt ? " <i>(optional)</i>" : ""}</label>
+      ${f.area
+        ? `<textarea id="f-${f.k}" data-k="${f.k}" placeholder="${esc(f.ph)}">${esc(vals[f.k] || "")}</textarea>`
+        : `<input id="f-${f.k}" data-k="${f.k}" placeholder="${esc(f.ph)}" value="${esc(vals[f.k] || "")}">`}
+    </div>`).join("")}
+    <div class="preview"><div class="label"><span>Your prompt</span><span id="chars"></span></div><pre id="out"></pre></div>
+    <div class="actions">
+      <a class="btn primary" id="open-claude" target="_blank" rel="noopener">Open in Claude ↗</a>
+      <a class="btn" id="open-gpt" target="_blank" rel="noopener">Open in ChatGPT ↗</a>
+      <button class="btn" id="copy">Copy prompt</button>
+    </div>
+    <p class="hint">Check your teacher's AI policy before using AI on graded work.</p>
+  `;
+  $("#panel").querySelectorAll("[data-k]").forEach(el => el.addEventListener("input", () => { vals[el.dataset.k] = el.value; update(); }));
+  $("#copy").addEventListener("click", copyPrompt);
+  update();
+}
+
+function promptText(markup) {
+  const { c, t, vals } = current;
+  const v = {};
+  t.fields.forEach(f => {
+    const val = (vals[f.k] || "").trim();
+    if (val) v[f.k] = val;
+    else v[f.k] = f.opt ? "" : (markup ? `\u0000[${f.label.toLowerCase()}]\u0001` : `[${f.label.toLowerCase()}]`);
+  });
+  let out = t.build(c, v).replace(/\n{3,}/g, "\n\n").trim();
+  if (markup) out = esc(out).replace(/\u0000([^\u0001]*)\u0001/g, "<mark>$1</mark>");
+  return out;
+}
+
+function update() {
+  const plain = promptText(false);
+  $("#out").innerHTML = promptText(true);
+  $("#open-claude").href = "https://claude.ai/new?q=" + encodeURIComponent(plain);
+  $("#open-gpt").href = "https://chatgpt.com/?q=" + encodeURIComponent(plain);
+}
+
+async function copyPrompt() {
+  const text = promptText(false);
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {
+    const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy"); ta.remove();
+  }
+  toast("Prompt copied. Paste it into any AI.");
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = $("#toast"); el.textContent = msg; el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2000);
+}
+
+function route() {
+  const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  const s = SUBJECTS.find(x => x.id === parts[0]);
+  const c = parts[1] && COURSES[parts[1]];
+  if (s && c && c.subject === s) renderCourse(c);
+  else if (s) renderSubject(s);
+  else renderHome();
+  window.scrollTo(0, 0);
+  $("#app").focus({ preventScroll: true });
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
