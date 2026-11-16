@@ -54,7 +54,12 @@ const TIERS=[
   [82,"Glazed","Skin's doing its job. Protect it, mainly with SPF."],
   [91,"Face Card","Never declines. Keep the routine and stop touching your face."]
 ];
-const LEVELS=["NPC","Side Character","Main Character","Skin Arc","Glazed","Face Card","Final Boss"];
+const LEVELS=["npc","crusty","oily unc","pore-ly made","t-zone tourist","cleanser curious","double cleanser","moisturizer main","spf believer","side quest",
+  "dewy rookie","clear-ish","main character","glow in progress","skin arc","barrier builder","glazed","dewy legend","mogger","face card",
+  "never declines","skin slayer","aura farmer","glow god","final boss"];
+/* each level takes a bit more xp than the last: 100 to reach lv 2, then +25 more per level. lv 25 = 9,300 xp */
+const lvlCost=l=>100+25*(l-1);
+function levelStart(l){let t=0;for(let i=1;i<l;i++) t+=lvlCost(i);return t}
 function tierFor(s){let t=TIERS[0];for(const x of TIERS) if(s>=x[0]) t=x;return t}
 
 /* ---------- zone analysis (3:4 centered crop, like the face map) ---------- */
@@ -229,11 +234,16 @@ function renderLoadout(){
 }
 ["am","pm","wk"].forEach(k=>$('tab-'+k).addEventListener('click',()=>{tab=k;renderLoadout()}));
 
-function levelOf(xp){return Math.floor(xp/200)+1}
-function levelName(){const l=levelOf(state.xp);return `LV ${l} · ${LEVELS[Math.min(l-1,LEVELS.length-1)]}`}
+function levelOf(xp){let l=1;while(l<LEVELS.length&&xp>=levelStart(l+1)) l++;return l}
+function levelName(){const l=levelOf(state.xp);return `lv ${l} · ${LEVELS[l-1]}`}
 function renderHUD(){
   $('lvl').textContent=levelName();
-  const into=state.xp%200;$('xpfill').style.width=(into/2)+"%";$('xptext').textContent=`${into} / 200 XP`;
+  const l=levelOf(state.xp);
+  document.querySelectorAll('#levelList li').forEach(li=>{const n=+li.dataset.l;li.classList.toggle('now',n===l);li.classList.toggle('done',n<l)});
+  if(l>=LEVELS.length){$('xpfill').style.width="100%";$('xptext').textContent=`max level · ${state.xp} xp`;$('lvl').title="max level";return}
+  const into=state.xp-levelStart(l),need=lvlCost(l);
+  $('xpfill').style.width=(into/need*100)+"%";$('xptext').textContent=`${into} / ${need} xp to ${LEVELS[l]}`;
+  $('lvl').title=`${need-into} xp to lv ${l+1} · ${LEVELS[l]}`;
 }
 
 
