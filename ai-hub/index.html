@@ -4,220 +4,250 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GCDS US AI Hub</title>
-<meta name="description" content="AI study tools for Greenwich Country Day Upper School classes, built to coach you instead of doing the work for you.">
-<meta name="theme-color" content="#000000">
+<meta name="description" content="Unit-by-unit study tools for Greenwich Country Day Upper School science, math and CS classes.">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23F47B20'/%3E%3Cpath d='M26 6Q32 24 32 24Q32 24 38 6Z M4 30Q20 33 20 33Q20 33 4 38Z M60 30Q44 33 44 33Q44 33 60 38Z' fill='%23000'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap">
 <style>
   :root {
-    --black: #000000;
-    --white: #ffffff;
+    --ink: #000;
+    --text: #1f1f1f;
+    --muted: #666;
+    --line: #e7e5e1;
+    --soft: #f7f6f3;
     --orange: #F47B20;
-    --orange-soft: #FDE6D3;
-    --gray: #5c5c5c;
-    --rule: #e3e3e3;
-    --field: #f4f4f2;
-    --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
-    --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    --orange-ink: #b4530c;
+    --orange-tint: #fff3e8;
+    --good: #1f7a3d;
+    --good-tint: #e8f5ec;
+    --bad: #b42318;
+    --bad-tint: #fdecea;
+    --r: 12px;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--white); color: var(--black); font: 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
-  a { color: inherit; text-decoration: none; }
-  button, input, textarea { font: inherit; color: inherit; }
-  :focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
-  h1, h2, h3 { font-family: var(--display); font-weight: 900; line-height: .92; letter-spacing: -.005em; margin: 0; text-transform: uppercase; }
-  .wrap { max-width: 1120px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+  body { margin: 0; background: #fff; color: var(--text); font: 16px/1.6 "Instrument Sans", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  h1, h2, h3 { color: var(--ink); margin: 0; line-height: 1.2; letter-spacing: -.015em; font-weight: 600; }
+  h1 { font-size: clamp(1.9rem, 4vw, 2.5rem); }
+  h2 { font-size: 1.35rem; }
+  h3 { font-size: 1.05rem; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+  .muted { color: var(--muted); }
 
-  /* ---------- nav ---------- */
-  .top { position: sticky; top: 0; z-index: 20; background: var(--black); color: var(--white); }
-  .top .wrap { display: flex; align-items: center; gap: 16px; height: 64px; }
-  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.02rem; letter-spacing: -.01em; }
-  .brand svg { width: 38px; height: 38px; flex: none; }
-  .brand span b { color: var(--orange); font-weight: 700; }
-  .crumbs { margin-left: auto; display: flex; gap: 10px; font-size: .92rem; color: #b5b5b5; flex-wrap: wrap; justify-content: flex-end; }
-  .crumbs a:hover { color: var(--orange); }
-  .crumbs .here { color: var(--white); }
+  /* nav */
+  .top { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .top .wrap { display: flex; align-items: center; height: 58px; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; color: var(--ink); }
+  .brand svg { width: 30px; height: 30px; }
+  .brand b { color: var(--orange-ink); font-weight: 600; }
 
-  main.wrap { padding-top: 0; padding-bottom: 96px; min-height: 60vh; }
+  main.wrap { padding-top: 40px; padding-bottom: 80px; min-height: 70vh; }
   main:focus { outline: none; }
 
-  /* ---------- stripes (signature) ---------- */
-  .stripes { display: block; width: 100%; height: 150px; background: var(--orange); }
-  .stripes.thin { height: 64px; }
-  .bleed { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+  /* buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line);
+    background: #fff; font-weight: 600; font-size: .95rem; cursor: pointer; text-decoration: none; transition: border-color .15s, background .15s; }
+  .btn:hover { border-color: var(--ink); }
+  .btn.primary { background: var(--orange); border-color: var(--orange); color: #000; }
+  .btn.primary:hover { background: #e56d12; border-color: #e56d12; }
+  .btn.dark { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .btn.small { padding: 6px 12px; font-size: .88rem; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn svg { width: 15px; height: 15px; }
+  .back { margin-bottom: 22px; }
 
-  /* ---------- home hero ---------- */
-  .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; align-items: end; padding: 72px 0 0; }
-  .hero h1 { font-size: clamp(3.6rem, 11vw, 9rem); }
-  .hero h1 .o { color: var(--orange); }
-  .hero p { font-size: 1.2rem; color: var(--gray); max-width: 50ch; margin: 26px 0 40px; }
-  .hero-tiger { width: 300px; height: auto; margin-bottom: -44px; position: relative; z-index: 2; }
+  /* home */
+  .intro { display: flex; align-items: center; gap: 22px; padding: 8px 0 34px; border-bottom: 1px solid var(--line); }
+  .intro svg { width: 84px; height: 84px; flex: none; }
+  .intro p { margin: 6px 0 0; color: var(--muted); max-width: 60ch; }
+  .sect { padding-top: 36px; }
+  .sect > h2 { margin-bottom: 4px; }
+  .sect > p { margin: 0 0 16px; color: var(--muted); }
+  .grades { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+  .grade { border: 1px solid var(--line); border-radius: var(--r); padding: 18px; }
+  .grade h3 { margin-bottom: 2px; }
+  .grade .sub { color: var(--muted); font-size: .9rem; margin-bottom: 12px; }
+  .grade .lvl { font-size: .82rem; font-weight: 600; color: var(--muted); margin: 12px 0 4px; }
+  .clist { display: grid; gap: 2px; }
+  .clink { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; margin: 0 -10px; border-radius: 8px; text-decoration: none; }
+  .clink:hover { background: var(--soft); }
+  .clink span:first-child { font-weight: 500; }
+  .tag { font-size: .76rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .tag.live { background: var(--orange-tint); color: var(--orange-ink); }
+  .tag.soon { background: var(--soft); color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips .clink { margin: 0; border: 1px solid var(--line); gap: 8px; }
+  .note { margin-top: 36px; background: var(--soft); border-radius: var(--r); padding: 16px 18px; color: var(--muted); font-size: .94rem; }
+  .note b { color: var(--text); }
 
-  /* ---------- how it works ---------- */
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 64px 0 72px; }
-  .step { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; }
-  .step .n { font-family: var(--display); font-weight: 900; font-size: 4.2rem; line-height: .8; color: var(--orange); }
-  .step b { display: block; font-size: 1.12rem; margin-bottom: 4px; }
-  .step span { color: var(--gray); font-size: .98rem; }
+  /* course page */
+  .head { margin-bottom: 28px; }
+  .head p { margin: 8px 0 0; color: var(--muted); max-width: 64ch; }
+  .course-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 28px; align-items: start; }
+  .unit { display: block; border: 1px solid var(--line); border-radius: var(--r); padding: 20px; text-decoration: none; transition: border-color .15s; margin-bottom: 12px; }
+  .unit:hover { border-color: var(--ink); }
+  .unit .num { font-size: .85rem; font-weight: 600; color: var(--orange-ink); }
+  .unit h3 { font-size: 1.15rem; margin: 2px 0 6px; }
+  .unit p { margin: 0 0 12px; color: var(--muted); font-size: .95rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: 14px; font-size: .88rem; color: var(--muted); }
+  .stats b { color: var(--text); }
+  .bar { height: 6px; background: var(--soft); border-radius: 99px; overflow: hidden; margin-top: 12px; }
+  .bar i { display: block; height: 100%; background: var(--orange); border-radius: 99px; transition: width .4s; }
+  .unit.locked { border-style: dashed; color: var(--muted); }
 
-  /* ---------- subject list ---------- */
-  .block-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding-bottom: 18px; border-bottom: 3px solid var(--black); }
-  .block-head h2 { font-size: clamp(2.4rem, 5vw, 3.6rem); }
-  .block-head p { margin: 0; color: var(--gray); max-width: 40ch; text-align: right; font-size: .98rem; }
-  .group-name { font-weight: 600; font-size: .95rem; color: var(--gray); padding: 28px 0 8px; }
-  .subj { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) auto; gap: 28px; align-items: center;
-    padding: 26px 0; border-bottom: 1px solid var(--rule); transition: background .18s, box-shadow .18s; }
-  .subj h3 { font-size: clamp(2.6rem, 5vw, 4rem); }
-  .subj p { margin: 0; color: var(--gray); }
-  .subj .count { justify-self: end; font-weight: 600; font-size: .95rem; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
-  .subj .count svg { width: 18px; height: 18px; transition: transform .18s; }
-  .subj:hover, .subj:focus-visible { background: var(--orange); box-shadow: -18px 0 0 var(--orange), 18px 0 0 var(--orange); }
-  .subj:hover p, .subj:focus-visible p { color: var(--black); }
-  .subj:hover .count svg { transform: translateX(4px); }
-  .subj.small h3 { font-size: clamp(2rem, 4vw, 3rem); }
+  .builder { border: 1px solid var(--line); border-radius: var(--r); padding: 20px; position: sticky; top: 78px; }
+  .builder h2 { font-size: 1.15rem; }
+  .builder > p { margin: 4px 0 14px; color: var(--muted); font-size: .92rem; }
+  .fieldset { border: 0; padding: 0; margin: 0 0 16px; }
+  .fieldset legend { font-weight: 600; font-size: .9rem; margin-bottom: 8px; display: flex; justify-content: space-between; width: 100%; }
+  .fieldset legend button { background: none; border: 0; color: var(--orange-ink); font-size: .82rem; font-weight: 600; cursor: pointer; padding: 0; }
+  .opt { display: flex; align-items: flex-start; gap: 8px; font-size: .92rem; padding: 3px 0; cursor: pointer; }
+  .opt input { accent-color: var(--orange); margin-top: 5px; }
+  .topics-box { max-height: 220px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; }
+  .seg button { flex: 1; border: 0; background: none; border-radius: 999px; padding: 6px 0; font-size: .9rem; font-weight: 500; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .builder .btn.primary { width: 100%; margin-top: 4px; }
+  .avail { font-size: .85rem; color: var(--muted); margin-top: 8px; text-align: center; }
 
-  .more { padding-top: 72px; }
-  .notice { display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center; background: var(--black); color: var(--white);
-    padding: 34px 36px; margin: 72px 0 0; border-radius: 4px; }
-  .notice svg { width: 76px; height: 76px; }
-  .notice h3 { font-size: 2rem; color: var(--orange); margin-bottom: 8px; }
-  .notice p { margin: 0; color: #d4d4d4; max-width: 70ch; }
+  .empty { text-align: center; padding: 50px 20px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--muted); }
+  .empty svg { width: 70px; height: 70px; margin-bottom: 10px; }
+  .empty h2 { margin-bottom: 6px; }
+  .empty p { max-width: 46ch; margin: 0 auto; }
 
-  /* ---------- page heads ---------- */
-  .page-head { padding: 64px 0 40px; display: grid; gap: 16px; }
-  .back { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px 9px 14px; border: 2px solid var(--black);
-    border-radius: 999px; font-weight: 600; font-size: .95rem; transition: background .15s, color .15s; }
-  .back svg { width: 16px; height: 16px; transition: transform .15s; }
-  .back:hover { background: var(--black); color: var(--orange); }
-  .back:hover svg { transform: translateX(-3px); }
-  .page-head h1 { font-size: clamp(3.2rem, 9vw, 6.6rem); }
-  .page-head h1 small { display: block; font-size: .42em; color: var(--gray); margin-top: 10px; }
-  .page-head p { margin: 0; color: var(--gray); font-size: 1.12rem; max-width: 60ch; }
+  /* unit page tabs */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 24px; overflow-x: auto; }
+  .tab { border: 0; background: none; padding: 10px 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--orange); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .toolbar select { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: #fff; }
+  .toolbar .grow { flex: 1; }
+  .toolbar label.opt { padding: 0; }
 
-  .course-groups { padding-bottom: 20px; }
-  .courses { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; border-top: 3px solid var(--black); }
-  .course { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 0;
-    border-bottom: 1px solid var(--rule); transition: background .18s, box-shadow .18s; }
-  .course b { font-weight: 600; font-size: 1.12rem; }
-  .course small { display: block; color: var(--gray); font-size: .9rem; }
-  .course svg { width: 18px; height: 18px; flex: none; transition: transform .18s; }
-  .course:hover, .course:focus-visible { background: var(--orange); box-shadow: -14px 0 0 var(--orange), 14px 0 0 var(--orange); }
-  .course:hover small { color: var(--black); }
-  .course:hover svg { transform: translateX(4px); }
-  .course-groups .group-name { padding-top: 36px; }
+  /* notes */
+  .notes-grid { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; align-items: start; }
+  .toc { position: sticky; top: 78px; display: grid; gap: 2px; font-size: .9rem; }
+  .toc a { text-decoration: none; padding: 5px 10px; border-radius: 6px; color: var(--muted); }
+  .toc a:hover { background: var(--soft); color: var(--text); }
+  .nsec { padding-bottom: 28px; margin-bottom: 28px; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+  .nsec:last-child { border-bottom: 0; }
+  .nsec > h2 { margin-bottom: 12px; }
+  .nbody h3 { margin: 18px 0 6px; }
+  .nbody ul, .nbody ol { padding-left: 20px; margin: 6px 0; }
+  .nbody li { margin: 4px 0; }
+  .nbody b.k { color: var(--ink); font-weight: 600; background: linear-gradient(transparent 62%, var(--orange-tint) 62%); }
+  .nbody .must { background: var(--orange-tint); border-radius: 10px; padding: 12px 16px; margin-bottom: 12px; }
+  .nbody .must ol { margin-bottom: 0; }
+  .nbody .flag, .nbody .mem { border-left: 3px solid var(--orange); padding: 6px 12px; margin: 10px 0; background: var(--soft); border-radius: 0 8px 8px 0; }
+  .nbody .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .nbody table, .qa table { border-collapse: collapse; width: 100%; font-size: .92rem; margin: 8px 0; }
+  .nbody th, .nbody td, .qa th, .qa td { border: 1px solid var(--line); padding: 7px 9px; text-align: left; vertical-align: top; }
+  .nbody th, .qa th { background: var(--soft); }
+  .nbody .tbl, .qa .tbl { overflow-x: auto; }
+  .mono { font-family: ui-monospace, Menlo, monospace; font-size: .92em; }
 
-  /* ---------- course page ---------- */
-  .workspace { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 40px; align-items: start; padding-top: 8px; }
-  .toollist { position: sticky; top: 88px; border-top: 3px solid var(--black); }
-  .toollist h2 { font-family: var(--body); text-transform: none; font-weight: 600; font-size: .95rem; color: var(--gray); padding: 14px 0 6px; line-height: 1.4; }
-  .tool-btn { width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--rule); padding: 14px 16px 14px 18px; cursor: pointer;
-    display: grid; gap: 2px; position: relative; transition: background .15s, color .15s; }
-  .tool-btn b { font-weight: 600; font-size: 1.02rem; }
-  .tool-btn span { color: var(--gray); font-size: .88rem; line-height: 1.4; }
-  .tool-btn::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: transparent; transition: background .15s; }
-  .tool-btn:hover { background: var(--field); }
-  .tool-btn[aria-pressed="true"] { background: var(--black); color: var(--white); }
-  .tool-btn[aria-pressed="true"] span { color: #c9c9c9; }
-  .tool-btn[aria-pressed="true"]::before { background: var(--orange); }
+  /* flashcards */
+  .flash { max-width: 640px; margin: 0 auto; }
+  .card { perspective: 1200px; cursor: pointer; height: 300px; }
+  .card-in { position: relative; width: 100%; height: 100%; transition: transform .45s; transform-style: preserve-3d; }
+  .card.flip .card-in { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; justify-content: center; text-align: center; overflow: auto; background: #fff; }
+  .face.back { transform: rotateY(180deg); background: var(--soft); }
+  .face .lbl { position: absolute; top: 14px; left: 18px; font-size: .8rem; font-weight: 600; color: var(--muted); }
+  .face .txt { font-size: 1.15rem; color: var(--ink); }
+  .face.back .txt { font-size: 1.02rem; color: var(--text); }
+  .fcontrols { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; gap: 10px; flex-wrap: wrap; }
+  .fcontrols .mid { display: flex; gap: 8px; }
+  .btn.got { border-color: var(--good); color: var(--good); }
+  .btn.got:hover { background: var(--good-tint); }
+  .btn.miss { border-color: var(--bad); color: var(--bad); }
+  .btn.miss:hover { background: var(--bad-tint); }
+  .hint { text-align: center; font-size: .85rem; color: var(--muted); margin-top: 10px; }
 
-  .panel { border: 3px solid var(--black); border-radius: 4px; padding: 30px; display: grid; gap: 20px; background: var(--white); }
-  .panel h2 { font-size: clamp(2.4rem, 4.5vw, 3.4rem); }
-  .panel .why { margin: 8px 0 0; color: var(--gray); }
-  .field { display: grid; gap: 7px; }
-  .field label { font-weight: 600; font-size: .96rem; }
-  .field label i { font-style: normal; font-weight: 400; color: var(--gray); }
-  .field input, .field textarea { width: 100%; background: var(--field); border: 2px solid transparent; border-radius: 4px; padding: 12px 14px; transition: border-color .15s, background .15s; }
-  .field textarea { min-height: 116px; resize: vertical; }
-  .field input:focus, .field textarea:focus { outline: none; border-color: var(--orange); background: var(--white); }
+  /* questions */
+  .qlist { display: grid; gap: 12px; }
+  .qa { border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; }
+  .qa .qtop { display: flex; justify-content: space-between; gap: 10px; font-size: .8rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  .qa .qtext { color: var(--ink); }
+  .qa .ans { margin-top: 12px; padding: 12px 14px; background: var(--soft); border-radius: 10px; }
+  .qa .ans[hidden] { display: none; }
+  .qa .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .qa.got { border-color: #b7dfc3; }
+  .qa.miss { border-color: #f3c2bd; }
+  .mark { font-size: .8rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+  .mark.got { background: var(--good-tint); color: var(--good); }
+  .mark.miss { background: var(--bad-tint); color: var(--bad); }
+  .choices { display: grid; gap: 8px; margin-top: 10px; }
+  .choice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; text-align: left; background: #fff; width: 100%; }
+  .choice:hover { border-color: var(--ink); }
+  .choice .letter { font-weight: 600; color: var(--muted); min-width: 1.2em; }
+  .choice.sel { border-color: var(--ink); background: var(--soft); }
+  .choice.right { border-color: var(--good); background: var(--good-tint); }
+  .choice.wrong { border-color: var(--bad); background: var(--bad-tint); }
+  .choice:disabled { cursor: default; }
+  .explain { margin-top: 10px; font-size: .94rem; }
+  .explain b { color: var(--ink); }
 
-  .preview { background: var(--black); color: var(--white); border-radius: 4px; padding: 20px 22px; }
-  .preview .label { display: flex; justify-content: space-between; font-weight: 600; font-size: .9rem; color: #a8a8a8; margin-bottom: 10px; }
-  .preview pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; font: .93rem/1.6 var(--body); max-height: 280px; overflow: auto; }
-  .preview mark { background: none; color: var(--orange); font-weight: 600; }
+  /* test + session */
+  .testhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 58px; background: #fff; padding: 12px 0; z-index: 5; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+  .testhead .bar { width: 220px; margin: 0; }
+  .score { border: 1px solid var(--line); border-radius: var(--r); padding: 22px; margin-bottom: 20px; display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: center; }
+  .score .big { font-size: 2.6rem; font-weight: 700; color: var(--ink); line-height: 1; }
+  .score .big small { font-size: 1rem; color: var(--muted); font-weight: 500; }
+  .score ul { margin: 6px 0 0; padding-left: 18px; }
+  .start { border: 1px solid var(--line); border-radius: var(--r); padding: 24px; max-width: 560px; }
+  .start p { color: var(--muted); margin: 6px 0 16px; }
 
-  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 999px; border: 2px solid var(--black);
-    background: var(--white); font-weight: 600; font-size: .98rem; cursor: pointer; transition: background .15s, color .15s, transform .1s; }
-  .btn:hover { background: var(--black); color: var(--white); }
-  .btn:active { transform: scale(.97); }
-  .btn.primary { background: var(--orange); border-color: var(--orange); color: var(--black); }
-  .btn.primary:hover { background: var(--black); border-color: var(--black); color: var(--orange); }
-  .btn svg { width: 14px; height: 14px; }
-  .fine { font-size: .9rem; color: var(--gray); margin: 0; }
+  footer { border-top: 1px solid var(--line); }
+  footer .stripes { display: block; width: 100%; height: 18px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 20px; padding-bottom: 28px; font-size: .88rem; color: var(--muted); }
 
-  .below { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-  .below h3 { font-size: 1.9rem; padding-bottom: 10px; border-bottom: 3px solid var(--black); margin-bottom: 14px; }
-  .below ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--gray); }
-  .below p { margin: 0; color: var(--gray); }
-  .res { display: grid; }
-  .res a { display: flex; justify-content: space-between; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--rule); font-weight: 600; }
-  .res a small { display: block; font-weight: 400; color: var(--gray); }
-  .res a:hover { color: var(--orange); }
-
-  .after { padding-bottom: 96px; }
-
-  /* ---------- footer ---------- */
-  footer { background: var(--black); color: #bdbdbd; }
-  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding-top: 34px; padding-bottom: 40px; font-size: .92rem; }
-  footer .who { display: flex; align-items: center; gap: 14px; }
-  footer svg.mark { width: 44px; height: 44px; flex: none; }
-  footer b { color: var(--white); font-weight: 600; }
-
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: var(--black); color: var(--white);
-    border-left: 5px solid var(--orange); padding: 12px 20px; border-radius: 4px; font-weight: 500; transition: .2s; pointer-events: none; z-index: 30; }
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 16px); opacity: 0; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-size: .92rem; transition: .2s; pointer-events: none; z-index: 30; }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-  /* ---------- scroll reveal ---------- */
-  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+  .reveal { opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s ease; transition-delay: var(--d, 0s); }
   .reveal.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
-    html { scroll-behavior: auto; }
-  }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } .card-in { transition: none; } }
 
-  @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding-top: 48px; }
-    .hero-tiger { width: 190px; justify-self: end; margin: -20px 0 -32px; }
-    .steps { grid-template-columns: 1fr; gap: 26px; padding: 48px 0; }
-    .subj { grid-template-columns: 1fr auto; gap: 6px 16px; }
-    .subj p { grid-column: 1 / -1; grid-row: 2; }
-    .subj .count { grid-row: 1; grid-column: 2; }
-    .block-head { flex-direction: column; align-items: start; }
-    .block-head p { text-align: left; }
-    .courses { grid-template-columns: 1fr; }
-    .workspace { grid-template-columns: 1fr; gap: 28px; }
-    .toollist { position: static; }
-    .below { grid-template-columns: 1fr; }
-    .notice { grid-template-columns: 1fr; padding: 28px; }
-    .crumbs { display: none; }
-    .panel { padding: 22px; }
+  @media (max-width: 880px) {
+    .grades { grid-template-columns: 1fr; }
+    .course-grid { grid-template-columns: 1fr; }
+    .builder { position: static; }
+    .notes-grid { grid-template-columns: 1fr; }
+    .toc { position: static; display: flex; flex-wrap: wrap; gap: 6px; }
+    .toc a { border: 1px solid var(--line); border-radius: 999px; }
+    .nbody .two { grid-template-columns: 1fr; }
+    .intro svg { width: 60px; height: 60px; }
+    .testhead .bar { width: 120px; }
+    .score { grid-template-columns: 1fr; }
+    .fcontrols .mid { order: -1; width: 100%; justify-content: center; }
+    .fcontrols .mid .btn { flex: 1; }
   }
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#/" aria-label="GCDS US AI Hub home"><svg aria-hidden="true"><use href="#tiger"/></svg><span>GCDS <b>US</b> AI Hub</span></a>
-    <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+    <a class="brand" href="#/"><svg aria-hidden="true"><use href="#tiger"/></svg><span>GCDS <b>US</b> AI Hub</span></a>
   </div>
 </header>
 
 <main class="wrap" id="app" tabindex="-1"></main>
 
 <footer>
+  <svg class="stripes" id="stripes" viewBox="0 0 1600 18" preserveAspectRatio="none" aria-hidden="true"></svg>
   <div class="wrap">
-    <div class="who"><svg class="mark" aria-hidden="true"><use href="#tiger"/></svg>
-      <span><b>GCDS US AI Hub</b><br>A student project by Mary Chickering for the GCDS AI competition. Not an official GCDS site.</span></div>
-    <span>Follow your teacher's AI policy and the Honor Code.</span>
+    <span>A student project by Mary Chickering for the GCDS AI competition. Not an official GCDS site.</span>
+    <span>Study materials are AI-generated from class notes. Check anything that looks off with your teacher.</span>
   </div>
 </footer>
-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- original tiger mark, reused everywhere via <use> -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="tiger" viewBox="0 0 100 100">
     <circle cx="20" cy="22" r="14" fill="#F47B20"/><circle cx="80" cy="22" r="14" fill="#F47B20"/>
@@ -225,457 +255,456 @@
     <path d="M50 12C75 12 92 30 92 54C92 78 74 94 50 94C26 94 8 78 8 54C8 30 25 12 50 12Z" fill="#F47B20"/>
     <path d="M50 66C64 66 74 72 74 81C74 90 63 95 50 95C37 95 26 90 26 81C26 72 36 66 50 66Z" fill="#fff"/>
     <path d="M44 12Q50 34 50 34Q50 34 56 12Z" fill="#000"/>
-    <path d="M32 15Q40 30 41 31Q38 22 39 13Z" fill="#000"/>
-    <path d="M68 15Q60 30 59 31Q62 22 61 13Z" fill="#000"/>
-    <path d="M8 46Q24 50 27 52Q22 54 9 56Z" fill="#000"/>
-    <path d="M10 64Q24 64 26 65Q22 68 13 72Z" fill="#000"/>
-    <path d="M92 46Q76 50 73 52Q78 54 91 56Z" fill="#000"/>
-    <path d="M90 64Q76 64 74 65Q78 68 87 72Z" fill="#000"/>
+    <path d="M32 15Q40 30 41 31Q38 22 39 13Z" fill="#000"/><path d="M68 15Q60 30 59 31Q62 22 61 13Z" fill="#000"/>
+    <path d="M8 46Q24 50 27 52Q22 54 9 56Z" fill="#000"/><path d="M10 64Q24 64 26 65Q22 68 13 72Z" fill="#000"/>
+    <path d="M92 46Q76 50 73 52Q78 54 91 56Z" fill="#000"/><path d="M90 64Q76 64 74 65Q78 68 87 72Z" fill="#000"/>
     <ellipse cx="35" cy="51" rx="6.5" ry="5" fill="#000"/><ellipse cx="65" cy="51" rx="6.5" ry="5" fill="#000"/>
     <circle cx="37" cy="49.5" r="1.8" fill="#fff"/><circle cx="67" cy="49.5" r="1.8" fill="#fff"/>
     <path d="M43 68Q50 64 57 68Q54 74 50 75Q46 74 43 68Z" fill="#000"/>
     <path d="M50 75V81M50 81Q45 85 41 82M50 81Q55 85 59 82" stroke="#000" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   </symbol>
-  <symbol id="go" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="back" viewBox="0 0 20 20"><path d="M17 10H4M9 5l-5 5 5 5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="ext" viewBox="0 0 14 14"><path d="M4 2h8v8M12 2 2 12" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="back" viewBox="0 0 20 20"><path d="M16 10H4M9 5l-5 5 5 5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
 <script>
-const SUBJECTS = [
-  {
-    id: "grade-9", name: "9th Grade", section: "grade", tools: "science",
-    blurb: "Biology, Core or Honors.",
-    groups: [
-      { name: "Biology", courses: [
-        ["biology", "Biology", "Core"], ["honors-biology", "Honors Biology", "Honors"] ] }
-    ]
-  },
-  {
-    id: "grade-10", name: "10th Grade", section: "grade", tools: "science",
-    blurb: "Chemistry, Core or Honors.",
-    groups: [
-      { name: "Chemistry", courses: [
-        ["chemistry", "Chemistry", "Core"], ["honors-chemistry", "Honors Chemistry", "Honors"] ] }
-    ]
-  },
-  {
-    id: "grade-11-12", name: "11th & 12th Grade", section: "grade", tools: "science",
-    blurb: "Physics, electives and advanced science, split into Core, Honors and Advanced.",
-    groups: [
-      { name: "Core", courses: [
-        ["physics", "Physics"], ["environmental", "Environmental Science"],
-        ["psychology", "Psychology"], ["marine-science", "Marine Science"] ] },
-      { name: "Honors", courses: [
-        ["honors-physics", "Honors Physics"], ["honors-environmental", "Honors Environmental Science"] ] },
-      { name: "Advanced (AAS)", courses: [
-        ["aas-biology", "AAS: Biology"], ["aas-chemistry", "AAS: Chemistry"],
-        ["aas-physics-eng", "AAS: Physics & Engineering"], ["aas-eco-eng", "AAS: Eco Engineering"],
-        ["csx", "AAS: CSX"] ] }
-    ]
-  },
-  {
-    id: "math", name: "Math", glyph: "∑", stem: true, tools: "math",
-    blurb: "Hints instead of answers, step-by-step work checks, and practice quizzes.",
-    groups: [
-      { name: "Core sequence", courses: [
-        ["algebra-1", "Algebra I"], ["geometry-concepts", "Geometry Concepts"], ["geometry", "Geometry"],
-        ["algebra-2", "Algebra II"], ["algebra-2-trig", "Algebra II & Trig"], ["precalc-concepts", "Pre-Calc Concepts"],
-        ["precalc", "Pre-Calc"], ["calculus", "Calculus"], ["statistics", "Statistics"] ] },
-      { name: "Honors", courses: [
-        ["honors-geometry", "Honors Geometry"], ["honors-algebra-2", "Honors Algebra II"],
-        ["honors-precalc", "Honors Pre-Calc"], ["honors-calculus", "Honors Calculus"] ] },
-      { name: "Advanced (AAM)", courses: [
-        ["aam-adv-calc", "AAM: Advanced Calculus"], ["aam-adv-stats", "AAM: Advanced Statistics"],
-        ["aam-multivariable", "AAM: Multivariable"], ["aam-discrete", "AAM: Discrete"] ] }
-    ]
-  },
-  {
-    id: "cs", name: "CS & Engineering", glyph: "</>", stem: true, tools: "cs",
-    blurb: "A debugging coach that points you at the bug without fixing it for you.",
-    groups: [
-      { name: "Computer Science", courses: [
-        ["cs-1", "Computer Science I"], ["cs-2", "Computer Science II"],
-        ["csda", "CSDA"], ["adv-csda", "Advanced CSDA"], ["csal", "CSAL"] ] },
-      { name: "Engineering", courses: [
-        ["fund-engineering", "Fundamentals of Engineering"] ] }
-    ]
-  }
-];
-
-// Class-made tools for specific courses go here, keyed by course id.
-const RESOURCES = {
-  // "biology": [{ title: "Unit 1 Study Guide", url: "https://...", note: "Macromolecules, enzymes" }],
-};
-
 /* ============================================================
-   TOOLS: every prompt tells the AI to coach, not do the work.
+   COURSES. To add a class's units, make data/<course-id>.json
+   and list it in DATA below.
    ============================================================ */
-const T = {
-  hint: {
-    name: "Hint tutor", short: "Stuck on a problem? Get one hint at a time.",
-    why: "You get unstuck without getting the answer handed to you.",
-    fields: [
-      { k: "problem", label: "The problem", area: true, ph: "Paste or type the problem exactly as written" },
-      { k: "tried", label: "What you've tried so far", opt: true, area: true, ph: "Even a wrong start helps the AI see where you're stuck" }
-    ],
-    build: (c, v) => `${intro(c)} I'm stuck on this problem:
-
-${v.problem}
-${v.tried ? `\nHere's what I've tried so far:\n${v.tried}\n` : ""}
-Rules for helping me:
-- Do NOT give me the final answer or solve the whole thing.
-- Give me ONE small hint at a time, then wait for me to try the next step.
-- If I make a mistake, point to where it is and ask a question that helps me see it.
-- Only confirm the answer after I've gotten there myself.`
-  },
-  check: {
-    name: "Check my work", short: "Find the first mistake in your solution.",
-    why: "You find out exactly where you went wrong, then fix it yourself.",
-    fields: [
-      { k: "problem", label: "The problem", area: true, ph: "Paste the problem" },
-      { k: "work", label: "Your full solution", area: true, ph: "Write out every step, not just the answer" }
-    ],
-    build: (c, v) => `${intro(c)} Here's a problem and my full solution. Check it step by step.
-
-Problem:
-${v.problem}
-
-My work:
-${v.work}
-
-Rules:
-- If everything is right, tell me and ask me one harder follow-up question on the same idea.
-- If there's a mistake, tell me which step it's in and why it's wrong, but do NOT redo the problem for me.
-- Let me fix it and send it back, then check it again.`
-  },
-  quiz: {
-    name: "Practice quiz", short: "Get quizzed one question at a time.",
-    why: "Testing yourself beats rereading notes. This is how you actually remember stuff.",
-    fields: [
-      { k: "topic", label: "Unit or topics", ph: "e.g. limiting reagents, stoichiometry" },
-      { k: "notes", label: "Notes or vocab from class", opt: true, area: true, ph: "Paste class notes so the questions match what your teacher covered" }
-    ],
-    build: (c, v) => `${intro(c)} Quiz me on: ${v.topic}.
-${v.notes ? `\nUse these class notes so the questions match what we covered:\n${v.notes}\n` : ""}
-Rules:
-- Ask ONE question at a time and wait for my answer.
-- Mix quick recall with questions that make me explain my reasoning or apply the idea.
-- After each answer, tell me if I'm right and briefly explain any mistake. Then ask the next one.
-- If I miss something, come back to it later in a different form.
-- After 10 questions, tell me what I'm solid on and what I should review.`
-  },
-  explain: {
-    name: "Explain it back", short: "Teach the AI a concept. It finds your gaps.",
-    why: "If you can't explain it, you don't know it yet. This shows you exactly what's missing.",
-    fields: [
-      { k: "concept", label: "Concept", ph: "e.g. how enzymes lower activation energy" },
-      { k: "explanation", label: "Your explanation, in your own words", area: true, ph: "Write it like you're teaching a friend who missed class" }
-    ],
-    build: (c, v) => `${intro(c)} I'm going to explain a concept in my own words: ${v.concept}.
-
-My explanation:
-${v.explanation}
-
-Rules:
-- Don't re-explain the whole concept to me.
-- Tell me what I got right, what's missing, and anything that's wrong or vague.
-- Then ask me 2 follow-up questions that test whether I really get it, one at a time.`
-  },
-  plan: {
-    name: "Test prep plan", short: "Turn a test date into a daily study plan.",
-    why: "Spreading out practice works way better than cramming the night before.",
-    fields: [
-      { k: "when", label: "When is the test?", ph: "e.g. next Friday" },
-      { k: "topics", label: "What's on it", area: true, ph: "List the topics or paste the study guide" },
-      { k: "time", label: "Time you have per day", opt: true, ph: "e.g. 30 minutes" }
-    ],
-    build: (c, v) => `${intro(c)} I have a test ${v.when}. It covers:
-${v.topics}
-${v.time ? `\nI have about ${v.time} per day to study.\n` : ""}
-Make me a day-by-day study plan using active recall and spaced practice, not rereading notes. For each day, tell me exactly what to practice and how. Put my hardest topics earlier so I have time to come back to them.
-
-Then start Day 1 right now by quizzing me, one question at a time.`
-  },
-  lab: {
-    name: "Lab report coach", short: "Feedback on claim, evidence, and reasoning.",
-    why: "You learn what a strong lab argument looks like, and it's still your writing.",
-    fields: [
-      { k: "lab", label: "What was the lab?", ph: "e.g. catalase and hydrogen peroxide concentration" },
-      { k: "section", label: "Which section", ph: "e.g. conclusion, error analysis" },
-      { k: "draft", label: "Your draft", area: true, ph: "Paste your section" }
-    ],
-    build: (c, v) => `${intro(c)} I'm writing a lab report on: ${v.lab}. Here's my ${v.section || "section"}:
-
-${v.draft}
-
-Give me feedback using claim, evidence, and reasoning:
-- Is my claim clear and does it actually answer the question?
-- Is it backed by my specific data, or am I being vague?
-- Does my reasoning explain WHY, using the science?
-- Point out any science that's wrong.
-
-Do NOT rewrite any sentences for me. Give specific comments I can act on, and quote the part of my draft each comment is about.`
-  },
-  debug: {
-    name: "Debug coach", short: "Find your own bug with guided questions.",
-    why: "Debugging is the actual skill. This trains it instead of skipping it.",
-    fields: [
-      { k: "lang", label: "Language", ph: "e.g. Python, Java" },
-      { k: "goal", label: "What should it do?", ph: "e.g. return the largest number in the list" },
-      { k: "happens", label: "What happens instead / error message", area: true, ph: "Paste the error or describe the wrong output" },
-      { k: "code", label: "Your code", area: true, ph: "Paste the code" }
-    ],
-    build: (c, v) => `${intro(c)} My ${v.lang || "code"} isn't working.
-
-What it should do: ${v.goal}
-What happens instead: ${v.happens}
-
-My code:
-${v.code}
-
-Rules:
-- Do NOT rewrite my code or give me a fixed version.
-- Ask me questions that help me find the bug myself (like what a variable holds at a certain line).
-- Narrow it down one step at a time. Point me to the right area, not the exact fix.
-- Once I've fixed it, ask me one question about why the bug happened so I don't repeat it.`
-  },
-};
-
-// courses that use a different tool set than their section
-const COURSE_TOOLS = { "csx": "cs" };
-
-const TOOLSETS = {
-  math: ["hint", "check", "quiz", "explain", "plan"],
-  science: ["hint", "explain", "quiz", "lab", "plan"],
-  cs: ["debug", "hint", "explain", "quiz", "plan"]
-};
-
+const SECTIONS = [
+  { id: "science", name: "Science", note: "Sorted by grade.", grades: [
+    { name: "9th grade", sub: "Biology", levels: [["Core", [["biology", "Biology"]]], ["Honors", [["honors-biology", "Honors Biology"]]]] },
+    { name: "10th grade", sub: "Chemistry", levels: [["Core", [["chemistry", "Chemistry"]]], ["Honors", [["honors-chemistry", "Honors Chemistry"]]]] },
+    { name: "11th & 12th grade", sub: "Physics, electives and advanced", levels: [
+      ["Core", [["physics", "Physics"], ["environmental", "Environmental Science"], ["psychology", "Psychology"], ["marine-science", "Marine Science"]]],
+      ["Honors", [["honors-physics", "Honors Physics"], ["honors-environmental", "Honors Environmental Science"]]],
+      ["Advanced", [["aas-biology", "AAS: Biology"], ["aas-chemistry", "AAS: Chemistry"], ["aas-physics-eng", "AAS: Physics & Engineering"], ["aas-eco-eng", "AAS: Eco Engineering"], ["csx", "AAS: CSX"]]] ] }
+  ]},
+  { id: "math", name: "Math", note: "Sorted by level, since placement doesn't follow grade.", courses: [
+    ["algebra-1", "Algebra I"], ["geometry-concepts", "Geometry Concepts"], ["geometry", "Geometry"], ["honors-geometry", "Honors Geometry"],
+    ["algebra-2", "Algebra II"], ["algebra-2-trig", "Algebra II & Trig"], ["honors-algebra-2", "Honors Algebra II"],
+    ["precalc-concepts", "Pre-Calc Concepts"], ["precalc", "Pre-Calc"], ["honors-precalc", "Honors Pre-Calc"],
+    ["calculus", "Calculus"], ["honors-calculus", "Honors Calculus"], ["statistics", "Statistics"],
+    ["aam-adv-stats", "AAM: Advanced Statistics"], ["aam-adv-calc", "AAM: Advanced Calculus"], ["aam-multivariable", "AAM: Multivariable"], ["aam-discrete", "AAM: Discrete"] ] },
+  { id: "cs", name: "Computer science and engineering", note: "", courses: [
+    ["cs-1", "Computer Science I"], ["cs-2", "Computer Science II"], ["csda", "CSDA"], ["adv-csda", "Advanced CSDA"], ["csal", "CSAL"], ["fund-engineering", "Fundamentals of Engineering"] ] }
+];
+const DATA = { "biology": "data/biology.json" };
 
 /* ============================================================ */
 const COURSES = {};
-SUBJECTS.forEach(s => s.groups.forEach(g => g.courses.forEach(([id, name, sub, desc]) => {
-  COURSES[id] = { id, name, sub, desc, subject: s };
-})));
-
-let current = null;
-function intro(c) {
-  const full = c.sub && !["Core", "Honors"].includes(c.sub) ? `${c.name}: ${c.sub}` : c.name;
-  return `I'm a high school student at Greenwich Country Day School taking ${full}.`;
-}
+SECTIONS.forEach(s => {
+  if (s.grades) s.grades.forEach(g => g.levels.forEach(([lvl, list]) => list.forEach(([id, name]) => COURSES[id] = { id, name, where: `${g.name}, ${lvl}` })));
+  else s.courses.forEach(([id, name]) => COURSES[id] = { id, name, where: s.name });
+});
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
-const icon = (id, cls = "") => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+const icon = id => `<svg aria-hidden="true"><use href="#${id}"/></svg>`;
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const plain = h => { const d = document.createElement("div"); d.innerHTML = h; return d.textContent; };
 
-/* tiger stripes: tapered strokes from both edges, seeded so they look the same every visit */
-function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-function stripes(seed, h = 150, cls = "") {
-  const r = rng(seed), W = 1600; let x = 10, top = r() > .5, d = "";
-  const spike = (x, w, len, bend, fromTop) => {
-    const y = v => fromTop ? v : h - v;
-    return `M${x - w / 2},${y(0)} C${x - w / 2 + bend * .3},${y(len * .5)} ${x + bend - 2},${y(len * .85)} ${x + bend},${y(len)} C${x + bend + 2},${y(len * .85)} ${x + w / 2 + bend * .3},${y(len * .5)} ${x + w / 2},${y(0)}Z`;
-  };
-  while (x < W) {
-    const w = 16 + r() * 22, len = h * (.38 + r() * .5), bend = (r() - .5) * 46;
-    d += spike(x, w, len, bend, top);
-    if (r() > .62) d += spike(x + w * .55, w * .45, len * .5, bend * 1.4 + 10, top);
-    x += 30 + r() * 46; top = r() > .35 ? !top : top;
+/* saved progress (per browser) */
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem("aihub:" + k) || "{}"); } catch (e) { return {}; } },
+  set(k, v) { try { localStorage.setItem("aihub:" + k, JSON.stringify(v)); } catch (e) {} }
+};
+
+const cache = {};
+async function load(id) {
+  if (!DATA[id]) return null;
+  if (!cache[id]) {
+    const r = await fetch(DATA[id], { cache: "no-cache" });
+    if (!r.ok) throw new Error("Couldn't load " + DATA[id]);
+    cache[id] = await r.json();
   }
-  return `<svg class="stripes ${cls}" viewBox="0 0 ${W} ${h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="${d}" fill="#000"/></svg>`;
+  return cache[id];
 }
+const topicName = (unit, id) => (unit.topics.find(t => t.id === id) || { name: id }).name;
 
-function crumbs(items) {
-  $("#crumbs").innerHTML = items.map(([label, href], i) =>
-    href ? `<a href="${href}">${esc(label)}</a><span aria-hidden="true">/</span>` : `<span class="here">${esc(label)}</span>`).join("");
+let toastT;
+function toast(m) { const t = $("#toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 1800); }
+
+/* ---------------- home ---------------- */
+function clink(id, name) {
+  const live = !!DATA[id];
+  return `<a class="clink" href="#/course/${id}"><span>${esc(name)}</span><span class="tag ${live ? "live" : "soon"}">${live ? "Units ready" : "Coming soon"}</span></a>`;
 }
-
-function subjRow(s, i, small) {
-  const n = s.groups.reduce((a, g) => a + g.courses.length, 0);
-  return `<a class="subj reveal${small ? " small" : ""}" style="--d:${i * .07}s" href="#/${s.id}">
-    <h3>${esc(s.name)}</h3><p>${esc(s.blurb)}</p>
-    <span class="count">${n} course${n === 1 ? "" : "s"} ${icon("go")}</span></a>`;
-}
-
 function renderHome() {
-  crumbs([]);
   document.title = "GCDS US AI Hub";
+  const sci = SECTIONS[0];
   $("#app").innerHTML = `
-    <section class="hero">
-      <div class="reveal">
-        <h1>GCDS US AI Hub</h1>
-        <p>AI study tools for Upper School science, math and computer science classes. They coach you through problems instead of handing you the answers.</p>
+    <section class="intro reveal">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
+      <div><h1>GCDS US AI Hub</h1>
+      <p>Study your class unit by unit: notes, flashcards, practice questions and practice tests, or build your own practice set from the units you choose.</p></div>
+    </section>
+    <section class="sect">
+      <h2 class="reveal">${esc(sci.name)}</h2><p class="reveal">${esc(sci.note)}</p>
+      <div class="grades">${sci.grades.map((g, i) => `
+        <div class="grade reveal" style="--d:${i * .06}s"><h3>${esc(g.name)}</h3><div class="sub">${esc(g.sub)}</div>
+          ${g.levels.map(([lvl, list]) => `<div class="lvl">${esc(lvl)}</div><div class="clist">${list.map(([id, n]) => clink(id, n)).join("")}</div>`).join("")}
+        </div>`).join("")}
       </div>
-      <svg class="hero-tiger reveal" style="--d:.15s" viewBox="0 0 100 100" role="img" aria-label="Tiger"><use href="#tiger"/></svg>
     </section>
-    <div class="bleed">${stripes(911)}</div>
-    <section class="steps" aria-label="How it works">
-      <div class="step reveal"><span class="n">1</span><div><b>Pick your class</b><span>Choose your grade or subject, then the course you're taking.</span></div></div>
-      <div class="step reveal" style="--d:.08s"><span class="n">2</span><div><b>Choose a tool</b><span>Fill in what you're working on. The hub writes the prompt for you.</span></div></div>
-      <div class="step reveal" style="--d:.16s"><span class="n">3</span><div><b>Open it in an AI</b><span>Send it to Claude or ChatGPT and answer its questions yourself.</span></div></div>
-    </section>
-    <section>
-      <div class="block-head reveal"><h2>Science by grade</h2><p>Pick your grade, then your class.</p></div>
-      ${SUBJECTS.filter(s => s.section === "grade").map((s, i) => subjRow(s, i)).join("")}
-    </section>
-    <section class="more">
-      <div class="block-head reveal"><h2>Math and computer science</h2><p>Sorted by course level, since placement doesn't follow grade.</p></div>
-      ${SUBJECTS.filter(s => s.section !== "grade").map((s, i) => subjRow(s, i)).join("")}
-    </section>
-    <section class="notice reveal">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
-      <div><h3>Not every course is here</h3>
-      <p>The hub only covers classes that share a standard curriculum across sections, so every tool fits what the whole class is learning. The hub is STEM only for now, and electives with section-specific content aren't included. Want your class added? Ask your teacher to reach out.</p></div>
-    </section>
+    ${SECTIONS.slice(1).map(s => `
+      <section class="sect">
+        <h2 class="reveal">${esc(s.name)}</h2>${s.note ? `<p class="reveal">${esc(s.note)}</p>` : `<p></p>`}
+        <div class="chips reveal">${s.courses.map(([id, n]) => clink(id, n)).join("")}</div>
+      </section>`).join("")}
+    <div class="note reveal"><b>Not every course is here.</b> The hub covers STEM classes that share a standard curriculum across sections. Units get added as class materials come in.</div>
   `;
 }
 
-function renderSubject(s) {
-  crumbs([["Hub", "#/"], [s.name]]);
-  document.title = `${s.name} · GCDS US AI Hub`;
-  $("#app").innerHTML = `
-    <section class="page-head">
-      <a class="back reveal" href="#/">${icon("back")}Back to the hub</a>
-      <h1 class="reveal">${esc(s.name)}</h1>
-      <p class="reveal">${esc(s.blurb)}</p>
-    </section>
-    <div class="course-groups">
-    ${s.groups.map(g => `
-      <div class="group-name reveal">${esc(g.name)}</div>
-      <div class="courses">${g.courses.map(([id, name, sub], i) =>
-        `<a class="course reveal" style="--d:${(i % 8) * .05}s" href="#/${s.id}/${id}"><span><b>${esc(name)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</span>${icon("go")}</a>`).join("")}
-      </div>`).join("")}
-    </div>
-    <section class="notice reveal">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
-      <div><h3>Don't see your class?</h3><p>Only courses with a shared curriculum across sections are included right now.</p></div>
-    </section>
-  `;
-}
-
-function renderCourse(c) {
-  const s = c.subject;
-  crumbs([["Hub", "#/"], [s.name, `#/${s.id}`], [c.name]]);
+/* ---------------- course ---------------- */
+async function renderCourse(cid) {
+  const c = COURSES[cid];
+  if (!c) return renderHome();
   document.title = `${c.name} · GCDS US AI Hub`;
-  const tools = TOOLSETS[COURSE_TOOLS[c.id] || s.tools];
-  const res = RESOURCES[c.id] || [];
-  $("#app").innerHTML = `
-    <section class="page-head">
-      <a class="back reveal" href="#/${s.id}">${icon("back")}Back to ${esc(s.name)}</a>
-      <h1 class="reveal">${esc(c.name)}${c.sub ? `<small>${esc(c.sub)}</small>` : ""}</h1>
-      <p class="reveal">${c.desc ? esc(c.desc) : `Pick a tool, fill in what you're working on, and open it in an AI.`}</p>
-    </section>
-    <div class="workspace">
-      <div class="toollist reveal" role="group" aria-label="Tools">
-        <h2>Tools for ${esc(c.name)}</h2>
-        ${tools.map((t, i) => `<button class="tool-btn" data-tool="${t}" aria-pressed="${i === 0}"><b>${esc(T[t].name)}</b><span>${esc(T[t].short)}</span></button>`).join("")}
-      </div>
-      <div class="reveal" style="--d:.1s">
-        <div class="panel" id="panel"></div>
-        <div class="below">
-          <div><h3>How to use it</h3><ol>
-            <li>Fill in the boxes. Anything you leave blank shows up in orange so you can fill it in later.</li>
-            <li>Open it in Claude or ChatGPT, or copy the prompt.</li>
-            <li>Answer the AI's questions yourself. That's where the learning happens.</li>
-          </ol></div>
-          <div><h3>Class-made tools</h3>${res.length
-            ? `<div class="res">${res.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener"><span>${esc(r.title)}${r.note ? `<small>${esc(r.note)}</small>` : ""}</span>${icon("ext")}</a>`).join("")}</div>`
-            : `<p>Study guides, practice tests and simulations made for ${esc(c.name)} will show up here.</p>`}</div>
-        </div>
-      </div>
-    </div>
-  `;
-  document.querySelectorAll(".tool-btn").forEach(b => b.addEventListener("click", () => {
-    document.querySelectorAll(".tool-btn").forEach(x => x.setAttribute("aria-pressed", x === b));
-    showTool(c, b.dataset.tool);
-    if (window.innerWidth <= 900) $("#panel").scrollIntoView({ behavior: "smooth", block: "start" });
-  }));
-  showTool(c, tools[0]);
-}
-
-const drafts = {};
-function showTool(c, toolId) {
-  const t = T[toolId];
-  const key = c.id + ":" + toolId;
-  const vals = drafts[key] || (drafts[key] = {});
-  current = { c, t, vals };
-  $("#panel").innerHTML = `
-    <div><h2>${esc(t.name)}</h2><p class="why">${esc(t.why)}</p></div>
-    ${t.fields.map(f => `<div class="field">
-      <label for="f-${f.k}">${esc(f.label)}${f.opt ? " <i>(optional)</i>" : ""}</label>
-      ${f.area
-        ? `<textarea id="f-${f.k}" data-k="${f.k}" placeholder="${esc(f.ph)}">${esc(vals[f.k] || "")}</textarea>`
-        : `<input id="f-${f.k}" data-k="${f.k}" placeholder="${esc(f.ph)}" value="${esc(vals[f.k] || "")}">`}
-    </div>`).join("")}
-    <div class="preview"><div class="label"><span>Your prompt</span></div><pre id="out"></pre></div>
-    <div class="actions">
-      <a class="btn primary" id="open-claude" target="_blank" rel="noopener">Open in Claude ${icon("ext")}</a>
-      <a class="btn" id="open-gpt" target="_blank" rel="noopener">Open in ChatGPT ${icon("ext")}</a>
-      <button class="btn" id="copy">Copy prompt</button>
-    </div>
-    <p class="fine">Check your teacher's AI policy before using AI on graded work.</p>
-  `;
-  $("#panel").querySelectorAll("[data-k]").forEach(el => el.addEventListener("input", () => { vals[el.dataset.k] = el.value; update(); }));
-  $("#copy").addEventListener("click", copyPrompt);
-  update();
-}
-
-function promptText(markup) {
-  const { c, t, vals } = current;
-  const v = {};
-  t.fields.forEach(f => {
-    const val = (vals[f.k] || "").trim();
-    if (val) v[f.k] = val;
-    else v[f.k] = f.opt ? "" : (markup ? `\u0000[${f.label.toLowerCase()}]\u0001` : `[${f.label.toLowerCase()}]`);
-  });
-  let out = t.build(c, v).replace(/\n{3,}/g, "\n\n").trim();
-  if (markup) out = esc(out).replace(/\u0000([^\u0001]*)\u0001/g, "<mark>$1</mark>");
-  return out;
-}
-
-function update() {
-  const plain = promptText(false);
-  $("#out").innerHTML = promptText(true);
-  $("#open-claude").href = "https://claude.ai/new?q=" + encodeURIComponent(plain);
-  $("#open-gpt").href = "https://chatgpt.com/?q=" + encodeURIComponent(plain);
-}
-
-async function copyPrompt() {
-  const text = promptText(false);
-  try { await navigator.clipboard.writeText(text); }
-  catch (e) {
-    const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
-    ta.select(); document.execCommand("copy"); ta.remove();
+  const data = await load(cid).catch(() => null);
+  const head = `<a class="btn small back" href="#/">${icon("back")}Back to all classes</a>
+    <div class="head reveal"><span class="muted">${esc(c.where)}</span><h1>${esc(c.name)}</h1></div>`;
+  if (!data) {
+    $("#app").innerHTML = head + `<div class="empty reveal"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
+      <h2>No units yet</h2><p>Units for ${esc(c.name)} get added once class materials are shared. Check back soon.</p></div>`;
+    return;
   }
-  toast("Prompt copied. Paste it into any AI.");
+  const marks = store.get("marks:" + cid);
+  $("#app").innerHTML = head + `
+    <div class="course-grid">
+      <div>
+        <h2 style="margin-bottom:12px">Units</h2>
+        ${data.units.map(u => {
+          const done = u.questions.filter(q => marks[q.id]).length;
+          return `<a class="unit reveal" href="#/course/${cid}/${u.id}/notes">
+            <div class="num">Unit ${u.number}</div><h3>${esc(u.title)}</h3><p>${esc(u.summary)}</p>
+            <div class="stats"><span><b>${u.topics.length}</b> topics</span><span><b>${u.cards.length}</b> flashcards</span><span><b>${u.questions.length}</b> questions</span></div>
+            <div class="bar" title="${done} of ${u.questions.length} questions practiced"><i style="width:${(done / u.questions.length * 100).toFixed(1)}%"></i></div>
+          </a>`;
+        }).join("")}
+        <div class="unit locked reveal"><h3>More units</h3><p style="margin:0">New units show up here as the class covers them.</p></div>
+      </div>
+      <aside class="builder reveal" id="builder"></aside>
+    </div>`;
+  renderBuilder(cid, data);
 }
 
-let toastTimer;
-function toast(msg) {
-  const el = $("#toast"); el.textContent = msg; el.classList.add("show");
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2000);
+const builderState = {};
+function renderBuilder(cid, data) {
+  const st = builderState[cid] || (builderState[cid] = { units: new Set(data.units.map(u => u.id)), topics: null, types: new Set(["mc", "short"]), count: 20 });
+  const units = data.units.filter(u => st.units.has(u.id));
+  const allTopics = units.flatMap(u => u.topics.map(t => ({ ...t, key: u.id + ":" + t.id, unit: u })));
+  if (!st.topics) st.topics = new Set(allTopics.map(t => t.key));
+  const pool = buildPool(data, st);
+  const el = $("#builder");
+  el.innerHTML = `
+    <h2>Build a practice set</h2>
+    <p>Pick what you want to work on. The set mixes questions from across your choices.</p>
+    <fieldset class="fieldset"><legend>Units</legend>
+      ${data.units.map(u => `<label class="opt"><input type="checkbox" data-unit="${u.id}" ${st.units.has(u.id) ? "checked" : ""}> Unit ${u.number}: ${esc(u.title)}</label>`).join("")}
+    </fieldset>
+    <fieldset class="fieldset"><legend>Topics <span><button type="button" data-all="1">All</button> · <button type="button" data-all="0">None</button></span></legend>
+      <div class="topics-box">${allTopics.map(t => `<label class="opt"><input type="checkbox" data-topic="${t.key}" ${st.topics.has(t.key) ? "checked" : ""}> ${esc(t.name)}</label>`).join("") || `<span class="muted">Pick a unit first.</span>`}</div>
+    </fieldset>
+    <fieldset class="fieldset"><legend>Question types</legend>
+      <label class="opt"><input type="checkbox" data-type="mc" ${st.types.has("mc") ? "checked" : ""}> Multiple choice (graded for you)</label>
+      <label class="opt"><input type="checkbox" data-type="short" ${st.types.has("short") ? "checked" : ""}> Short answer (check yourself)</label>
+      <label class="opt"><input type="checkbox" data-type="missed" ${st.types.has("missed") ? "checked" : ""}> Only questions I've missed before</label>
+    </fieldset>
+    <fieldset class="fieldset"><legend>How many</legend>
+      <div class="seg">${[10, 20, 30].map(n => `<button type="button" data-count="${n}" aria-pressed="${st.count === n}">${n}</button>`).join("")}</div>
+    </fieldset>
+    <button class="btn primary" id="go" ${pool.length ? "" : "disabled"}>Start practice set</button>
+    <div class="avail">${pool.length} question${pool.length === 1 ? "" : "s"} match</div>`;
+  el.querySelectorAll("[data-unit]").forEach(i => i.onchange = () => { i.checked ? st.units.add(i.dataset.unit) : st.units.delete(i.dataset.unit); st.topics = null; renderBuilder(cid, data); });
+  el.querySelectorAll("[data-topic]").forEach(i => i.onchange = () => { i.checked ? st.topics.add(i.dataset.topic) : st.topics.delete(i.dataset.topic); renderBuilder(cid, data); });
+  el.querySelectorAll("[data-all]").forEach(b => b.onclick = () => { st.topics = new Set(b.dataset.all === "1" ? allTopics.map(t => t.key) : []); renderBuilder(cid, data); });
+  el.querySelectorAll("[data-type]").forEach(i => i.onchange = () => { i.checked ? st.types.add(i.dataset.type) : st.types.delete(i.dataset.type); renderBuilder(cid, data); });
+  el.querySelectorAll("[data-count]").forEach(b => b.onclick = () => { st.count = +b.dataset.count; renderBuilder(cid, data); });
+  $("#go").onclick = () => {
+    // when both types are picked, split the set evenly between them
+    const mcs = shuffle(pool.filter(q => q.type === "mc")), sas = shuffle(pool.filter(q => q.type === "short"));
+    let items = shuffle(pool).slice(0, st.count);
+    if (mcs.length && sas.length) {
+      const half = Math.ceil(st.count / 2), m = Math.min(half, mcs.length), sa = Math.min(st.count - m, sas.length);
+      items = shuffle(mcs.slice(0, m).concat(sas.slice(0, sa), mcs.slice(m, m + (st.count - m - sa))));
+    }
+    session = { cid, items, answers: {}, done: false };
+    location.hash = `#/course/${cid}/set`;
+  };
+}
+function buildPool(data, st) {
+  const marks = store.get("marks:" + data.course);
+  return data.units.filter(u => st.units.has(u.id)).flatMap(u => u.questions
+    .filter(q => st.topics.has(u.id + ":" + q.topic) && st.types.has(q.type))
+    .filter(q => !st.types.has("missed") || marks[q.id] === "miss")
+    .map(q => ({ ...q, unit: u })));
 }
 
-/* fade things in as they scroll into view */
-const io = "IntersectionObserver" in window
-  ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12, rootMargin: "0px 0px -40px 0px" })
-  : null;
-function reveal() {
-  document.querySelectorAll(".reveal:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+/* ---------------- shared question rendering ---------------- */
+function mcHTML(q, i, ans, showResult) {
+  const L = "ABCD";
+  return `<div class="choices">${q.choices.map((c, k) => {
+    let cls = "";
+    if (showResult && ans != null) cls = k === q.correct ? "right" : (k === ans ? "wrong" : "");
+    else if (ans === k) cls = "sel";
+    return `<button type="button" class="choice ${cls}" data-q="${i}" data-k="${k}" ${showResult && ans != null ? "disabled" : ""}><span class="letter">${L[k]}</span><span>${esc(c)}</span></button>`;
+  }).join("")}</div>
+  ${showResult && ans != null ? `<div class="explain"><b>${ans === q.correct ? "Correct." : `Not quite. The answer is ${L[q.correct]}.`}</b> ${esc(q.explain)}</div>` : ""}`;
 }
 
-function route() {
-  const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  const s = SUBJECTS.find(x => x.id === parts[0]);
-  const c = parts[1] && COURSES[parts[1]];
-  if (s && c && c.subject === s) renderCourse(c);
-  else if (s) renderSubject(s);
+/* ---------------- practice set session ---------------- */
+let session = null;
+function renderSession(cid) {
+  const c = COURSES[cid];
+  if (!session || session.cid !== cid) { location.hash = `#/course/${cid}`; return; }
+  document.title = `Practice set · ${c.name}`;
+  const s = session, n = s.items.length;
+  const answered = Object.keys(s.answers).length;
+  const marks = store.get("marks:" + cid);
+  if (s.done) return renderSessionSummary(cid);
+  $("#app").innerHTML = `
+    <a class="btn small back" href="#/course/${cid}">${icon("back")}Back to ${esc(c.name)}</a>
+    <h1>Practice set</h1>
+    <div class="testhead"><span><b>${answered}</b> of ${n} done</span><div class="bar"><i style="width:${answered / n * 100}%"></i></div><button class="btn small dark" id="finish">Finish and see results</button></div>
+    <div class="qlist">${s.items.map((q, i) => {
+      const a = s.answers[i];
+      const st = q.type === "mc" ? (a == null ? "" : a === q.correct ? "got" : "miss") : (a || "");
+      return `<div class="qa ${st}" id="q${i}">
+        <div class="qtop"><span>${i + 1}. ${esc(topicName(q.unit, q.topic))}</span><span>${q.type === "mc" ? "Multiple choice" : "Short answer"}</span></div>
+        <div class="qtext">${q.type === "mc" ? esc(q.q) : q.q}</div>
+        ${q.type === "mc" ? mcHTML(q, i, a, true) : `
+          <div class="ans" ${a ? "" : "hidden"}>${q.a}</div>
+          <div class="row">${a ? `<span class="mark ${a}">${a === "got" ? "Got it" : "Missed"}</span>` :
+            `<button class="btn small" data-show="${i}">Show answer</button>`}
+            <span class="selfmark" ${a ? "hidden" : ""} id="sm${i}" style="display:none;gap:8px"><button class="btn small got" data-self="${i}" data-v="got">Got it</button><button class="btn small miss" data-self="${i}" data-v="miss">Missed it</button></span></div>`}
+      </div>`;
+    }).join("")}</div>
+    <div style="margin-top:20px"><button class="btn primary" id="finish2">Finish and see results</button></div>`;
+  const app = $("#app");
+  app.querySelectorAll(".choice").forEach(b => b.onclick = () => {
+    const i = +b.dataset.q, q = s.items[i], k = +b.dataset.k;
+    s.answers[i] = k; marks[q.id] = k === q.correct ? "got" : "miss"; store.set("marks:" + cid, marks);
+    keepScroll(() => renderSession(cid));
+  });
+  app.querySelectorAll("[data-show]").forEach(b => b.onclick = () => {
+    const i = b.dataset.show; $(`#q${i} .ans`).hidden = false; b.remove(); $(`#sm${i}`).style.display = "inline-flex";
+  });
+  app.querySelectorAll("[data-self]").forEach(b => b.onclick = () => {
+    const i = +b.dataset.self, q = s.items[i];
+    s.answers[i] = b.dataset.v; marks[q.id] = b.dataset.v; store.set("marks:" + cid, marks);
+    keepScroll(() => renderSession(cid));
+  });
+  ["#finish", "#finish2"].forEach(id => $(id).onclick = () => { s.done = true; renderSession(cid); window.scrollTo(0, 0); });
+}
+function keepScroll(fn) { const y = window.scrollY; fn(); window.scrollTo(0, y); }
+function results(items, answers) {
+  let right = 0, total = 0; const weak = {};
+  items.forEach((q, i) => {
+    const a = answers[i]; if (a == null) return;
+    total++;
+    const ok = q.type === "mc" ? a === q.correct : a === "got";
+    if (ok) right++; else { const k = topicName(q.unit, q.topic); weak[k] = (weak[k] || 0) + 1; }
+  });
+  return { right, total, weak: Object.entries(weak).sort((a, b) => b[1] - a[1]) };
+}
+function scoreHTML(r, of) {
+  const pct = r.total ? Math.round(r.right / r.total * 100) : 0;
+  return `<div class="score"><div class="big">${pct}%<br><small>${r.right} of ${r.total} right${of > r.total ? `, ${of - r.total} skipped` : ""}</small></div>
+    <div>${r.weak.length ? `<h3>Review these topics</h3><ul>${r.weak.map(([t, n]) => `<li>${esc(t)} <span class="muted">(${n} missed)</span></li>`).join("")}</ul>`
+      : `<h3>Nothing missed</h3><p class="muted" style="margin:4px 0 0">Try a bigger set or add more topics.</p>`}</div></div>`;
+}
+function renderSessionSummary(cid) {
+  const c = COURSES[cid], s = session, r = results(s.items, s.answers);
+  $("#app").innerHTML = `
+    <a class="btn small back" href="#/course/${cid}">${icon("back")}Back to ${esc(c.name)}</a>
+    <h1 style="margin-bottom:18px">Your results</h1>
+    ${scoreHTML(r, s.items.length)}
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn primary" href="#/course/${cid}">Build another set</a><button class="btn" id="again">Review this set</button></div>`;
+  $("#again").onclick = () => { s.done = false; renderSession(cid); window.scrollTo(0, 0); };
+}
+
+/* ---------------- unit page ---------------- */
+const TABS = [["notes", "Notes"], ["cards", "Flashcards"], ["practice", "Practice questions"], ["test", "Practice test"]];
+const unitUI = {};
+async function renderUnit(cid, uid, tab) {
+  const c = COURSES[cid]; const data = await load(cid).catch(() => null);
+  const u = data && data.units.find(x => x.id === uid);
+  if (!u) return renderCourse(cid);
+  if (!TABS.some(t => t[0] === tab)) tab = "notes";
+  document.title = `Unit ${u.number} · ${c.name}`;
+  const ui = unitUI[cid + uid] || (unitUI[cid + uid] = { topic: "all", onlyMissed: false });
+  $("#app").innerHTML = `
+    <a class="btn small back" href="#/course/${cid}">${icon("back")}Back to ${esc(c.name)}</a>
+    <div class="head"><span class="muted">${esc(c.name)} · Unit ${u.number}</span><h1>${esc(u.title)}</h1></div>
+    <div class="tabs" role="tablist">${TABS.map(([id, n]) => `<button class="tab" role="tab" aria-selected="${id === tab}" data-tab="${id}">${n}</button>`).join("")}</div>
+    <div id="pane"></div>`;
+  $("#app").querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { location.hash = `#/course/${cid}/${uid}/${b.dataset.tab}`; });
+  const ctx = { cid, u, ui };
+  ({ notes: paneNotes, cards: paneCards, practice: panePractice, test: paneTest })[tab](ctx);
+}
+function topicSelect(u, ui, includeAll = true) {
+  return `<select id="topicSel" aria-label="Topic">${includeAll ? `<option value="all">All topics</option>` : ""}${u.topics.map(t => `<option value="${t.id}" ${ui.topic === t.id ? "selected" : ""}>${esc(t.name)}</option>`).join("")}</select>`;
+}
+
+function paneNotes({ u }) {
+  const order = u.topics.filter(t => u.notes.some(n => n.topic === t.id));
+  $("#pane").innerHTML = `<div class="notes-grid">
+    <nav class="toc" aria-label="Topics">${order.map(t => `<a href="#n-${t.id}" data-jump="n-${t.id}">${esc(t.name)}</a>`).join("")}</nav>
+    <div>${order.map(t => u.notes.filter(n => n.topic === t.id).map(n => `<section class="nsec reveal" id="n-${t.id}"><h2>${esc(t.name)}</h2><div class="nbody">${n.html}</div></section>`).join("")).join("")}</div>
+  </div>`;
+  $("#pane").querySelectorAll("[data-jump]").forEach(a => a.onclick = e => { e.preventDefault(); document.getElementById(a.dataset.jump).scrollIntoView({ behavior: "smooth" }); });
+  reveal();
+}
+
+function paneCards({ cid, u, ui }) {
+  const known = store.get("cards:" + cid);
+  if (!ui.deck || ui.deckTopic !== ui.topic || ui.deckMode !== ui.onlyMissed) {
+    let cards = u.cards.filter(c => ui.topic === "all" || c.topic === ui.topic);
+    if (ui.onlyMissed) cards = cards.filter(c => known[c.id] !== "got");
+    ui.deck = cards; ui.pos = 0; ui.deckTopic = ui.topic; ui.deckMode = ui.onlyMissed;
+  }
+  const deck = ui.deck, c = deck[ui.pos];
+  const gotN = deck.filter(x => known[x.id] === "got").length;
+  $("#pane").innerHTML = `
+    <div class="toolbar">${topicSelect(u, ui)}<label class="opt"><input type="checkbox" id="onlyM" ${ui.onlyMissed ? "checked" : ""}> Skip cards I know</label>
+      <span class="grow"></span><button class="btn small" id="shuf">Shuffle</button></div>
+    ${!c ? `<div class="empty"><h2>No cards here</h2><p>${ui.onlyMissed ? "You know every card in this topic. Nice." : "This topic doesn't have flashcards yet."}</p></div>` : `
+    <div class="flash">
+      <div class="card" id="card" tabindex="0" role="button" aria-label="Flip card"><div class="card-in">
+        <div class="face"><span class="lbl">${esc(topicName(u, c.topic))}</span><div class="txt">${c.front}</div></div>
+        <div class="face back"><span class="lbl">Answer</span><div class="txt">${c.back}</div></div>
+      </div></div>
+      <div class="fcontrols">
+        <button class="btn small" id="prev" ${ui.pos === 0 ? "disabled" : ""}>Previous</button>
+        <div class="mid"><button class="btn small miss" id="learning">Still learning</button><button class="btn small got" id="knowit">Know it</button></div>
+        <button class="btn small" id="next" ${ui.pos >= deck.length - 1 ? "disabled" : ""}>Next</button>
+      </div>
+      <div class="hint">Card ${ui.pos + 1} of ${deck.length} · ${gotN} known · Click the card or press space to flip</div>
+    </div>`}`;
+  const rerender = () => paneCards({ cid, u, ui });
+  $("#topicSel").onchange = e => { ui.topic = e.target.value; rerender(); };
+  $("#onlyM").onchange = e => { ui.onlyMissed = e.target.checked; rerender(); };
+  $("#shuf").onclick = () => { ui.deck = shuffle(ui.deck); ui.pos = 0; rerender(); };
+  if (!c) return;
+  const card = $("#card"); const flip = () => card.classList.toggle("flip");
+  card.onclick = flip;
+  card.onkeydown = e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); } };
+  $("#prev").onclick = () => { ui.pos--; rerender(); };
+  $("#next").onclick = () => { ui.pos++; rerender(); };
+  const markCard = v => { known[c.id] = v; store.set("cards:" + cid, known); if (ui.pos < deck.length - 1) ui.pos++; rerender(); };
+  $("#knowit").onclick = () => markCard("got");
+  $("#learning").onclick = () => markCard("miss");
+}
+
+function panePractice({ cid, u, ui }) {
+  const marks = store.get("marks:" + cid);
+  let qs = u.questions.filter(q => q.type === "short" && (ui.topic === "all" || q.topic === ui.topic));
+  if (ui.onlyMissed) qs = qs.filter(q => marks[q.id] === "miss");
+  const got = qs.filter(q => marks[q.id] === "got").length, miss = qs.filter(q => marks[q.id] === "miss").length;
+  $("#pane").innerHTML = `
+    <div class="toolbar">${topicSelect(u, ui)}<label class="opt"><input type="checkbox" id="onlyM" ${ui.onlyMissed ? "checked" : ""}> Only ones I missed</label>
+      <span class="grow"></span><span class="muted" style="font-size:.9rem">${qs.length} questions · ${got} got · ${miss} missed</span></div>
+    <p class="muted" style="margin-top:-6px">Answer out loud or on paper first, then check. Your marks save in this browser.</p>
+    <div class="qlist">${qs.slice(0, ui.limit || 40).map(q => {
+      const m = marks[q.id] || "";
+      return `<div class="qa ${m}" data-id="${q.id}">
+        <div class="qtop"><span>${esc(topicName(u, q.topic))}</span>${m ? `<span class="mark ${m}">${m === "got" ? "Got it" : "Missed"}</span>` : ""}</div>
+        <div class="qtext">${q.q}</div>
+        <div class="ans" hidden>${q.a}</div>
+        <div class="row"><button class="btn small" data-act="show">Show answer</button>
+          <button class="btn small got" data-act="got">Got it</button><button class="btn small miss" data-act="miss">Missed it</button></div>
+      </div>`;
+    }).join("") || `<div class="empty"><h2>Nothing here</h2><p>${ui.onlyMissed ? "No missed questions in this topic." : "No questions for this topic yet."}</p></div>`}</div>
+    ${qs.length > (ui.limit || 40) ? `<div style="text-align:center;margin-top:16px"><button class="btn" id="more">Show more (${qs.length - (ui.limit || 40)} left)</button></div>` : ""}`;
+  const rerender = () => keepScroll(() => panePractice({ cid, u, ui }));
+  $("#topicSel").onchange = e => { ui.topic = e.target.value; ui.limit = 40; panePractice({ cid, u, ui }); };
+  $("#onlyM").onchange = e => { ui.onlyMissed = e.target.checked; panePractice({ cid, u, ui }); };
+  if ($("#more")) $("#more").onclick = () => { ui.limit = (ui.limit || 40) + 40; rerender(); };
+  $("#pane").querySelectorAll(".qa [data-act]").forEach(b => b.onclick = () => {
+    const box = b.closest(".qa"), id = box.dataset.id;
+    if (b.dataset.act === "show") { const a = box.querySelector(".ans"); a.hidden = !a.hidden; b.textContent = a.hidden ? "Show answer" : "Hide answer"; return; }
+    marks[id] = b.dataset.act; store.set("marks:" + cid, marks); rerender();
+  });
+}
+
+function paneTest({ cid, u, ui }) {
+  const t = ui.test;
+  const mc = u.questions.filter(q => q.type === "mc");
+  if (!t) {
+    $("#pane").innerHTML = `<div class="start">
+      <h2>Practice test</h2>
+      <p>Multiple choice from every topic in this unit, graded when you submit. You'll see your score and which topics to go back over.</p>
+      <fieldset class="fieldset"><legend>Length</legend><div class="seg" style="max-width:320px">
+        ${[[15, "15"], [30, "30"], [mc.length, `All ${mc.length}`]].map(([n, l], i) => `<button type="button" data-len="${n}" aria-pressed="${(ui.len || 15) === n}">${l}</button>`).join("")}</div></fieldset>
+      <button class="btn primary" id="startT">Start test</button></div>`;
+    $("#pane").querySelectorAll("[data-len]").forEach(b => b.onclick = () => { ui.len = +b.dataset.len; paneTest({ cid, u, ui }); });
+    $("#startT").onclick = () => {
+      // spread questions across topics before shuffling
+      const byTopic = {}; shuffle(mc).forEach(q => (byTopic[q.topic] = byTopic[q.topic] || []).push(q));
+      const picked = []; const len = ui.len || 15;
+      while (picked.length < len && Object.values(byTopic).some(a => a.length)) Object.values(byTopic).forEach(a => { if (a.length && picked.length < len) picked.push(a.pop()); });
+      ui.test = { items: shuffle(picked).map(q => ({ ...q, unit: u })), answers: {}, submitted: false };
+      paneTest({ cid, u, ui });
+    };
+    return;
+  }
+  const n = t.items.length, answered = Object.keys(t.answers).length;
+  $("#pane").innerHTML = `
+    ${t.submitted ? scoreHTML(results(t.items, t.answers), n) :
+      `<div class="testhead"><span><b>${answered}</b> of ${n} answered</span><div class="bar"><i style="width:${answered / n * 100}%"></i></div><button class="btn small dark" id="submitT">Submit test</button></div>`}
+    <div class="qlist">${t.items.map((q, i) => {
+      const a = t.answers[i];
+      const cls = t.submitted ? (a === q.correct ? "got" : "miss") : "";
+      return `<div class="qa ${cls}"><div class="qtop"><span>${i + 1}. ${esc(topicName(u, q.topic))}</span>${t.submitted && a === -1 ? `<span class="mark miss">Skipped</span>` : ""}</div>
+        <div class="qtext">${esc(q.q)}</div>${mcHTML(q, i, a, t.submitted)}</div>`;
+    }).join("")}</div>
+    <div style="margin-top:20px;display:flex;gap:10px">${t.submitted ? `<button class="btn primary" id="newT">Take a new test</button>` : `<button class="btn primary" id="submitT2">Submit test</button>`}</div>`;
+  const marks = store.get("marks:" + cid);
+  $("#pane").querySelectorAll(".choice").forEach(b => b.onclick = () => { t.answers[+b.dataset.q] = +b.dataset.k; keepScroll(() => paneTest({ cid, u, ui })); });
+  const submit = () => {
+    const left = n - Object.keys(t.answers).length;
+    if (left && !confirmSkip(left)) return;
+    t.items.forEach((q, i) => { if (t.answers[i] == null) t.answers[i] = -1; });
+    t.submitted = true;
+    t.items.forEach((q, i) => { if (t.answers[i] !== -1) marks[q.id] = t.answers[i] === q.correct ? "got" : "miss"; });
+    store.set("marks:" + cid, marks); paneTest({ cid, u, ui }); window.scrollTo(0, 0);
+  };
+  ["#submitT", "#submitT2"].forEach(id => { if ($(id)) $(id).onclick = submit; });
+  if ($("#newT")) $("#newT").onclick = () => { ui.test = null; paneTest({ cid, u, ui }); };
+}
+let skipArmed = 0;
+function confirmSkip(left) {
+  if (Date.now() - skipArmed < 4000) return true;
+  skipArmed = Date.now(); toast(`${left} unanswered. Click submit again to turn it in anyway.`); return false;
+}
+
+/* ---------------- router + scroll reveal ---------------- */
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .08 }) : null;
+function reveal() { document.querySelectorAll(".reveal:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in")); }
+
+let lastPath = "";
+async function route() {
+  const p = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  const samePage = p.slice(0, 3).join("/") === lastPath; lastPath = p.slice(0, 3).join("/");
+  if (p[0] === "course" && p[1] && p[2] === "set") renderSession(p[1]);
+  else if (p[0] === "course" && p[1] && p[2]) await renderUnit(p[1], p[2], p[3]);
+  else if (p[0] === "course" && p[1]) await renderCourse(p[1]);
   else renderHome();
-  window.scrollTo(0, 0);
+  if (!samePage) window.scrollTo(0, 0);
   $("#app").focus({ preventScroll: true });
   reveal();
 }
-document.querySelector("footer").insertAdjacentHTML("beforebegin", stripes(27, 64, "thin"));
+
+/* thin tiger-stripe edge on the footer */
+(function () {
+  let s = 7, x = 0, d = "", top = true; const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  while (x < 1600) { const w = 8 + r() * 10, len = 8 + r() * 9, b = (r() - .5) * 16; const y = v => top ? v : 18 - v;
+    d += `M${x - w / 2},${y(0)} Q${x + b * .4},${y(len * .6)} ${x + b},${y(len)} Q${x + b * .6},${y(len * .6)} ${x + w / 2},${y(0)}Z`;
+    x += 20 + r() * 26; top = r() > .4 ? !top : top; }
+  $("#stripes").innerHTML = `<rect width="1600" height="18" fill="#F47B20"/><path d="${d}" fill="#000"/>`;
+})();
+
 window.addEventListener("hashchange", route);
 route();
 </script>
