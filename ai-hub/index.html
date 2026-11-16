@@ -79,6 +79,7 @@
   .subj:hover .count svg { transform: translateX(4px); }
   .subj.small h3 { font-size: clamp(2rem, 4vw, 3rem); }
 
+  .more { padding-top: 72px; }
   .notice { display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center; background: var(--black); color: var(--white);
     padding: 34px 36px; margin: 72px 0 0; border-radius: 4px; }
   .notice svg { width: 76px; height: 76px; }
@@ -243,6 +244,37 @@
 <script>
 const SUBJECTS = [
   {
+    id: "grade-9", name: "9th Grade", section: "grade", tools: "science",
+    blurb: "Biology, Core or Honors.",
+    groups: [
+      { name: "Biology", courses: [
+        ["biology", "Biology", "Core"], ["honors-biology", "Honors Biology", "Honors"] ] }
+    ]
+  },
+  {
+    id: "grade-10", name: "10th Grade", section: "grade", tools: "science",
+    blurb: "Chemistry, Core or Honors.",
+    groups: [
+      { name: "Chemistry", courses: [
+        ["chemistry", "Chemistry", "Core"], ["honors-chemistry", "Honors Chemistry", "Honors"] ] }
+    ]
+  },
+  {
+    id: "grade-11-12", name: "11th & 12th Grade", section: "grade", tools: "science",
+    blurb: "Physics, electives and advanced science, split into Core, Honors and Advanced.",
+    groups: [
+      { name: "Core", courses: [
+        ["physics", "Physics"], ["environmental", "Environmental Science"],
+        ["psychology", "Psychology"], ["marine-science", "Marine Science"] ] },
+      { name: "Honors", courses: [
+        ["honors-physics", "Honors Physics"], ["honors-environmental", "Honors Environmental Science"] ] },
+      { name: "Advanced (AAS)", courses: [
+        ["aas-biology", "AAS: Biology"], ["aas-chemistry", "AAS: Chemistry"],
+        ["aas-physics-eng", "AAS: Physics & Engineering"], ["aas-eco-eng", "AAS: Eco Engineering"],
+        ["csx", "AAS: CSX"] ] }
+    ]
+  },
+  {
     id: "math", name: "Math", glyph: "∑", stem: true, tools: "math",
     blurb: "Hints instead of answers, step-by-step work checks, and practice quizzes.",
     groups: [
@@ -259,28 +291,11 @@ const SUBJECTS = [
     ]
   },
   {
-    id: "science", name: "Science", glyph: "⚗", stem: true, tools: "science",
-    blurb: "Concept checks, problem hints, and lab report feedback that doesn't rewrite your work.",
-    groups: [
-      { name: "Core", courses: [
-        ["biology", "Biology"], ["chemistry", "Chemistry"], ["physics", "Physics"] ] },
-      { name: "Honors", courses: [
-        ["honors-chemistry", "Honors Chemistry"], ["honors-physics", "Honors Physics"],
-        ["honors-environmental", "Honors Environmental Science"] ] },
-      { name: "Electives", courses: [
-        ["environmental", "Environmental Science"], ["psychology", "Psychology"],
-        ["marine-science", "Marine Science"], ["intro-stem", "Intro to STEM"] ] },
-      { name: "Advanced (AAS)", courses: [
-        ["aas-biology", "AAS: Biology"], ["aas-chemistry", "AAS: Chemistry"],
-        ["aas-physics-eng", "AAS: Physics & Engineering"], ["aas-eco-eng", "AAS: Eco Engineering"] ] }
-    ]
-  },
-  {
     id: "cs", name: "CS & Engineering", glyph: "</>", stem: true, tools: "cs",
     blurb: "A debugging coach that points you at the bug without fixing it for you.",
     groups: [
       { name: "Computer Science", courses: [
-        ["cs-1", "Computer Science I"], ["cs-2", "Computer Science II"], ["csx", "CSX"],
+        ["cs-1", "Computer Science I"], ["cs-2", "Computer Science II"],
         ["csda", "CSDA"], ["adv-csda", "Advanced CSDA"], ["csal", "CSAL"] ] },
       { name: "Engineering", courses: [
         ["fund-engineering", "Fundamentals of Engineering"] ] }
@@ -427,6 +442,9 @@ Rules:
   },
 };
 
+// courses that use a different tool set than their section
+const COURSE_TOOLS = { "csx": "cs" };
+
 const TOOLSETS = {
   math: ["hint", "check", "quiz", "explain", "plan"],
   science: ["hint", "explain", "quiz", "lab", "plan"],
@@ -442,7 +460,7 @@ SUBJECTS.forEach(s => s.groups.forEach(g => g.courses.forEach(([id, name, sub, d
 
 let current = null;
 function intro(c) {
-  const full = c.sub ? `${c.name}: ${c.sub}` : c.name;
+  const full = c.sub && !["Core", "Honors"].includes(c.sub) ? `${c.name}: ${c.sub}` : c.name;
   return `I'm a high school student at Greenwich Country Day School taking ${full}.`;
 }
 
@@ -486,19 +504,23 @@ function renderHome() {
     <section class="hero">
       <div class="reveal">
         <h1>GCDS US AI Hub</h1>
-        <p>AI study tools for Upper School math, science and computer science classes. They coach you through problems instead of handing you the answers.</p>
+        <p>AI study tools for Upper School science, math and computer science classes. They coach you through problems instead of handing you the answers.</p>
       </div>
       <svg class="hero-tiger reveal" style="--d:.15s" viewBox="0 0 100 100" role="img" aria-label="Tiger"><use href="#tiger"/></svg>
     </section>
     <div class="bleed">${stripes(911)}</div>
     <section class="steps" aria-label="How it works">
-      <div class="step reveal"><span class="n">1</span><div><b>Pick your class</b><span>Choose a subject, then the course you're taking.</span></div></div>
+      <div class="step reveal"><span class="n">1</span><div><b>Pick your class</b><span>Choose your grade or subject, then the course you're taking.</span></div></div>
       <div class="step reveal" style="--d:.08s"><span class="n">2</span><div><b>Choose a tool</b><span>Fill in what you're working on. The hub writes the prompt for you.</span></div></div>
       <div class="step reveal" style="--d:.16s"><span class="n">3</span><div><b>Open it in an AI</b><span>Send it to Claude or ChatGPT and answer its questions yourself.</span></div></div>
     </section>
     <section>
-      <div class="block-head reveal"><h2>Pick a subject</h2></div>
-      ${SUBJECTS.map((s, i) => subjRow(s, i)).join("")}
+      <div class="block-head reveal"><h2>Science by grade</h2><p>Pick your grade, then your class.</p></div>
+      ${SUBJECTS.filter(s => s.section === "grade").map((s, i) => subjRow(s, i)).join("")}
+    </section>
+    <section class="more">
+      <div class="block-head reveal"><h2>Math and computer science</h2><p>Sorted by course level, since placement doesn't follow grade.</p></div>
+      ${SUBJECTS.filter(s => s.section !== "grade").map((s, i) => subjRow(s, i)).join("")}
     </section>
     <section class="notice reveal">
       <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
@@ -513,7 +535,7 @@ function renderSubject(s) {
   document.title = `${s.name} · GCDS US AI Hub`;
   $("#app").innerHTML = `
     <section class="page-head">
-      <a class="back reveal" href="#/">${icon("back")}Back to all subjects</a>
+      <a class="back reveal" href="#/">${icon("back")}Back to the hub</a>
       <h1 class="reveal">${esc(s.name)}</h1>
       <p class="reveal">${esc(s.blurb)}</p>
     </section>
@@ -535,7 +557,7 @@ function renderCourse(c) {
   const s = c.subject;
   crumbs([["Hub", "#/"], [s.name, `#/${s.id}`], [c.name]]);
   document.title = `${c.name} · GCDS US AI Hub`;
-  const tools = TOOLSETS[s.tools];
+  const tools = TOOLSETS[COURSE_TOOLS[c.id] || s.tools];
   const res = RESOURCES[c.id] || [];
   $("#app").innerHTML = `
     <section class="page-head">
