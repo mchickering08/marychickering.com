@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GCDS US AI Learning Hub</title>
+<title>GCDS US AI Hub</title>
 <meta name="description" content="AI study tools for Greenwich Country Day Upper School classes, built to coach you instead of doing the work for you.">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23F47B20'/%3E%3Cpath d='M26 6Q32 24 32 24Q32 24 38 6Z M4 30Q20 33 20 33Q20 33 4 38Z M60 30Q44 33 44 33Q44 33 60 38Z' fill='%23000'/%3E%3C/svg%3E">
@@ -51,9 +51,9 @@
 
   /* ---------- home hero ---------- */
   .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; align-items: end; padding: 72px 0 0; }
-  .hero h1 { font-size: clamp(3.4rem, 9.5vw, 7.4rem); }
+  .hero h1 { font-size: clamp(3.6rem, 11vw, 9rem); }
   .hero h1 .o { color: var(--orange); }
-  .hero p { font-size: 1.2rem; color: var(--gray); max-width: 46ch; margin: 26px 0 40px; }
+  .hero p { font-size: 1.2rem; color: var(--gray); max-width: 50ch; margin: 26px 0 40px; }
   .hero-tiger { width: 300px; height: auto; margin-bottom: -44px; position: relative; z-index: 2; }
 
   /* ---------- how it works ---------- */
@@ -87,8 +87,11 @@
 
   /* ---------- page heads ---------- */
   .page-head { padding: 64px 0 40px; display: grid; gap: 16px; }
-  .page-head .up { justify-self: start; font-weight: 600; font-size: .95rem; color: var(--gray); border-bottom: 2px solid var(--orange); }
-  .page-head .up:hover { color: var(--black); }
+  .back { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px 9px 14px; border: 2px solid var(--black);
+    border-radius: 999px; font-weight: 600; font-size: .95rem; transition: background .15s, color .15s; }
+  .back svg { width: 16px; height: 16px; transition: transform .15s; }
+  .back:hover { background: var(--black); color: var(--orange); }
+  .back:hover svg { transform: translateX(-3px); }
   .page-head h1 { font-size: clamp(3.2rem, 9vw, 6.6rem); }
   .page-head h1 small { display: block; font-size: .42em; color: var(--gray); margin-top: 10px; }
   .page-head p { margin: 0; color: var(--gray); font-size: 1.12rem; max-width: 60ch; }
@@ -196,7 +199,7 @@
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#/" aria-label="GCDS AI Learning Hub home"><svg aria-hidden="true"><use href="#tiger"/></svg><span>GCDS <b>US</b> AI Learning Hub</span></a>
+    <a class="brand" href="#/" aria-label="GCDS US AI Hub home"><svg aria-hidden="true"><use href="#tiger"/></svg><span>GCDS <b>US</b> AI Hub</span></a>
     <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
   </div>
 </header>
@@ -206,7 +209,7 @@
 <footer>
   <div class="wrap">
     <div class="who"><svg class="mark" aria-hidden="true"><use href="#tiger"/></svg>
-      <span><b>GCDS US AI Learning Hub</b><br>A student project by Mary Chickering for the GCDS AI competition. Not an official GCDS site.</span></div>
+      <span><b>GCDS US AI Hub</b><br>A student project by Mary Chickering for the GCDS AI competition. Not an official GCDS site.</span></div>
     <span>Follow your teacher's AI policy and the Honor Code.</span>
   </div>
 </footer>
@@ -233,6 +236,7 @@
     <path d="M50 75V81M50 81Q45 85 41 82M50 81Q55 85 59 82" stroke="#000" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   </symbol>
   <symbol id="go" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="back" viewBox="0 0 20 20"><path d="M17 10H4M9 5l-5 5 5 5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="ext" viewBox="0 0 14 14"><path d="M4 2h8v8M12 2 2 12" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -280,28 +284,6 @@ const SUBJECTS = [
         ["csda", "CSDA"], ["adv-csda", "Advanced CSDA"], ["csal", "CSAL"] ] },
       { name: "Engineering", courses: [
         ["fund-engineering", "Fundamentals of Engineering"] ] }
-    ]
-  },
-  {
-    id: "english", name: "English", glyph: "Aa", stem: false, tools: "english",
-    blurb: "English 9 and 10 only. Reading checks, close reading, Harkness prep, and essay feedback.",
-    groups: [
-      { name: "Grade-level courses", courses: [
-        ["english-9", "English 9", "Identity & Society",
-          "Taught with History 9 as part of the 9th grade Global Studies program, through the lens of personal identity."],
-        ["english-10", "English 10", "American Studies: Literature",
-          "Taught with History 10 as part of the 10th grade American Studies program."] ] }
-    ]
-  },
-  {
-    id: "history", name: "History", glyph: "⌛", stem: false, tools: "history",
-    blurb: "History 9 and 10 only. Source analysis, debate practice, and thesis testing.",
-    groups: [
-      { name: "Grade-level courses", courses: [
-        ["history-9", "History 9", "Global History",
-          "Social Sciences 9. Covers how societies are organized, trade and migration, revolutions and empires, cultural achievements, and imperialism and colonialism. Taught with English 9."],
-        ["history-10", "History 10", "American Studies: History",
-          "Social Sciences 10. American history from the 1600s through the 1900s, built around power and systems: freedom, progress, and democracy. Taught with English 10."] ] }
     ]
   }
 ];
@@ -443,138 +425,12 @@ Rules:
 - Narrow it down one step at a time. Point me to the right area, not the exact fix.
 - Once I've fixed it, ask me one question about why the bug happened so I don't repeat it.`
   },
-  reading: {
-    name: "Reading check", short: "Make sure you actually got the reading.",
-    why: "No summaries. It asks you questions and sends you back to the text when you miss.",
-    fields: [
-      { k: "text", label: "What you're reading", ph: "Title and author" },
-      { k: "section", label: "Section you just read", ph: "e.g. chapters 4-6" }
-    ],
-    build: (c, v) => `${intro(c)} I'm reading ${v.text} and just finished ${v.section}.
-
-Do NOT summarize it for me. Ask me 6 questions, one at a time:
-- Start with what happened and who's involved.
-- Move to why characters act the way they do.
-- End with bigger questions about themes and what the author is doing.
-
-If I get something wrong, tell me what part of the text to go reread instead of giving me the answer.`
-  },
-  close: {
-    name: "Close reading coach", short: "Work through a passage line by line.",
-    why: "You build your own analysis instead of borrowing one.",
-    fields: [
-      { k: "text", label: "Book or text", ph: "Title and author" },
-      { k: "passage", label: "The passage", area: true, ph: "Paste the passage or quote" }
-    ],
-    build: (c, v) => `${intro(c)} Help me close read this passage from ${v.text}:
-
-"${v.passage}"
-
-Do NOT analyze it for me. Instead:
-- Ask me questions one at a time about specific word choices, images, structure, and tone.
-- Push me to connect what I notice to a bigger theme or idea in the book.
-- At the end, have me write 2-3 sentences of analysis and give me feedback on them.`
-  },
-  harkness: {
-    name: "Harkness prep", short: "Pressure-test your points before discussion.",
-    why: "You walk in with sharper ideas and good questions, and they're still yours.",
-    fields: [
-      { k: "topic", label: "Text or topic for discussion", ph: "e.g. The Great Gatsby, chapters 1-3" },
-      { k: "ideas", label: "Points you're thinking of bringing up", area: true, ph: "Rough is fine" }
-    ],
-    build: (c, v) => `${intro(c)} I have a Harkness discussion on ${v.topic}. Here's what I'm thinking of bringing up:
-
-${v.ideas}
-
-Act like a sharp classmate at the table:
-- Push back on my points one at a time and let me respond.
-- Ask me what specific evidence supports each one.
-- Bring up a counterargument I'd have to answer.
-- At the end, help me turn my ideas into 2 open questions I could ask the table.
-
-Do NOT give me new points to say. Help me sharpen mine.`
-  },
-  thesis: {
-    name: "Thesis stress test", short: "Find out if your thesis can hold up.",
-    why: "Fixing the thesis first saves you from rewriting the whole essay later.",
-    fields: [
-      { k: "prompt", label: "Essay prompt", area: true, ph: "Paste the prompt" },
-      { k: "thesis", label: "Your thesis", area: true, ph: "Paste your thesis" }
-    ],
-    build: (c, v) => `${intro(c)} Here's my essay prompt:
-${v.prompt}
-
-My thesis:
-${v.thesis}
-
-Stress test it:
-- Is it arguable, specific, and actually answering the prompt?
-- What's the strongest counterargument someone could make?
-- What would I need to prove in my body paragraphs?
-- Ask me questions that help me make it sharper.
-
-Do NOT write a new thesis for me.`
-  },
-  paragraph: {
-    name: "Paragraph feedback", short: "Comments only. No rewriting.",
-    why: "You get a teacher-style read on your writing without losing your voice.",
-    fields: [
-      { k: "prompt", label: "Essay prompt or thesis", opt: true, area: true, ph: "Helps the feedback stay on target" },
-      { k: "para", label: "Your paragraph", area: true, ph: "Paste one body paragraph" }
-    ],
-    build: (c, v) => `${intro(c)} Here's a body paragraph from my essay.
-${v.prompt ? `\nPrompt/thesis: ${v.prompt}\n` : ""}
-Paragraph:
-${v.para}
-
-Give me feedback on:
-- Topic sentence: is the claim clear?
-- Evidence: is it the strongest choice, and is it set up well?
-- Analysis: am I explaining HOW the evidence proves my point, or just summarizing?
-- Flow and clarity.
-
-Comment only. Do NOT rewrite any of my sentences. Quote the part each comment is about.`
-  },
-  source: {
-    name: "Source analysis coach", short: "Work through a primary source.",
-    why: "Sourcing is the core history skill. This makes you do it, not watch it.",
-    fields: [
-      { k: "info", label: "Source info", ph: "Who made it, when, what kind of source" },
-      { k: "text", label: "The source", area: true, ph: "Paste the text, or describe the image" }
-    ],
-    build: (c, v) => `${intro(c)} I'm analyzing this source: ${v.info}
-
-${v.text}
-
-Coach me through it one question at a time:
-- Sourcing: who made it and why does that matter?
-- Context: what was going on at the time?
-- Purpose and audience: who was it for and what was it trying to do?
-- Point of view: what's missing or slanted?
-
-Do NOT tell me the answers. At the end, ask me what this source can and can't tell a historian, and give me feedback.`
-  },
-  debate: {
-    name: "Debate the other side", short: "Argue against an AI that disagrees with you.",
-    why: "You find the weak spots in your argument before your teacher does.",
-    fields: [
-      { k: "claim", label: "Your argument", area: true, ph: "e.g. Trade did more to spread ideas than empire did" }
-    ],
-    build: (c, v) => `${intro(c)} I'm arguing that:
-${v.claim}
-
-Take the opposite side and argue against me using real historical evidence. Go one round at a time and wait for me to respond. Keep it accurate and tell me if I state something that isn't true.
-
-After 4 rounds, tell me which of my points held up, which were weakest, and what evidence I should look into.`
-  }
 };
 
 const TOOLSETS = {
   math: ["hint", "check", "quiz", "explain", "plan"],
   science: ["hint", "explain", "quiz", "lab", "plan"],
-  cs: ["debug", "hint", "explain", "quiz", "plan"],
-  english: ["reading", "close", "harkness", "thesis", "paragraph"],
-  history: ["source", "debate", "harkness", "thesis", "quiz"]
+  cs: ["debug", "hint", "explain", "quiz", "plan"]
 };
 
 
@@ -625,13 +481,12 @@ function subjRow(s, i, small) {
 
 function renderHome() {
   crumbs([]);
-  document.title = "GCDS US AI Learning Hub";
-  const stem = SUBJECTS.filter(s => s.stem), other = SUBJECTS.filter(s => !s.stem);
+  document.title = "GCDS US AI Hub";
   $("#app").innerHTML = `
     <section class="hero">
       <div class="reveal">
-        <h1>Study with AI. Do the thinking yourself.</h1>
-        <p>Tools for Upper School classes that coach you through problems, readings and essays instead of handing you the answers.</p>
+        <h1>GCDS US AI Hub</h1>
+        <p>AI study tools for Upper School math, science and computer science classes. They coach you through problems instead of handing you the answers.</p>
       </div>
       <svg class="hero-tiger reveal" style="--d:.15s" viewBox="0 0 100 100" role="img" aria-label="Tiger"><use href="#tiger"/></svg>
     </section>
@@ -642,26 +497,23 @@ function renderHome() {
       <div class="step reveal" style="--d:.16s"><span class="n">3</span><div><b>Open it in an AI</b><span>Send it to Claude or ChatGPT and answer its questions yourself.</span></div></div>
     </section>
     <section>
-      <div class="block-head reveal"><h2>Pick a subject</h2><p>STEM classes come first. English and History cover grades 9 and 10.</p></div>
-      <div class="group-name reveal">STEM</div>
-      ${stem.map((s, i) => subjRow(s, i)).join("")}
-      <div class="group-name reveal">English and History</div>
-      ${other.map((s, i) => subjRow(s, i, true)).join("")}
+      <div class="block-head reveal"><h2>Pick a subject</h2></div>
+      ${SUBJECTS.map((s, i) => subjRow(s, i)).join("")}
     </section>
     <section class="notice reveal">
       <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
       <div><h3>Not every course is here</h3>
-      <p>The hub only covers classes that share a standard curriculum across sections, so every tool fits what the whole class is learning. Electives with section-specific content and Seminar aren't included. Want your class added? Ask your teacher to reach out.</p></div>
+      <p>The hub only covers classes that share a standard curriculum across sections, so every tool fits what the whole class is learning. The hub is STEM only for now, and electives with section-specific content aren't included. Want your class added? Ask your teacher to reach out.</p></div>
     </section>
   `;
 }
 
 function renderSubject(s) {
   crumbs([["Hub", "#/"], [s.name]]);
-  document.title = `${s.name} · GCDS AI Learning Hub`;
+  document.title = `${s.name} · GCDS US AI Hub`;
   $("#app").innerHTML = `
     <section class="page-head">
-      <a class="up reveal" href="#/">All subjects</a>
+      <a class="back reveal" href="#/">${icon("back")}Back to all subjects</a>
       <h1 class="reveal">${esc(s.name)}</h1>
       <p class="reveal">${esc(s.blurb)}</p>
     </section>
@@ -682,12 +534,12 @@ function renderSubject(s) {
 function renderCourse(c) {
   const s = c.subject;
   crumbs([["Hub", "#/"], [s.name, `#/${s.id}`], [c.name]]);
-  document.title = `${c.name} · GCDS AI Learning Hub`;
+  document.title = `${c.name} · GCDS US AI Hub`;
   const tools = TOOLSETS[s.tools];
   const res = RESOURCES[c.id] || [];
   $("#app").innerHTML = `
     <section class="page-head">
-      <a class="up reveal" href="#/${s.id}">${esc(s.name)}</a>
+      <a class="back reveal" href="#/${s.id}">${icon("back")}Back to ${esc(s.name)}</a>
       <h1 class="reveal">${esc(c.name)}${c.sub ? `<small>${esc(c.sub)}</small>` : ""}</h1>
       <p class="reveal">${c.desc ? esc(c.desc) : `Pick a tool, fill in what you're working on, and open it in an AI.`}</p>
     </section>
