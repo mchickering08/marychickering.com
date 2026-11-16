@@ -4,175 +4,199 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GCDS US AI Learning Hub</title>
-<meta name="description" content="AI study tools for Greenwich Country Day Upper School classes, built to make you think instead of doing the work for you.">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="AI study tools for Greenwich Country Day Upper School classes, built to coach you instead of doing the work for you.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23F47B20'/%3E%3Cpath d='M26 6Q32 24 32 24Q32 24 38 6Z M4 30Q20 33 20 33Q20 33 4 38Z M60 30Q44 33 44 33Q44 33 60 38Z' fill='%23000'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap">
 <style>
   :root {
-    --bg: #f6f5f1;
-    --surface: #ffffff;
-    --sunk: #efede7;
-    --ink: #14161c;
-    --muted: #61646e;
-    --line: #e2dfd7;
-    --radius: 18px;
-    --shadow: 0 1px 2px rgba(20,22,28,.04), 0 10px 30px rgba(20,22,28,.06);
-    /* subject colors follow the master schedule's department colors */
-    --math: #b0399b;   --math-soft: #f6e3f2;
-    --sci: #2f7d32;    --sci-soft: #e2f1df;
-    --cs: #5b4bc4;     --cs-soft: #e9e6fa;
-    --eng: #1f6fb2;    --eng-soft: #dfecf8;
-    --hist: #c2600a;   --hist-soft: #fbe9d6;
-    --accent: var(--ink);
-    --accent-soft: var(--sunk);
+    --black: #000000;
+    --white: #ffffff;
+    --orange: #F47B20;
+    --orange-soft: #FDE6D3;
+    --gray: #5c5c5c;
+    --rule: #e3e3e3;
+    --field: #f4f4f2;
+    --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+    --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font: 16px/1.6 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  h1, h2, h3 { font-family: "Space Grotesk", Inter, sans-serif; letter-spacing: -.02em; line-height: 1.1; margin: 0; }
+  body { margin: 0; background: var(--white); color: var(--black); font: 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
   button, input, textarea { font: inherit; color: inherit; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 22px; }
+  :focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 900; line-height: .92; letter-spacing: -.005em; margin: 0; text-transform: uppercase; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 
-  /* top bar */
-  .top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-  .top .wrap { display: flex; align-items: center; gap: 14px; height: 60px; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.05rem; }
-  .mark { width: 30px; height: 30px; border-radius: 9px; background: var(--ink); color: var(--bg);
-    display: grid; place-items: center; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
-  .crumbs { margin-left: auto; font-size: .9rem; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-  .crumbs a { text-decoration: none; }
-  .crumbs a:hover { color: var(--ink); }
+  /* ---------- nav ---------- */
+  .top { position: sticky; top: 0; z-index: 20; background: var(--black); color: var(--white); }
+  .top .wrap { display: flex; align-items: center; gap: 16px; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.02rem; letter-spacing: -.01em; }
+  .brand svg { width: 38px; height: 38px; flex: none; }
+  .brand span b { color: var(--orange); font-weight: 700; }
+  .crumbs { margin-left: auto; display: flex; gap: 10px; font-size: .92rem; color: #b5b5b5; flex-wrap: wrap; justify-content: flex-end; }
+  .crumbs a:hover { color: var(--orange); }
+  .crumbs .here { color: var(--white); }
 
-  main.wrap { padding-top: 40px; padding-bottom: 80px; min-height: 70vh; }
+  main.wrap { padding-top: 0; padding-bottom: 96px; min-height: 60vh; }
   main:focus { outline: none; }
 
-  /* hero */
-  .eyebrow { display: inline-block; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-    color: var(--accent); background: var(--accent-soft); padding: 5px 12px; border-radius: 999px; margin-bottom: 16px; }
-  .hero h1 { font-size: clamp(2.3rem, 6vw, 3.8rem); max-width: 16ch; }
-  .hero p.lede { font-size: 1.15rem; color: var(--muted); max-width: 60ch; margin: 18px 0 0; }
+  /* ---------- stripes (signature) ---------- */
+  .stripes { display: block; width: 100%; height: 150px; background: var(--orange); }
+  .stripes.thin { height: 64px; }
+  .bleed { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
 
-  .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 34px 0 44px; }
-  .rule { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
-  .rule b { display: block; font-family: "Space Grotesk", sans-serif; font-size: 1.05rem; margin-bottom: 4px; }
-  .rule span { color: var(--muted); font-size: .94rem; }
+  /* ---------- home hero ---------- */
+  .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; align-items: end; padding: 72px 0 0; }
+  .hero h1 { font-size: clamp(3.4rem, 9.5vw, 7.4rem); }
+  .hero h1 .o { color: var(--orange); }
+  .hero p { font-size: 1.2rem; color: var(--gray); max-width: 46ch; margin: 26px 0 40px; }
+  .hero-tiger { width: 300px; height: auto; margin-bottom: -44px; position: relative; z-index: 2; }
 
-  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-  .section-head h2 { font-size: 1.5rem; }
-  .section-head .count { color: var(--muted); font-size: .9rem; }
+  /* ---------- how it works ---------- */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 64px 0 72px; }
+  .step { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; }
+  .step .n { font-family: var(--display); font-weight: 900; font-size: 4.2rem; line-height: .8; color: var(--orange); }
+  .step b { display: block; font-size: 1.12rem; margin-bottom: 4px; }
+  .step span { color: var(--gray); font-size: .98rem; }
 
-  /* subject cards */
-  .subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .subjects.secondary { grid-template-columns: repeat(2, 1fr); margin-top: 16px; }
-  .subj { position: relative; display: flex; flex-direction: column; gap: 10px; text-decoration: none;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: var(--shadow);
-    transition: transform .15s, border-color .15s; overflow: hidden; min-height: 190px; }
-  .subj:hover { transform: translateY(-2px); border-color: var(--c); }
-  .subj .glyph { width: 46px; height: 46px; border-radius: 14px; background: var(--c-soft); color: var(--c);
-    display: grid; place-items: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.15rem; }
-  .subj h3 { font-size: 1.35rem; }
-  .subj p { margin: 0; color: var(--muted); font-size: .94rem; }
-  .subj .meta { margin-top: auto; font-size: .85rem; font-weight: 600; color: var(--c); }
-  .subjects.secondary .subj { min-height: 0; flex-direction: row; align-items: center; gap: 16px; }
-  .subjects.secondary .subj .txt { display: grid; gap: 2px; }
-  .subjects.secondary .subj .meta { margin: 0 0 0 auto; white-space: nowrap; }
-  .stem-tag { position: absolute; top: 18px; right: 18px; font-size: .7rem; font-weight: 700; letter-spacing: .08em;
-    color: var(--muted); border: 1px solid var(--line); padding: 2px 8px; border-radius: 999px; }
+  /* ---------- subject list ---------- */
+  .block-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding-bottom: 18px; border-bottom: 3px solid var(--black); }
+  .block-head h2 { font-size: clamp(2.4rem, 5vw, 3.6rem); }
+  .block-head p { margin: 0; color: var(--gray); max-width: 40ch; text-align: right; font-size: .98rem; }
+  .group-name { font-weight: 600; font-size: .95rem; color: var(--gray); padding: 28px 0 8px; }
+  .subj { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) auto; gap: 28px; align-items: center;
+    padding: 26px 0; border-bottom: 1px solid var(--rule); transition: background .18s, box-shadow .18s; }
+  .subj h3 { font-size: clamp(2.6rem, 5vw, 4rem); }
+  .subj p { margin: 0; color: var(--gray); }
+  .subj .count { justify-self: end; font-weight: 600; font-size: .95rem; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .subj .count svg { width: 18px; height: 18px; transition: transform .18s; }
+  .subj:hover, .subj:focus-visible { background: var(--orange); box-shadow: -18px 0 0 var(--orange), 18px 0 0 var(--orange); }
+  .subj:hover p, .subj:focus-visible p { color: var(--black); }
+  .subj:hover .count svg { transform: translateX(4px); }
+  .subj.small h3 { font-size: clamp(2rem, 4vw, 3rem); }
 
-  .note { display: flex; gap: 14px; align-items: flex-start; margin-top: 30px; padding: 16px 20px;
-    background: var(--sunk); border-radius: var(--radius); font-size: .93rem; color: var(--muted); }
-  .note b { color: var(--ink); }
-  .note .i { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--bg);
-    display: grid; place-items: center; font-weight: 700; font-size: .8rem; margin-top: 1px; }
+  .notice { display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center; background: var(--black); color: var(--white);
+    padding: 34px 36px; margin: 72px 0 0; border-radius: 4px; }
+  .notice svg { width: 76px; height: 76px; }
+  .notice h3 { font-size: 2rem; color: var(--orange); margin-bottom: 8px; }
+  .notice p { margin: 0; color: #d4d4d4; max-width: 70ch; }
 
-  /* subject page */
-  .page-head { display: grid; gap: 12px; margin-bottom: 30px; }
-  .page-head h1 { font-size: clamp(2rem, 5vw, 3rem); }
-  .page-head p { margin: 0; color: var(--muted); max-width: 62ch; font-size: 1.05rem; }
-  .group { margin-top: 28px; }
-  .group h2 { font-size: .8rem; font-family: Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
-  .courses { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
-  .course { display: flex; align-items: center; justify-content: space-between; gap: 10px; text-decoration: none;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; transition: border-color .15s, transform .15s; }
-  .course:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .course b { font-weight: 600; }
-  .course small { display: block; color: var(--muted); font-size: .82rem; }
-  .arrow { color: var(--accent); font-weight: 700; }
+  /* ---------- page heads ---------- */
+  .page-head { padding: 64px 0 40px; display: grid; gap: 16px; }
+  .page-head .up { justify-self: start; font-weight: 600; font-size: .95rem; color: var(--gray); border-bottom: 2px solid var(--orange); }
+  .page-head .up:hover { color: var(--black); }
+  .page-head h1 { font-size: clamp(3.2rem, 9vw, 6.6rem); }
+  .page-head h1 small { display: block; font-size: .42em; color: var(--gray); margin-top: 10px; }
+  .page-head p { margin: 0; color: var(--gray); font-size: 1.12rem; max-width: 60ch; }
 
-  /* course page */
-  .course-grid { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 22px; align-items: start; }
-  .toollist { display: grid; gap: 8px; position: sticky; top: 80px; }
-  .toollist .label { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px 4px; }
-  .tool-btn { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer;
-    display: grid; gap: 2px; transition: border-color .15s, background .15s; }
-  .tool-btn b { font-weight: 600; font-size: .98rem; }
-  .tool-btn span { color: var(--muted); font-size: .84rem; line-height: 1.4; }
-  .tool-btn:hover { border-color: var(--accent); }
-  .tool-btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+  .course-groups { padding-bottom: 20px; }
+  .courses { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; border-top: 3px solid var(--black); }
+  .course { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 0;
+    border-bottom: 1px solid var(--rule); transition: background .18s, box-shadow .18s; }
+  .course b { font-weight: 600; font-size: 1.12rem; }
+  .course small { display: block; color: var(--gray); font-size: .9rem; }
+  .course svg { width: 18px; height: 18px; flex: none; transition: transform .18s; }
+  .course:hover, .course:focus-visible { background: var(--orange); box-shadow: -14px 0 0 var(--orange), 14px 0 0 var(--orange); }
+  .course:hover small { color: var(--black); }
+  .course:hover svg { transform: translateX(4px); }
+  .course-groups .group-name { padding-top: 36px; }
 
-  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 26px; box-shadow: var(--shadow); display: grid; gap: 18px; }
-  .panel h2 { font-size: 1.6rem; }
-  .panel .why { margin: 6px 0 0; color: var(--muted); }
-  .field { display: grid; gap: 6px; }
-  .field label { font-weight: 600; font-size: .92rem; }
-  .field label i { font-style: normal; font-weight: 400; color: var(--muted); }
-  .field input, .field textarea { width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; }
-  .field textarea { min-height: 110px; resize: vertical; }
-  .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+  /* ---------- course page ---------- */
+  .workspace { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 40px; align-items: start; padding-top: 8px; }
+  .toollist { position: sticky; top: 88px; border-top: 3px solid var(--black); }
+  .toollist h2 { font-family: var(--body); text-transform: none; font-weight: 600; font-size: .95rem; color: var(--gray); padding: 14px 0 6px; line-height: 1.4; }
+  .tool-btn { width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--rule); padding: 14px 16px 14px 18px; cursor: pointer;
+    display: grid; gap: 2px; position: relative; transition: background .15s, color .15s; }
+  .tool-btn b { font-weight: 600; font-size: 1.02rem; }
+  .tool-btn span { color: var(--gray); font-size: .88rem; line-height: 1.4; }
+  .tool-btn::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: transparent; transition: background .15s; }
+  .tool-btn:hover { background: var(--field); }
+  .tool-btn[aria-pressed="true"] { background: var(--black); color: var(--white); }
+  .tool-btn[aria-pressed="true"] span { color: #c9c9c9; }
+  .tool-btn[aria-pressed="true"]::before { background: var(--orange); }
 
-  .preview { background: var(--sunk); border-radius: 14px; padding: 16px; }
-  .preview .label { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
-  .preview pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; font: .88rem/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; max-height: 260px; overflow: auto; }
-  .preview pre mark { background: color-mix(in srgb, var(--accent) 16%, transparent); color: inherit; border-radius: 4px; padding: 0 2px; }
+  .panel { border: 3px solid var(--black); border-radius: 4px; padding: 30px; display: grid; gap: 20px; background: var(--white); }
+  .panel h2 { font-size: clamp(2.4rem, 4.5vw, 3.4rem); }
+  .panel .why { margin: 8px 0 0; color: var(--gray); }
+  .field { display: grid; gap: 7px; }
+  .field label { font-weight: 600; font-size: .96rem; }
+  .field label i { font-style: normal; font-weight: 400; color: var(--gray); }
+  .field input, .field textarea { width: 100%; background: var(--field); border: 2px solid transparent; border-radius: 4px; padding: 12px 14px; transition: border-color .15s, background .15s; }
+  .field textarea { min-height: 116px; resize: vertical; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--orange); background: var(--white); }
+
+  .preview { background: var(--black); color: var(--white); border-radius: 4px; padding: 20px 22px; }
+  .preview .label { display: flex; justify-content: space-between; font-weight: 600; font-size: .9rem; color: #a8a8a8; margin-bottom: 10px; }
+  .preview pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; font: .93rem/1.6 var(--body); max-height: 280px; overflow: auto; }
+  .preview mark { background: none; color: var(--orange); font-weight: 600; }
 
   .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; border: 1px solid var(--line);
-    background: var(--surface); font-weight: 600; font-size: .94rem; cursor: pointer; text-decoration: none; transition: transform .1s, border-color .15s; }
-  .btn:hover { border-color: var(--accent); }
-  .btn:active { transform: scale(.98); }
-  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .hint { font-size: .85rem; color: var(--muted); margin: 0; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 999px; border: 2px solid var(--black);
+    background: var(--white); font-weight: 600; font-size: .98rem; cursor: pointer; transition: background .15s, color .15s, transform .1s; }
+  .btn:hover { background: var(--black); color: var(--white); }
+  .btn:active { transform: scale(.97); }
+  .btn.primary { background: var(--orange); border-color: var(--orange); color: var(--black); }
+  .btn.primary:hover { background: var(--black); border-color: var(--black); color: var(--orange); }
+  .btn svg { width: 14px; height: 14px; }
+  .fine { font-size: .9rem; color: var(--gray); margin: 0; }
 
-  .about { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
-  .card h3 { font-size: 1.05rem; margin-bottom: 8px; }
-  .card p, .card li { color: var(--muted); font-size: .93rem; margin: 0; }
-  .card ol { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
-  .res { display: grid; gap: 8px; }
-  .res a { display: flex; justify-content: space-between; gap: 10px; text-decoration: none; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; }
-  .res a:hover { border-color: var(--accent); }
+  .below { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+  .below h3 { font-size: 1.9rem; padding-bottom: 10px; border-bottom: 3px solid var(--black); margin-bottom: 14px; }
+  .below ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--gray); }
+  .below p { margin: 0; color: var(--gray); }
+  .res { display: grid; }
+  .res a { display: flex; justify-content: space-between; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--rule); font-weight: 600; }
+  .res a small { display: block; font-weight: 400; color: var(--gray); }
+  .res a:hover { color: var(--orange); }
 
-  .toast { position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: var(--ink); color: #fff;
-    padding: 10px 18px; border-radius: 999px; font-size: .9rem; font-weight: 500; transition: .2s; pointer-events: none; z-index: 20; }
+  .after { padding-bottom: 96px; }
+
+  /* ---------- footer ---------- */
+  footer { background: var(--black); color: #bdbdbd; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding-top: 34px; padding-bottom: 40px; font-size: .92rem; }
+  footer .who { display: flex; align-items: center; gap: 14px; }
+  footer svg.mark { width: 44px; height: 44px; flex: none; }
+  footer b { color: var(--white); font-weight: 600; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: var(--black); color: var(--white);
+    border-left: 5px solid var(--orange); padding: 12px 20px; border-radius: 4px; font-weight: 500; transition: .2s; pointer-events: none; z-index: 30; }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-  footer { border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font-size: .85rem; }
-  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  /* ---------- scroll reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
 
-  @media (max-width: 860px) {
-    .subjects, .rules { grid-template-columns: 1fr; }
-    .subjects.secondary { grid-template-columns: 1fr; }
-    .course-grid { grid-template-columns: 1fr; }
-    .toollist { position: static; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-    .toollist .label { grid-column: 1 / -1; }
-    .about { grid-template-columns: 1fr; }
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 48px; }
+    .hero-tiger { width: 190px; justify-self: end; margin: -20px 0 -32px; }
+    .steps { grid-template-columns: 1fr; gap: 26px; padding: 48px 0; }
+    .subj { grid-template-columns: 1fr auto; gap: 6px 16px; }
+    .subj p { grid-column: 1 / -1; grid-row: 2; }
+    .subj .count { grid-row: 1; grid-column: 2; }
+    .block-head { flex-direction: column; align-items: start; }
+    .block-head p { text-align: left; }
+    .courses { grid-template-columns: 1fr; }
+    .workspace { grid-template-columns: 1fr; gap: 28px; }
+    .toollist { position: static; }
+    .below { grid-template-columns: 1fr; }
+    .notice { grid-template-columns: 1fr; padding: 28px; }
     .crumbs { display: none; }
+    .panel { padding: 22px; }
   }
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#/"><span class="mark">US</span>GCDS AI Learning Hub</a>
+    <a class="brand" href="#/" aria-label="GCDS AI Learning Hub home"><svg aria-hidden="true"><use href="#tiger"/></svg><span>GCDS <b>US</b> AI Learning Hub</span></a>
     <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
   </div>
 </header>
@@ -181,18 +205,38 @@
 
 <footer>
   <div class="wrap">
-    <span>A student project by Mary Chickering for the GCDS AI competition. Not an official GCDS site.</span>
-    <span>Always follow your teacher's AI policy and the Honor Code.</span>
+    <div class="who"><svg class="mark" aria-hidden="true"><use href="#tiger"/></svg>
+      <span><b>GCDS US AI Learning Hub</b><br>A student project by Mary Chickering for the GCDS AI competition. Not an official GCDS site.</span></div>
+    <span>Follow your teacher's AI policy and the Honor Code.</span>
   </div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- original tiger mark, reused everywhere via <use> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tiger" viewBox="0 0 100 100">
+    <circle cx="20" cy="22" r="14" fill="#F47B20"/><circle cx="80" cy="22" r="14" fill="#F47B20"/>
+    <circle cx="20" cy="22" r="7" fill="#000"/><circle cx="80" cy="22" r="7" fill="#000"/>
+    <path d="M50 12C75 12 92 30 92 54C92 78 74 94 50 94C26 94 8 78 8 54C8 30 25 12 50 12Z" fill="#F47B20"/>
+    <path d="M50 66C64 66 74 72 74 81C74 90 63 95 50 95C37 95 26 90 26 81C26 72 36 66 50 66Z" fill="#fff"/>
+    <path d="M44 12Q50 34 50 34Q50 34 56 12Z" fill="#000"/>
+    <path d="M32 15Q40 30 41 31Q38 22 39 13Z" fill="#000"/>
+    <path d="M68 15Q60 30 59 31Q62 22 61 13Z" fill="#000"/>
+    <path d="M8 46Q24 50 27 52Q22 54 9 56Z" fill="#000"/>
+    <path d="M10 64Q24 64 26 65Q22 68 13 72Z" fill="#000"/>
+    <path d="M92 46Q76 50 73 52Q78 54 91 56Z" fill="#000"/>
+    <path d="M90 64Q76 64 74 65Q78 68 87 72Z" fill="#000"/>
+    <ellipse cx="35" cy="51" rx="6.5" ry="5" fill="#000"/><ellipse cx="65" cy="51" rx="6.5" ry="5" fill="#000"/>
+    <circle cx="37" cy="49.5" r="1.8" fill="#fff"/><circle cx="67" cy="49.5" r="1.8" fill="#fff"/>
+    <path d="M43 68Q50 64 57 68Q54 74 50 75Q46 74 43 68Z" fill="#000"/>
+    <path d="M50 75V81M50 81Q45 85 41 82M50 81Q55 85 59 82" stroke="#000" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="go" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="ext" viewBox="0 0 14 14"><path d="M4 2h8v8M12 2 2 12" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
 <script>
-/* ============================================================
-   DATA: edit this part to add courses or class-made tools.
-   resources: [{ title: "...", url: "https://...", note: "..." }]
-   ============================================================ */
 const SUBJECTS = [
   {
     id: "math", name: "Math", glyph: "∑", stem: true, tools: "math",
@@ -533,10 +577,6 @@ const TOOLSETS = {
   history: ["source", "debate", "harkness", "thesis", "quiz"]
 };
 
-const COLORS = {
-  math: ["--math", "--math-soft"], science: ["--sci", "--sci-soft"], cs: ["--cs", "--cs-soft"],
-  english: ["--eng", "--eng-soft"], history: ["--hist", "--hist-soft"]
-};
 
 /* ============================================================ */
 const COURSES = {};
@@ -552,103 +592,121 @@ function intro(c) {
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+const icon = (id, cls = "") => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
 
-function setTheme(subjectId) {
-  const root = document.documentElement.style;
-  if (subjectId && COLORS[subjectId]) {
-    root.setProperty("--accent", `var(${COLORS[subjectId][0]})`);
-    root.setProperty("--accent-soft", `var(${COLORS[subjectId][1]})`);
-  } else {
-    root.setProperty("--accent", "var(--ink)");
-    root.setProperty("--accent-soft", "var(--sunk)");
+/* tiger stripes: tapered strokes from both edges, seeded so they look the same every visit */
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function stripes(seed, h = 150, cls = "") {
+  const r = rng(seed), W = 1600; let x = 10, top = r() > .5, d = "";
+  const spike = (x, w, len, bend, fromTop) => {
+    const y = v => fromTop ? v : h - v;
+    return `M${x - w / 2},${y(0)} C${x - w / 2 + bend * .3},${y(len * .5)} ${x + bend - 2},${y(len * .85)} ${x + bend},${y(len)} C${x + bend + 2},${y(len * .85)} ${x + w / 2 + bend * .3},${y(len * .5)} ${x + w / 2},${y(0)}Z`;
+  };
+  while (x < W) {
+    const w = 16 + r() * 22, len = h * (.38 + r() * .5), bend = (r() - .5) * 46;
+    d += spike(x, w, len, bend, top);
+    if (r() > .62) d += spike(x + w * .55, w * .45, len * .5, bend * 1.4 + 10, top);
+    x += 30 + r() * 46; top = r() > .35 ? !top : top;
   }
+  return `<svg class="stripes ${cls}" viewBox="0 0 ${W} ${h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="${d}" fill="#000"/></svg>`;
 }
 
 function crumbs(items) {
-  $("#crumbs").innerHTML = items.map(([label, href]) =>
-    href ? `<a href="${href}">${esc(label)}</a><span>/</span>` : `<span style="color:var(--ink)">${esc(label)}</span>`).join("");
+  $("#crumbs").innerHTML = items.map(([label, href], i) =>
+    href ? `<a href="${href}">${esc(label)}</a><span aria-hidden="true">/</span>` : `<span class="here">${esc(label)}</span>`).join("");
 }
 
-function subjCard(s) {
+function subjRow(s, i, small) {
   const n = s.groups.reduce((a, g) => a + g.courses.length, 0);
-  const [c, cs] = COLORS[s.id];
-  return `<a class="subj" href="#/${s.id}" style="--c:var(${c});--c-soft:var(${cs})">
-    ${s.stem ? '<span class="stem-tag">STEM</span>' : ""}
-    <span class="glyph">${esc(s.glyph)}</span>
-    <span class="txt"><h3>${esc(s.name)}</h3><p>${esc(s.blurb)}</p></span>
-    <span class="meta">${n} course${n === 1 ? "" : "s"} →</span>
-  </a>`;
+  return `<a class="subj reveal${small ? " small" : ""}" style="--d:${i * .07}s" href="#/${s.id}">
+    <h3>${esc(s.name)}</h3><p>${esc(s.blurb)}</p>
+    <span class="count">${n} course${n === 1 ? "" : "s"} ${icon("go")}</span></a>`;
 }
 
 function renderHome() {
-  setTheme(null); crumbs([]);
+  crumbs([]);
   document.title = "GCDS US AI Learning Hub";
   const stem = SUBJECTS.filter(s => s.stem), other = SUBJECTS.filter(s => !s.stem);
   $("#app").innerHTML = `
     <section class="hero">
-      <span class="eyebrow">Upper School</span>
-      <h1>AI that makes you think, not skip the thinking.</h1>
-      <p class="lede">Pick your class and get study tools built for it: hint-only tutoring, practice quizzes, debugging coaches, and feedback that never rewrites your work. Every tool is set up so the AI coaches you instead of doing it for you.</p>
+      <div class="reveal">
+        <h1>Study with AI. Do the thinking yourself.</h1>
+        <p>Tools for Upper School classes that coach you through problems, readings and essays instead of handing you the answers.</p>
+      </div>
+      <svg class="hero-tiger reveal" style="--d:.15s" viewBox="0 0 100 100" role="img" aria-label="Tiger"><use href="#tiger"/></svg>
     </section>
-    <div class="rules">
-      <div class="rule"><b>1. Pick your class</b><span>Choose a subject, then your course.</span></div>
-      <div class="rule"><b>2. Choose a tool</b><span>Fill in what you're working on. The hub writes the prompt.</span></div>
-      <div class="rule"><b>3. Open it in an AI</b><span>Copy it or open it in Claude or ChatGPT and start working.</span></div>
-    </div>
-    <div class="section-head"><h2>Subjects</h2><span class="count">STEM first</span></div>
-    <div class="subjects">${stem.map(subjCard).join("")}</div>
-    <div class="subjects secondary">${other.map(subjCard).join("")}</div>
-    <div class="note"><span class="i">i</span><div><b>Not every course is here.</b> The hub covers classes that share a standard curriculum across sections, so the tools fit what every section is learning. Electives with section-specific content and Seminar aren't included. Want your class added? Ask your teacher to reach out.</div></div>
+    <div class="bleed">${stripes(911)}</div>
+    <section class="steps" aria-label="How it works">
+      <div class="step reveal"><span class="n">1</span><div><b>Pick your class</b><span>Choose a subject, then the course you're taking.</span></div></div>
+      <div class="step reveal" style="--d:.08s"><span class="n">2</span><div><b>Choose a tool</b><span>Fill in what you're working on. The hub writes the prompt for you.</span></div></div>
+      <div class="step reveal" style="--d:.16s"><span class="n">3</span><div><b>Open it in an AI</b><span>Send it to Claude or ChatGPT and answer its questions yourself.</span></div></div>
+    </section>
+    <section>
+      <div class="block-head reveal"><h2>Pick a subject</h2><p>STEM classes come first. English and History cover grades 9 and 10.</p></div>
+      <div class="group-name reveal">STEM</div>
+      ${stem.map((s, i) => subjRow(s, i)).join("")}
+      <div class="group-name reveal">English and History</div>
+      ${other.map((s, i) => subjRow(s, i, true)).join("")}
+    </section>
+    <section class="notice reveal">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
+      <div><h3>Not every course is here</h3>
+      <p>The hub only covers classes that share a standard curriculum across sections, so every tool fits what the whole class is learning. Electives with section-specific content and Seminar aren't included. Want your class added? Ask your teacher to reach out.</p></div>
+    </section>
   `;
 }
 
 function renderSubject(s) {
-  setTheme(s.id); crumbs([["Hub", "#/"], [s.name]]);
+  crumbs([["Hub", "#/"], [s.name]]);
   document.title = `${s.name} · GCDS AI Learning Hub`;
   $("#app").innerHTML = `
     <section class="page-head">
-      <span class="eyebrow" style="justify-self:start">${esc(s.name)}</span>
-      <h1>Choose your ${esc(s.name)} class</h1>
-      <p>${esc(s.blurb)}</p>
+      <a class="up reveal" href="#/">All subjects</a>
+      <h1 class="reveal">${esc(s.name)}</h1>
+      <p class="reveal">${esc(s.blurb)}</p>
     </section>
+    <div class="course-groups">
     ${s.groups.map(g => `
-      <div class="group"><h2>${esc(g.name)}</h2>
-        <div class="courses">${g.courses.map(([id, name, sub]) =>
-          `<a class="course" href="#/${s.id}/${id}"><span><b>${esc(name)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</span><span class="arrow">→</span></a>`).join("")}
-        </div>
+      <div class="group-name reveal">${esc(g.name)}</div>
+      <div class="courses">${g.courses.map(([id, name, sub], i) =>
+        `<a class="course reveal" style="--d:${(i % 8) * .05}s" href="#/${s.id}/${id}"><span><b>${esc(name)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</span>${icon("go")}</a>`).join("")}
       </div>`).join("")}
-    <div class="note"><span class="i">i</span><div><b>Don't see your class?</b> Only courses with a shared curriculum across sections are included right now.</div></div>
+    </div>
+    <section class="notice reveal">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#tiger"/></svg>
+      <div><h3>Don't see your class?</h3><p>Only courses with a shared curriculum across sections are included right now.</p></div>
+    </section>
   `;
 }
 
 function renderCourse(c) {
   const s = c.subject;
-  setTheme(s.id); crumbs([["Hub", "#/"], [s.name, `#/${s.id}`], [c.name]]);
+  crumbs([["Hub", "#/"], [s.name, `#/${s.id}`], [c.name]]);
   document.title = `${c.name} · GCDS AI Learning Hub`;
   const tools = TOOLSETS[s.tools];
   const res = RESOURCES[c.id] || [];
   $("#app").innerHTML = `
     <section class="page-head">
-      <span class="eyebrow" style="justify-self:start">${esc(s.name)}</span>
-      <h1>${esc(c.name)}${c.sub ? `<span style="color:var(--muted);font-weight:500">: ${esc(c.sub)}</span>` : ""}</h1>
-      ${c.desc ? `<p>${esc(c.desc)}</p>` : `<p>Study tools for ${esc(c.name)}. Pick one, fill in what you're working on, and open it in an AI.</p>`}
+      <a class="up reveal" href="#/${s.id}">${esc(s.name)}</a>
+      <h1 class="reveal">${esc(c.name)}${c.sub ? `<small>${esc(c.sub)}</small>` : ""}</h1>
+      <p class="reveal">${c.desc ? esc(c.desc) : `Pick a tool, fill in what you're working on, and open it in an AI.`}</p>
     </section>
-    <div class="course-grid">
-      <div class="toollist" role="group" aria-label="Tools">
-        <div class="label">Tools</div>
+    <div class="workspace">
+      <div class="toollist reveal" role="group" aria-label="Tools">
+        <h2>Tools for ${esc(c.name)}</h2>
         ${tools.map((t, i) => `<button class="tool-btn" data-tool="${t}" aria-pressed="${i === 0}"><b>${esc(T[t].name)}</b><span>${esc(T[t].short)}</span></button>`).join("")}
       </div>
-      <div>
+      <div class="reveal" style="--d:.1s">
         <div class="panel" id="panel"></div>
-        <div class="about">
-          <div class="card"><h3>How to use it</h3><ol>
-            <li>Fill in the boxes. Blank boxes show up as [brackets] you can fill in later.</li>
-            <li>Hit Open in Claude or Open in ChatGPT, or copy the prompt.</li>
+        <div class="below">
+          <div><h3>How to use it</h3><ol>
+            <li>Fill in the boxes. Anything you leave blank shows up in orange so you can fill it in later.</li>
+            <li>Open it in Claude or ChatGPT, or copy the prompt.</li>
             <li>Answer the AI's questions yourself. That's where the learning happens.</li>
           </ol></div>
-          <div class="card"><h3>Class-made tools</h3>${res.length
-            ? `<div class="res">${res.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener"><span><b>${esc(r.title)}</b>${r.note ? `<br><small style="color:var(--muted)">${esc(r.note)}</small>` : ""}</span><span class="arrow">↗</span></a>`).join("")}</div>`
-            : `<p>Study guides, practice tests, and simulations made for ${esc(c.name)} will show up here.</p>`}</div>
+          <div><h3>Class-made tools</h3>${res.length
+            ? `<div class="res">${res.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener"><span>${esc(r.title)}${r.note ? `<small>${esc(r.note)}</small>` : ""}</span>${icon("ext")}</a>`).join("")}</div>`
+            : `<p>Study guides, practice tests and simulations made for ${esc(c.name)} will show up here.</p>`}</div>
         </div>
       </div>
     </div>
@@ -656,7 +714,7 @@ function renderCourse(c) {
   document.querySelectorAll(".tool-btn").forEach(b => b.addEventListener("click", () => {
     document.querySelectorAll(".tool-btn").forEach(x => x.setAttribute("aria-pressed", x === b));
     showTool(c, b.dataset.tool);
-    if (window.innerWidth <= 860) $("#panel").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (window.innerWidth <= 900) $("#panel").scrollIntoView({ behavior: "smooth", block: "start" });
   }));
   showTool(c, tools[0]);
 }
@@ -675,13 +733,13 @@ function showTool(c, toolId) {
         ? `<textarea id="f-${f.k}" data-k="${f.k}" placeholder="${esc(f.ph)}">${esc(vals[f.k] || "")}</textarea>`
         : `<input id="f-${f.k}" data-k="${f.k}" placeholder="${esc(f.ph)}" value="${esc(vals[f.k] || "")}">`}
     </div>`).join("")}
-    <div class="preview"><div class="label"><span>Your prompt</span><span id="chars"></span></div><pre id="out"></pre></div>
+    <div class="preview"><div class="label"><span>Your prompt</span></div><pre id="out"></pre></div>
     <div class="actions">
-      <a class="btn primary" id="open-claude" target="_blank" rel="noopener">Open in Claude ↗</a>
-      <a class="btn" id="open-gpt" target="_blank" rel="noopener">Open in ChatGPT ↗</a>
+      <a class="btn primary" id="open-claude" target="_blank" rel="noopener">Open in Claude ${icon("ext")}</a>
+      <a class="btn" id="open-gpt" target="_blank" rel="noopener">Open in ChatGPT ${icon("ext")}</a>
       <button class="btn" id="copy">Copy prompt</button>
     </div>
-    <p class="hint">Check your teacher's AI policy before using AI on graded work.</p>
+    <p class="fine">Check your teacher's AI policy before using AI on graded work.</p>
   `;
   $("#panel").querySelectorAll("[data-k]").forEach(el => el.addEventListener("input", () => { vals[el.dataset.k] = el.value; update(); }));
   $("#copy").addEventListener("click", copyPrompt);
@@ -724,6 +782,14 @@ function toast(msg) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2000);
 }
 
+/* fade things in as they scroll into view */
+const io = "IntersectionObserver" in window
+  ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12, rootMargin: "0px 0px -40px 0px" })
+  : null;
+function reveal() {
+  document.querySelectorAll(".reveal:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+}
+
 function route() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   const s = SUBJECTS.find(x => x.id === parts[0]);
@@ -733,7 +799,9 @@ function route() {
   else renderHome();
   window.scrollTo(0, 0);
   $("#app").focus({ preventScroll: true });
+  reveal();
 }
+document.querySelector("footer").insertAdjacentHTML("beforebegin", stripes(27, 64, "thin"));
 window.addEventListener("hashchange", route);
 route();
 </script>
