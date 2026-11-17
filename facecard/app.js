@@ -28,23 +28,23 @@ const P={
   dreamMask:{brand:"Youth to the People",div:"L'Oréal Luxe",name:"Superberry Hydrate + Glow Dream Mask",why:"Overnight mask for dull, dehydrated skin.",fixes:["radiance","hydration"]}
 };
 
-/* official pages. img: paste a product photo address here to show it on the card */
+/* [link to the brand's page, product photo]. photos are the brands' packshots as hosted by the brand or a retailer */
 const LINKS={
-  ffWash:["https://www.kiehls.com/search?q=facial%20fuel%20energizing%20face%20wash",""],
-  ufCleanser:["https://www.kiehls.com/skincare/face-cleansers-scrubs/ultra-facial-cleanser/714.html",""],
-  yttpCleanser:["https://www.youthtothepeople.com/skincare/cleansers/superfood-cleanser/YTTP-10100.html",""],
-  gelCream:["https://www.kiehls.com/skincare/moisturizers/ultra-facial-oil-free-gel-cream/10003.html",""],
-  ufCream:["https://www.kiehls.com/search?q=ultra%20facial%20cream",""],
-  ffMoist:["https://www.kiehls.com/search?q=facial%20fuel%20energizing%20moisture%20treatment",""],
-  spf:["https://www.kiehls.com/search?q=ultra%20light%20daily%20uv%20defense",""],
-  drgSun:["https://www.google.com/search?q=Dr.G%20Green%20Mild%20Up%20Sun%2B%20SPF50",""],
-  pressClear:["https://www.medik8.com/products/press-clear",""],
-  drgRed:["https://www.google.com/search?q=Dr.G%20Red%20Blemish%20Clear%20Soothing%20Cream",""],
-  mandelic:["https://www.youthtothepeople.com/search?q=mandelic",""],
-  darkSpot:["https://www.kiehls.com/Clearly-Corrective-Dark-Spot-Solution/842.html",""],
-  b5:["https://int.medik8.com/products/hydr8-b5-intense",""],
-  rareEarth:["https://www.kiehls.com/search?q=rare%20earth%20deep%20pore%20cleansing%20masque",""],
-  dreamMask:["https://www.youthtothepeople.com/search?q=superberry%20dream%20mask",""]
+  ffWash:["https://www.kiehls.com/search?q=facial%20fuel%20energizing%20face%20wash","https://bluemercury.com/cdn/shop/files/global_images-p3605970319779-1.jpg?v=1768491671&width=600"],
+  ufCleanser:["https://www.kiehls.com/skincare/face-cleansers-scrubs/ultra-facial-cleanser/714.html","https://bluemercury.com/cdn/shop/files/variant_images-size-25floz-3605975099676-1.jpg?v=1759623866&width=600"],
+  yttpCleanser:["https://www.youthtothepeople.com/skincare/cleansers/superfood-cleanser/YTTP-10100.html","https://static.thcdn.com/productimg/original/13324144-7904896743335317.jpg"],
+  gelCream:["https://www.kiehls.com/skincare/moisturizers/ultra-facial-oil-free-gel-cream/10003.html","https://bluemercury.com/cdn/shop/files/global_images-3605972453211-1.jpg?v=1759527009&width=600"],
+  ufCream:["https://www.kiehls.com/search?q=ultra%20facial%20cream","https://bluemercury.com/cdn/shop/files/global_images-p3605972132840-1_de7c0a24-5005-4fd5-9d59-60dbe06322e1.jpg?v=1773869407&width=600"],
+  ffMoist:["https://www.kiehls.com/search?q=facial%20fuel%20energizing%20moisture%20treatment","https://bluemercury.com/cdn/shop/files/variant_images-size-42floz-3700194719104-2.jpg?v=1759527360&width=600"],
+  spf:["https://www.kiehls.com/search?q=ultra%20light%20daily%20uv%20defense","https://static.thcdn.com/productimg/original/12916130-9765339672329941.jpg"],
+  drgSun:["https://www.google.com/search?q=Dr.G%20Green%20Mild%20Up%20Sun%2B%20SPF50","https://josephbeauty.com/cdn/shop/products/drg-green-mild-up-sun-plus-spf50pa-50ml-503336.jpg?v=1693435840&width=600"],
+  pressClear:["https://www.medik8.com/products/press-clear","https://cdn.shopify.com/s/files/1/0751/6753/1181/files/20230922-PDPAsset1-Press_Clear-Packshot-ROW_ad67b41c-5818-43ef-9771-108cb37266fc.jpg?v=1770289721"],
+  drgRed:["https://www.google.com/search?q=Dr.G%20Red%20Blemish%20Clear%20Soothing%20Cream","https://cdn.shopify.com/s/files/1/0859/0275/4068/products/drg-red-blemish-clear-soothing-cream-36754969461012.png?v=1764689781"],
+  mandelic:["https://www.youthtothepeople.com/search?q=mandelic","https://static.thcdn.com/productimg/original/13417971-7374903961159367.jpg"],
+  darkSpot:["https://www.kiehls.com/Clearly-Corrective-Dark-Spot-Solution/842.html","https://bluemercury.com/cdn/shop/files/variant_images-size-1oz-3605970202637-3_4b267932-f14a-42b2-a78a-9293a23b593d.jpg?v=1761497125&width=600"],
+  b5:["https://int.medik8.com/products/hydr8-b5-intense","https://scdn.speedsize.com/fd01c063-4aa1-453d-b317-e8f709b2bfe7/int.medik8.com/cdn/shop/files/20230922-PDPAsset1-Hydr8B5Intense-Packshot-ROW_ac96d220-e9e5-493f-973d-b46db56e5fee.jpg?v=1702312619&width=1000"],
+  rareEarth:["https://www.kiehls.com/search?q=rare%20earth%20deep%20pore%20cleansing%20masque","https://static.thcdn.com/productimg/original/17374671-1675321493438192.jpg"],
+  dreamMask:["https://www.youthtothepeople.com/search?q=superberry%20dream%20mask","https://static.thcdn.com/productimg/original/13314104-5024896452086767.jpg"]
 };
 for(const k in LINKS){P[k].url=LINKS[k][0];P[k].img=LINKS[k][1]}
 const SITE=u=>{try{const h=new URL(u).hostname.replace(/^www\.|^int\./,"");return h==="google.com"?"":h}catch(e){return ""}};
