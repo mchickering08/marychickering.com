@@ -1,0 +1,1499 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ADV Applied Economics + Engineering Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap">
+<style>
+img{max-width:100%}
+/* Layout: one question per screen in a centered 720px column. A thin bar under the
+   header fills left to right through a skin-tone shade range as questions are answered. */
+:root{
+  --bg:#F4F4F1; --surface:#FFFFFF; --panel:#E9E7E2; --ink:#111214; --ink-2:#5C5E62; --line:#DCDCD7;
+  --accent:#1D3557; --accent-ink:#FFFFFF; --tint:#E6EBF2; --metal:#A88B5C; --lip:#A85D55;
+  --t1:#F1D3BE; --t2:#E2B597; --t3:#C98F6B; --t4:#A26B4A; --t5:#6E4630; --t6:#43291C;
+  --serif:"Libre Caslon Display","Big Caslon","Didot",Georgia,serif;
+  --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111214; --surface:#1A1B1E; --panel:#1F2024; --ink:#F1F1EE; --ink-2:#A2A4A8; --line:#2E2F33;
+    --accent:#9DB6D6; --accent-ink:#0D1420; --tint:#1C2533; --metal:#B79A6A; --lip:#C27A70; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111214; --surface:#1A1B1E; --panel:#1F2024; --ink:#F1F1EE; --ink-2:#A2A4A8; --line:#2E2F33;
+  --accent:#9DB6D6; --accent-ink:#0D1420; --tint:#1C2533; --metal:#B79A6A; --lip:#C27A70; color-scheme:dark;
+}
+html,body{margin:0;height:100%}
+.app{min-height:100%;display:flex;flex-direction:column}
+.app>main{flex:1 0 auto}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* illustration pigments */
+.c-ink{fill:var(--ink)} .c-surf{fill:var(--surface)} .c-panel{fill:var(--panel)} .c-line{fill:var(--line)}
+.c-metal{fill:var(--metal)} .c-lip{fill:var(--lip)} .c-acc{fill:var(--accent)}
+.c-t1{fill:var(--t1)} .c-t2{fill:var(--t2)} .c-t3{fill:var(--t3)} .c-t4{fill:var(--t4)} .c-t5{fill:var(--t5)} .c-t6{fill:var(--t6)}
+.c-ring{fill:none;stroke:var(--ink-2);stroke-width:2.5;stroke-dasharray:4 5}
+.c-label{fill:var(--ink-2);font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.1em}
+.c-tag{fill:var(--ink);font-family:var(--sans);font-size:19px;font-weight:700}
+.s-t2{fill:none;stroke:var(--t2)}
+
+.preview-band{background:var(--ink);color:var(--bg);font-size:13px;padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:center}
+.preview-band a{color:inherit}
+
+.top{background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:16px}
+.mark{font-family:var(--serif);font-size:24px;line-height:1;letter-spacing:.01em}
+.partner{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);text-align:right}
+.progress{height:4px;background:var(--line)}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--t1),var(--t2),var(--t3),var(--t4),var(--t5),var(--t6));background-size:100vw 100%;transition:width .35s ease}
+.app[data-view="intro"] .progress,.app[data-view="end"] .progress{visibility:hidden}
+
+.stage{padding-block:40px 64px}
+@media (min-width:760px){.stage{padding-block:64px 88px}}
+.col-q{max-width:720px;margin:0 auto}
+
+/* type */
+.label{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin:0 0 12px}
+.label .n{color:var(--accent)}
+.q-title{font-weight:600;font-size:clamp(26px,4vw,36px);line-height:1.15;letter-spacing:-.015em;margin:0;text-wrap:balance;outline:none}
+.q-help{color:var(--ink-2);margin:10px 0 0;max-width:60ch}
+.answers{margin-top:28px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:32px;flex-wrap:wrap}
+.nav-right{display:flex;align-items:center;gap:16px;margin-left:auto}
+.count{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.count.warn{color:var(--lip)}
+
+.btn{border:0;cursor:pointer;font-weight:600;font-size:16px;line-height:1;padding:15px 26px;border-radius:8px;transition:opacity .2s,transform .1s}
+.btn:active{transform:translateY(1px)}
+.primary{background:var(--accent);color:var(--accent-ink)}
+.primary:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.secondary{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.text-btn{background:none;border:0;color:var(--ink-2);cursor:pointer;padding:8px 0;font-size:15px;text-decoration:underline;text-underline-offset:4px}
+
+/* option cards with illustrations */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:600px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;text-align:left;font-weight:500;font-size:15px;line-height:1.3;cursor:pointer;transition:border-color .15s,background .15s;min-width:0}
+.card svg{width:52px;height:52px;flex:none}
+.card small{display:block;font-weight:400;font-size:13px;color:var(--ink-2);margin-top:2px}
+.card:hover{border-color:var(--ink-2)}
+.card[aria-pressed="true"]{border-color:var(--accent);background:var(--tint);box-shadow:inset 0 0 0 1px var(--accent)}
+.tick{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:4px;background:var(--accent);color:var(--accent-ink);display:none;place-items:center}
+.tick svg{width:12px;height:12px}
+[aria-pressed="true"]>.tick{display:grid}
+.cards.check{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:600px){.cards.check{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cards.check .card{align-items:center;padding:22px 10px}
+.cards.check .card svg{width:68px;height:68px}
+
+/* frequency rows */
+.rows{display:grid;gap:8px}
+.rows .card{flex-direction:row;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;font-size:16px}
+.dots{display:flex;gap:4px;justify-content:flex-end}
+.dots i{width:9px;height:9px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);display:block}
+.dots i.f{background:var(--accent);box-shadow:none}
+.dots i.x{box-shadow:inset 0 0 0 1.5px var(--ink-2)}
+.dots-label{display:block;font-size:12px;color:var(--ink-2);margin-top:5px;text-align:right}
+
+/* choices */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:12px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-weight:500;font-size:15px;line-height:1.25;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chips.stack{flex-direction:column;align-items:stretch}
+.chips.stack .chip{padding:15px 18px;font-size:16px}
+.group+.group{margin-top:28px}
+.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+
+/* which best describes you */
+.pairs{display:grid;gap:24px}
+.pair-q{font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin:0 0 8px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pair .card{flex-direction:row;align-items:center;gap:14px;padding:14px 40px 14px 14px}
+.pair .card>svg{width:60px;height:60px;padding:6px;border-radius:8px;background:var(--panel)}
+.pair .card b{display:block;font-size:16px;font-weight:600}
+.pair .card small{margin-top:3px}
+@media (max-width:540px){.pair .card{flex-direction:column;align-items:flex-start;padding:14px}}
+
+/* price */
+.price-read{font-family:var(--serif);font-size:clamp(56px,11vw,88px);line-height:1;margin:0;font-variant-numeric:tabular-nums}
+.price-read small{font-family:var(--sans);font-size:15px;color:var(--ink-2);margin-left:8px}
+.range{width:100%;margin:22px 0 10px;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent) var(--p,30%),var(--line) var(--p,30%));outline-offset:8px}
+.range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.25);cursor:grab}
+.range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.25);cursor:grab}
+.ticks{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* 1-5 scale */
+.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.scale button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:13px;font-weight:500;line-height:1.2;text-align:center}
+.scale b{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1}
+.scale button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+
+.concept{display:grid;gap:22px;margin-top:24px}
+.art{border-radius:12px;overflow:hidden;line-height:0;background:var(--panel)}
+.art svg{width:100%;height:auto;display:block}
+.concept-card{display:grid;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+@media (min-width:640px){.concept-card{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}}
+.concept-art{background:var(--panel);line-height:0;display:flex;align-items:center}
+.concept-art svg{width:100%;height:auto;display:block}
+.concept-body{padding:22px;display:grid;gap:16px;align-content:start}
+.concept-name{font-family:var(--serif);font-size:28px;line-height:1.1;margin:0}
+.features{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.features li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+.features .fi{width:34px;height:34px;border-radius:8px;background:var(--tint);color:var(--accent);display:grid;place-items:center}
+.features .fi svg{width:18px;height:18px}
+.features b{display:block;font-weight:600;font-size:15px;line-height:1.3}
+.features span{display:block;font-size:14px;color:var(--ink-2);line-height:1.4}
+.ba{display:flex;align-items:center;gap:14px;padding-top:16px;border-top:1px solid var(--line)}
+.ba figure{margin:0;display:grid;justify-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.ba figure svg{width:58px;height:58px}
+.ba .arrow{width:28px;height:14px;color:var(--ink-2);flex:none;margin-bottom:18px}
+
+.field{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:500 17px/1.3 var(--sans)}
+.field:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 1px var(--accent)}
+textarea.field{min-height:130px;resize:vertical;line-height:1.45}
+.stack-gap{display:grid;gap:14px}
+.hint{font-size:14px;color:var(--ink-2);margin:8px 0 0}
+
+/* cover */
+.intro{display:grid;gap:32px;align-items:center}
+@media (min-width:880px){.intro{grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:64px}}
+.intro-title{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4.6vw,52px);line-height:1.08;letter-spacing:-.005em;margin:0;text-wrap:balance}
+.lede{font-size:17px;max-width:50ch;margin:18px 0 0;color:var(--ink)}
+.facts{list-style:none;padding:0;margin:22px 0 26px;display:flex;flex-wrap:wrap;gap:8px}
+.facts li{font-size:14px;font-weight:500;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.fine{font-size:13px;color:var(--ink-2);max-width:56ch;margin:18px 0 0}
+.sel{user-select:all;color:var(--ink);font-weight:500;overflow-wrap:anywhere}
+.friend{font-size:14px;font-weight:600;color:var(--accent);margin:0 0 12px}
+
+/* results */
+.result{display:grid;gap:28px}
+@media (min-width:880px){.result{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:56px;align-items:start}}
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.summary-head{padding:24px 24px 20px;border-bottom:1px solid var(--line)}
+.type-name{font-family:var(--serif);font-size:clamp(34px,5vw,44px);line-height:1.05;margin:4px 0 8px}
+.type-line{margin:0;color:var(--ink-2)}
+.shade-strip{display:grid;grid-template-columns:repeat(6,1fr);height:8px}
+.shade-strip i:nth-child(1){background:var(--t1)}.shade-strip i:nth-child(2){background:var(--t2)}.shade-strip i:nth-child(3){background:var(--t3)}
+.shade-strip i:nth-child(4){background:var(--t4)}.shade-strip i:nth-child(5){background:var(--t5)}.shade-strip i:nth-child(6){background:var(--t6)}
+.glance{margin:0;padding:8px 24px 16px}
+.glance div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px;padding-block:10px;border-bottom:1px solid var(--line);font-size:15px}
+.glance div:last-child{border-bottom:0}
+.glance dt{color:var(--ink-2)} .glance dd{margin:0;font-weight:500}
+.col{display:grid;gap:28px;min-width:0}
+.h2{font-weight:600;font-size:21px;line-height:1.25;margin:0 0 10px}
+.stats{border-top:1px solid var(--line)}
+.stat{display:grid;grid-template-columns:5.2ch 1fr;gap:16px;align-items:baseline;padding-block:14px;border-bottom:1px solid var(--line)}
+.stat b{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat span q{font-style:italic}
+.share{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
+.share p{margin:0 0 14px;max-width:60ch}
+.linkbox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.linkbox .field{font-size:14px}
+.mini{font-size:14px;color:var(--ink-2);margin:12px 0 0}
+.mini b{color:var(--ink)}
+.board{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.board li{display:grid;grid-template-columns:2ch minmax(0,1fr) auto;gap:12px;align-items:center;font-size:15px}
+.board .rk{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.board .nm{min-width:0}
+.board .nm span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board .bar{display:block;height:5px;border-radius:3px;background:var(--line);margin-top:6px;overflow:hidden}
+.board .bar i{display:block;height:100%;background:var(--t3)}
+.board li.me .bar i{background:var(--accent)}
+.board li.me .nm span{font-weight:600}
+.board .n{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+.example-note{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--lip);margin:0}
+
+/* link tracker */
+.hub{display:grid;gap:26px;max-width:720px;margin:0 auto}
+.goal-grid{display:grid;grid-template-columns:repeat(5,minmax(0,40px));gap:10px;margin:16px 0 10px}
+.goal-grid i{aspect-ratio:1/1;border-radius:50%;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.goal-grid i.on{background:var(--accent);box-shadow:none}
+.hub-num{font-family:var(--serif);font-size:clamp(48px,8vw,72px);line-height:1;margin:8px 0 0;font-variant-numeric:tabular-nums}
+.hub-num small{font-family:var(--sans);font-size:16px;color:var(--ink-2);margin-left:6px}
+.code-tag{font-weight:600;font-size:14px;letter-spacing:.1em;background:var(--tint);color:var(--ink);padding:6px 10px;border-radius:6px;display:inline-block}
+
+.end{max-width:620px;margin:0 auto;padding-block:20px}
+.end h1{font-weight:600;font-size:clamp(28px,4.4vw,40px);line-height:1.15;margin:0 0 14px;text-wrap:balance}
+.end p{font-size:17px;margin:0 0 14px}
+
+.foot{border-top:1px solid var(--line);color:var(--ink-2);font-size:13px;background:var(--surface)}
+.foot .wrap{padding-block:18px;display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between}
+
+.fade{animation:fade .25s ease both}
+@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* ---------- additions for the two-part local version ---------- */
+.app[data-view="admin"] .progress{visibility:hidden}
+.top-in{flex-wrap:wrap}
+.steps{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.app:not([data-view="q"]) .steps{visibility:hidden}
+.steps span[data-s]{display:flex;align-items:center;gap:7px}
+.steps b{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.steps .on{color:var(--ink)}
+.steps .on b{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.steps .done b{background:var(--ink-2);color:var(--surface);box-shadow:none}
+.steps .bg-step.on{color:var(--ink)}
+.steps .sep{width:28px;height:1px;background:var(--line)}
+@media (max-width:640px){.partner{display:none}}
+.other-wrap{margin-top:14px}
+.interlude .art{margin-top:28px}
+.summary-head+.summary-head{border-top:0}
+.admin{max-width:720px;margin:0 auto;display:grid;gap:8px}
+.big-num{font-family:var(--serif);font-size:clamp(48px,8vw,72px);line-height:1;margin:8px 0 6px;font-variant-numeric:tabular-nums}
+.big-num small{font-family:var(--sans);font-size:16px;color:var(--ink-2);margin-left:6px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 22px}
+.res{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:12px}
+.res .h2{margin:0 0 2px}
+.part-h{font-family:var(--serif);font-size:30px;font-weight:400;margin:36px 0 4px}
+.res .board{margin-top:14px}
+.res .board li{grid-template-columns:minmax(0,1fr) auto}
+.res .board .nm span{white-space:normal}
+.res .board .n{white-space:nowrap}
+.others{margin:14px 0 0;padding-left:18px;font-size:14px;color:var(--ink-2)}
+.others li+li{margin-top:6px}
+.foot a{color:inherit}
+.lede strong{font-weight:700}
+.time-est{margin:26px 0 8px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.sections-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;border-radius:10px;overflow:hidden;margin:0 0 26px;max-width:520px}
+.sections-bar span{padding:13px 6px;text-align:center;font-size:14px;font-weight:600;color:#111214;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sections-bar span:nth-child(1){background:var(--t1)}
+.sections-bar span:nth-child(2){background:var(--t2)}
+.sections-bar span:nth-child(3){background:var(--t3)}
+.sections-bar span:nth-child(4){background:var(--t4);color:#fff}
+@media (max-width:420px){.sections-bar span{font-size:12px;padding:12px 3px}}
+.mark{font-size:21px;line-height:1.15}
+.segs{border-top:1px solid var(--line)}
+.app[data-view="intro"] .segs,.app[data-view="admin"] .segs{display:none}
+.segs-in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-block:10px 12px}
+.seg-top{display:flex;justify-content:space-between;gap:6px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:6px;white-space:nowrap}
+.seg-n{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.seg.on .seg-top{color:var(--ink)}
+.seg-track{height:5px;border-radius:3px;background:var(--line);overflow:hidden}
+.seg-track i{display:block;height:100%;width:0;transition:width .35s ease}
+.seg[data-p="0"] .seg-track i{background:var(--t2)}
+.seg[data-p="1"] .seg-track i{background:var(--t3)}
+.seg[data-p="2"] .seg-track i{background:var(--t4)}
+.seg[data-p="3"] .seg-track i{background:var(--t5)}
+.seg.on .seg-track{box-shadow:0 0 0 1px var(--ink-2)}
+@media (max-width:560px){.seg-n{display:none}.seg-top{font-size:10px;letter-spacing:.05em}.segs-in{gap:8px}}
+.stat{grid-template-columns:minmax(5.2ch,auto) 1fr}
+
+/* ================= look ================= */
+:root[data-theme="light"]{
+  --bg:#FBF8F4; --surface:#FFFFFF; --panel:#F4EBE4; --ink:#2B211D; --ink-2:#7B6A62; --line:#ECE1D8;
+  --accent:#7A2E3F; --accent-ink:#FFFFFF; --tint:#F8EBEA; --metal:#C49A6C; --lip:#B5566A;
+  --serif:"Cormorant Garamond","Cormorant",Garamond,Georgia,serif;
+  --sans:"Jost","Futura","Avenir Next","Helvetica Neue",Arial,sans-serif;
+  --rose1:#F3DCD5; --rose2:#E6BCB1; --rose3:#CF968D; --rose4:#A9646A;
+  --shadow:0 1px 2px rgba(74,38,28,.04),0 8px 24px rgba(74,38,28,.06);
+  color-scheme:light;
+}
+body{font-family:var(--sans);background:
+  radial-gradient(900px 520px at 92% -8%, #F6E0DA 0%, rgba(246,224,218,0) 62%),
+  radial-gradient(800px 480px at -12% 108%, #EFE5D8 0%, rgba(239,229,216,0) 60%), var(--bg);background-attachment:fixed}
+.top{background:rgba(251,248,244,.82);backdrop-filter:saturate(1.2) blur(10px);-webkit-backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.mark{font-family:var(--serif);font-style:italic;font-weight:500;font-size:23px;letter-spacing:0}
+.partner{font-size:11px;letter-spacing:.2em;font-weight:500;color:var(--ink-2)}
+.segs{border-top:0}
+.seg-top{text-transform:none;letter-spacing:.01em;font-size:13px;font-weight:500;color:var(--ink-2)}
+.seg.on .seg-top{color:var(--accent)}
+.seg.on .seg-track{box-shadow:none}
+.seg-track{height:4px;border-radius:99px;background:#EFE4DC}
+.seg[data-p="0"] .seg-track i{background:var(--rose1)}
+.seg[data-p="1"] .seg-track i{background:var(--rose2)}
+.seg[data-p="2"] .seg-track i{background:var(--rose3)}
+.seg[data-p="3"] .seg-track i{background:var(--rose4)}
+.seg-track i{border-radius:99px;transition:width .5s cubic-bezier(.2,.7,.2,1)}
+
+.label{text-transform:none;letter-spacing:.01em;font-size:15px;font-weight:500;color:var(--ink-2)}
+.label .n{color:var(--accent);font-weight:500}
+.q-title{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5vw,48px);line-height:1.08;letter-spacing:-.005em}
+.q-help{font-size:16px}
+.answers{margin-top:30px}
+
+.chip{border-radius:999px;padding:12px 20px;border-color:var(--line);background:var(--surface);box-shadow:0 1px 2px rgba(74,38,28,.04);font-weight:400;font-size:16px;transition:background .18s,border-color .18s,box-shadow .18s,transform .12s}
+.chip:hover{border-color:#D9C3B8;transform:translateY(-1px)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(122,46,63,.25)}
+.chips.stack .chip{border-radius:16px;padding:16px 20px}
+.group .label{font-size:14px;margin-bottom:12px}
+
+.card{border-radius:20px;border-color:var(--line);box-shadow:var(--shadow);font-weight:400;font-size:16px;transition:border-color .18s,background .18s,transform .12s,box-shadow .18s}
+.card:hover{border-color:#D9C3B8;transform:translateY(-1px)}
+.card[aria-pressed="true"]{border-color:var(--accent);background:var(--tint);box-shadow:inset 0 0 0 1px var(--accent),0 8px 22px rgba(122,46,63,.12)}
+.tick{border-radius:50%;background:var(--accent)}
+.rows .card{padding:18px 22px}
+.dots i.f{background:var(--accent)}
+.pair .card>svg{background:var(--panel);border-radius:14px}
+.pair-q{text-transform:none;letter-spacing:.01em;font-size:15px;font-weight:500}
+
+.scale button{border-radius:18px;border-color:var(--line);box-shadow:var(--shadow);font-weight:400;font-size:14px}
+.scale b{font-size:32px;font-weight:500}
+.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 8px 22px rgba(122,46,63,.25)}
+
+.btn{border-radius:999px;font-weight:500;letter-spacing:.02em;padding:16px 32px}
+.primary{background:var(--accent);box-shadow:0 8px 22px rgba(122,46,63,.22)}
+.primary:hover:not(:disabled){background:#65202F}
+.secondary{border-radius:999px}
+.text-btn{text-decoration:none;color:var(--ink-2);font-size:16px}
+.text-btn:hover{color:var(--ink)}
+.count{font-size:14px}
+.field{border-radius:16px;border-color:var(--line);font-family:var(--sans);font-weight:400}
+.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(122,46,63,.12)}
+.range{background:linear-gradient(90deg,var(--accent) var(--p,30%),var(--line) var(--p,30%))}
+.range::-webkit-slider-thumb{border-color:var(--accent)}
+.price-read{font-weight:500}
+
+.intro-title{font-weight:400;font-size:clamp(40px,5.2vw,62px);line-height:1.04;letter-spacing:-.01em}
+.intro-title em{font-style:italic;color:var(--accent)}
+.intro .label{color:var(--accent)}
+.lede{font-size:18px;line-height:1.6;color:#4A3C36}
+.lede strong{color:var(--ink);font-weight:600}
+.time-est{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:.01em;font-size:15px;font-weight:500;color:var(--ink-2);margin:28px 0 10px}
+.time-est svg{width:16px;height:16px}
+.sections-bar{border-radius:999px;gap:0;box-shadow:var(--shadow);max-width:540px}
+.sections-bar span{font-weight:500;font-size:14px;padding:14px 6px;color:var(--ink)}
+.sections-bar span:nth-child(1){background:var(--rose1)}
+.sections-bar span:nth-child(2){background:var(--rose2)}
+.sections-bar span:nth-child(3){background:var(--rose3);color:#fff}
+.sections-bar span:nth-child(4){background:var(--rose4);color:#fff}
+.fine{font-size:14px}
+.art{border-radius:28px;box-shadow:var(--shadow)}
+
+.summary{border-radius:24px;border-color:var(--line);box-shadow:var(--shadow)}
+.summary-head .label{font-size:14px}
+.type-name{font-weight:500}
+.shade-strip{height:6px}
+.stat b{font-weight:500;font-size:36px;color:var(--accent)}
+.share{border-radius:24px;border-color:var(--line);box-shadow:var(--shadow)}
+.h2{font-family:var(--serif);font-weight:500;font-size:27px}
+.res{border-radius:20px;border-color:var(--line);box-shadow:var(--shadow)}
+.part-h{font-weight:500}
+.big-num{font-weight:500;color:var(--accent)}
+.res .board .bar i{background:var(--rose3)}
+.foot{background:transparent;border-top:1px solid var(--line)}
+.sec-title{font-family:var(--serif);font-weight:400;font-size:clamp(52px,8vw,84px);line-height:1;margin:0;letter-spacing:-.01em;outline:none}
+.sec-meta{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 4px}
+.sec-meta span{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:15px;font-weight:500;color:var(--ink);box-shadow:0 1px 2px rgba(74,38,28,.04)}
+.sec-meta svg{width:16px;height:16px;color:var(--accent)}
+.interlude .q-help{margin-top:14px}
+.login{max-width:440px;margin:0 auto}
+.login-form{display:grid;gap:16px;margin-top:26px}
+.login-form label{display:grid;gap:8px;font-size:15px;font-weight:500;color:var(--ink-2)}
+.login-err{margin:0;color:var(--lip);font-size:15px}
+.login .nav{margin-top:8px}
+.foot .login-link{font-weight:500;text-decoration:none;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.foot .login-link:hover{border-color:var(--accent);color:var(--accent)}
+.test-band{background:var(--accent);color:#fff;text-align:center;font-size:14px;font-weight:500;letter-spacing:.02em;padding:7px 16px}
+.fade{animation:fade .35s cubic-bezier(.2,.7,.2,1) both}
+</style>
+</head>
+<body>
+<div class="app" id="app" data-view="intro">
+  <div class="test-band" id="testBand" hidden>Test mode: answers are not being saved.</div>
+  <header class="top">
+    <div class="wrap top-in">
+      <span class="mark">ADV Applied Economics + Engineering Survey</span>
+    </div>
+    <div class="segs" aria-hidden="true"><div class="wrap segs-in" id="segs">
+      <div class="seg" data-p="0"><div class="seg-top"><span>Background</span><span class="seg-n"></span></div><div class="seg-track"><i></i></div></div>
+      <div class="seg" data-p="1"><div class="seg-top"><span>Makeup</span><span class="seg-n"></span></div><div class="seg-track"><i></i></div></div>
+      <div class="seg" data-p="2"><div class="seg-top"><span>Skincare</span><span class="seg-n"></span></div><div class="seg-track"><i></i></div></div>
+      <div class="seg" data-p="3"><div class="seg-top"><span>Fragrance</span><span class="seg-n"></span></div><div class="seg-track"><i></i></div></div>
+    </div></div>
+  </header>
+  <main class="wrap stage">
+    <section id="screen" aria-live="polite"></section>
+  </main>
+  <footer class="foot">
+    <div class="wrap">
+      <span>A Greenwich Country Day School student research project.</span>
+      <a href="#login" class="login-link">Log in</a>
+    </div>
+  </footer>
+</div>
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- setup ---------- */
+  /* ===== SETTINGS: the only lines you need to change ===== */
+  var TEST_MODE = true;   // true = a test run: nothing is saved anywhere. Set to false to start collecting.
+  var SHEET_URL = '';     // your Google Apps Script web app URL (ends in /exec). Empty = save on this device only.
+  /* ======================================================== */
+  var LIVE = !TEST_MODE && !!SHEET_URL;
+  var KEY = 'face-value-two-part-v1';   // used only when SHEET_URL is empty
+  var RESET_SECONDS = 30;               // the thank-you screen resets for the next person
+
+  var app = document.getElementById('app');
+  var screen = document.getElementById('screen');
+  var A = {}, trail = [], t0 = 0, resetTimer = null;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function has(v, x) { return Array.isArray(v) && v.indexOf(x) !== -1; }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  var memory = [];
+  function loadAll() { try { var r = localStorage.getItem(KEY); return r ? JSON.parse(r) : memory; } catch (e) { return memory; } }
+  function saveAll(all) { memory = all; try { localStorage.setItem(KEY, JSON.stringify(all)); } catch (e) { } }
+
+    /* ---------- illustrations (flat, drawn in a 64x64 box) ---------- */
+  var I = {
+    stick: '<rect class="c-t2" x="24" y="8" width="16" height="16" rx="6"/><rect class="c-ink" x="22" y="22" width="20" height="8" rx="1.5"/><rect class="c-t1" x="22" y="29" width="20" height="28" rx="3"/><rect class="c-surf" x="26" y="33" width="2.4" height="20" rx="1.2" opacity=".5"/>',
+    tube: '<path class="c-t1" d="M20 6h24l-2.5 40c-.3 4-4.5 7-9.5 7s-9.2-3-9.5-7z"/><rect class="c-ink" x="24" y="51" width="16" height="9" rx="2"/><rect class="c-ink" x="20" y="6" width="24" height="3"/><rect class="c-surf" x="25.5" y="14" width="2.4" height="26" rx="1.2" opacity=".45"/>',
+    bottle: '<rect class="c-ink" x="24" y="5" width="16" height="7" rx="2"/><rect class="c-ink" x="28" y="11" width="8" height="10"/><rect class="c-t2" x="18" y="20" width="28" height="38" rx="5"/><rect class="c-surf" x="22" y="25" width="2.6" height="28" rx="1.3" opacity=".45"/>',
+    dropper: '<rect class="c-ink" x="28" y="5" width="8" height="15" rx="4"/><rect class="c-ink" x="27" y="19" width="10" height="7"/><rect class="c-metal" x="20" y="26" width="24" height="32" rx="4"/><rect class="c-surf" x="24" y="35" width="16" height="13" rx="1" opacity=".85"/>',
+    brow: '<rect class="c-ink" x="28" y="3" width="8" height="17" rx="2.5"/><rect class="c-metal" x="31" y="20" width="2" height="6"/><rect class="c-t4" x="29.5" y="25" width="5" height="10" rx="2.5"/><rect class="c-ink" x="27" y="39" width="10" height="22" rx="3"/>',
+    balm: '<rect class="c-t3" x="24" y="13" width="16" height="17" rx="7"/><rect class="c-t1" x="21" y="28" width="22" height="30" rx="4"/><rect class="c-ink" x="21" y="28" width="22" height="6"/><rect class="c-surf" x="25" y="38" width="2.4" height="15" rx="1.2" opacity=".5"/>',
+    mascara: '<rect class="c-ink" x="27" y="3" width="10" height="18" rx="3"/><rect class="c-metal" x="30.5" y="21" width="3" height="8"/><rect class="c-ink" x="28.5" y="28" width="7" height="15" rx="3.5"/><rect class="c-surf" x="28.5" y="31" width="7" height="1.3" opacity=".5"/><rect class="c-surf" x="28.5" y="34.5" width="7" height="1.3" opacity=".5"/><rect class="c-surf" x="28.5" y="38" width="7" height="1.3" opacity=".5"/><rect class="c-ink" x="25" y="46" width="14" height="15" rx="3"/>',
+    compact: '<rect class="c-metal" x="28" y="7" width="8" height="5" rx="1"/><circle class="c-ink" cx="32" cy="35" r="24"/><circle class="c-t2" cx="32" cy="35" r="18"/><path class="c-surf" opacity=".4" d="M19.5 31a13.5 13.5 0 0 1 12.5-10v4.2a9.4 9.4 0 0 0-8.4 5.8z"/>',
+    brush: '<g transform="rotate(-35 32 32)"><rect class="c-ink" x="29" y="31" width="6" height="30" rx="3"/><rect class="c-metal" x="28" y="24" width="8" height="8" rx="1"/><path class="c-t2" d="M27 25c-1-9 1.5-17 5-21 3.5 4 6 12 5 21z"/></g>',
+    blush: '<rect class="c-ink" x="8" y="13" width="48" height="38" rx="8"/><circle class="c-lip" cx="25" cy="32" r="11" opacity=".85"/><circle class="c-t4" cx="41" cy="32" r="11"/>',
+    palette: '<rect class="c-ink" x="6" y="14" width="52" height="36" rx="6"/><circle class="c-t1" cx="20" cy="26" r="6"/><circle class="c-t3" cx="32" cy="26" r="6"/><circle class="c-t5" cx="44" cy="26" r="6"/><circle class="c-t2" cx="20" cy="39" r="6"/><circle class="c-t4" cx="32" cy="39" r="6"/><circle class="c-t6" cx="44" cy="39" r="6"/>',
+    gloss: '<rect class="c-ink" x="26" y="4" width="12" height="20" rx="3"/><rect class="c-lip" x="24" y="23" width="16" height="36" rx="7"/><rect class="c-surf" x="28" y="28" width="2.4" height="24" rx="1.2" opacity=".45"/>',
+    lipstick: '<rect class="c-ink" x="21" y="36" width="22" height="22" rx="2.5"/><rect class="c-metal" x="23" y="29" width="18" height="8" rx="1"/><path class="c-lip" d="M25 29V15.5c0-2 1.2-3.6 3-4.3L39 7v22z"/>',
+    none: '<circle class="c-ring" cx="32" cy="32" r="20"/>'
+  };
+  function sub(n, x, y, s) { return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' + I[n] + '</g>'; }
+  I.natural = '<rect class="c-t1" x="2" y="40" width="46" height="13" rx="6.5" transform="rotate(-14 25 46)"/>' + sub('tube', 22, 2, 0.62);
+  I.glam = '<rect class="c-ink" x="3" y="18" width="40" height="30" rx="5"/><circle class="c-lip" cx="14" cy="28" r="4.5"/><circle class="c-metal" cx="23" cy="28" r="4.5"/><circle class="c-acc" cx="32" cy="28" r="4.5"/><circle class="c-t5" cx="14" cy="38.5" r="4.5"/><circle class="c-t4" cx="23" cy="38.5" r="4.5"/><circle class="c-lip" cx="32" cy="38.5" r="4.5" opacity=".6"/>' + sub('lipstick', 33, 8, 0.6);
+  I.tag = '<path class="c-t1" d="M7 31 29 9h25v25L32 56z"/><circle class="c-panel" cx="45" cy="18" r="3.6"/><text class="c-tag" x="24" y="41">$</text>';
+  I.gift = '<rect class="c-ink" x="12" y="30" width="40" height="27" rx="2"/><rect class="c-ink" x="9" y="22" width="46" height="10" rx="2"/><rect class="c-metal" x="29" y="22" width="6" height="35"/><path class="c-metal" d="M32 22c-5-9-15-10-14-4 1 4 8 4 14 4zm0 0c5-9 15-10 14-4-1 4-8 4-14 4z"/>';
+  I.skincare = sub('dropper', -5, 6, 0.85) + sub('tube', 23, 10, 0.75);
+  I.makeup = sub('stick', -6, 8, 0.8) + sub('mascara', 21, 7, 0.8);
+  function icon(n) { return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">' + I[n] + '</svg>'; }
+  function place(n, x, y, s) { return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">' + I[n] + '</g>'; }
+  var TICK = '<span class="tick" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M2 6.4 4.8 9 10 3.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+
+  function coverArt() {
+    var tones = '';
+    for (var i = 0; i < 6; i++) tones += '<circle class="c-t' + (i + 1) + '" cx="' + (164 + i * 46) + '" cy="334" r="16"/>';
+    return '<svg viewBox="0 0 560 400" role="img" aria-label="A shelf of grooming products: a skincare dropper, a concealer stick, a tinted moisturizer, a brow gel and a lip balm, above a range of skin-tone shades">' +
+      '<rect class="c-panel" x="0" y="0" width="560" height="400"/>' +
+      place('dropper', 26, 117, 2.6) + place('stick', 122, 120, 2.6) + place('tube', 214, 106, 2.7) + place('brow', 318, 109, 2.6) + place('balm', 410, 129, 2.4) +
+      '<rect class="c-line" x="30" y="268" width="500" height="3"/>' +
+      '<text class="c-label" x="138" y="339" text-anchor="end">FAIR</text>' + tones + '<text class="c-label" x="420" y="339">DEEP</text>' +
+    '</svg>';
+  }
+  function conceptArt() {
+    return '<svg viewBox="0 0 340 300" role="img" aria-label="An uncapped concealer stick standing next to its cap, with a swipe of skin-tone product">' +
+      '<rect class="c-panel" x="0" y="0" width="340" height="300"/>' +
+      '<path class="s-t2" d="M26 268c70-22 170 12 288-14" stroke-width="20" stroke-linecap="round" opacity=".75"/>' +
+      '<ellipse class="c-line" cx="132" cy="246" rx="52" ry="8"/><ellipse class="c-line" cx="244" cy="246" rx="42" ry="7"/>' +
+      sub('stick', 17, 41, 3.6) +
+      '<rect class="c-ink" x="110" y="178" width="46" height="3" rx="1.5" opacity=".18"/><rect class="c-ink" x="110" y="188" width="30" height="3" rx="1.5" opacity=".18"/>' +
+      '<g transform="rotate(10 244 205)"><rect class="c-ink" x="208" y="160" width="72" height="84" rx="9"/><rect class="c-metal" x="208" y="226" width="72" height="5"/><rect class="c-surf" x="218" y="170" width="4" height="48" rx="2" opacity=".25"/></g>' +
+    '</svg>';
+  }
+  var FI = {
+    time: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 13.5V9.5M9.5 2.5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    hidden: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20 20 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    drop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.6 4.6 6 7.7 6 10.6a6 6 0 0 1-12 0C6 10.7 8.4 7.6 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>'
+  };
+  function conceptCard() {
+    var skin = function (spot) { return '<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="c-t2" cx="32" cy="32" r="29"/><circle class="c-lip" cx="38" cy="27" r="8" opacity="' + (spot ? '.35' : '.06') + '"/>' + (spot ? '<circle class="c-lip" cx="38" cy="27" r="3.8" opacity=".85"/>' : '') + '</svg>'; };
+    return '<div class="concept-card">' +
+      '<div class="concept-art">' + conceptArt() + '</div>' +
+      '<div class="concept-body">' +
+        '<div><p class="label" style="margin-bottom:6px">The idea</p><p class="concept-name">A 10-second concealer stick</p></div>' +
+        '<ul class="features">' +
+          '<li><span class="fi">' + FI.time + '</span><div><b>Done in about 10 seconds</b><span>Swipe it over a breakout or redness and blend with a fingertip.</span></div></li>' +
+          '<li><span class="fi">' + FI.hidden + '</span><div><b>Looks like skin, not makeup</b><span>Made so no one can tell you’re wearing it.</span></div></li>' +
+          '<li><span class="fi">' + FI.drop + '</span><div><b>Skincare built in</b><span>Acne-fighting ingredients treat the spot while it’s covered.</span></div></li>' +
+        '</ul>' +
+        '<div class="ba"><figure>' + skin(true) + '<figcaption>Before</figcaption></figure>' +
+          '<svg class="arrow" viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<figure>' + skin(false) + '<figcaption>10 sec later</figcaption></figure></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* skincare illustrations */
+  I.pump = '<rect class="c-ink" x="29" y="4" width="15" height="4" rx="2"/><rect class="c-ink" x="29" y="7" width="6" height="10"/><rect class="c-ink" x="26" y="15" width="12" height="7" rx="1.5"/><rect class="c-t3" x="19" y="21" width="26" height="38" rx="6"/><rect class="c-surf" x="23" y="27" width="2.6" height="26" rx="1.3" opacity=".45"/>';
+  I.jar = '<rect class="c-ink" x="13" y="28" width="38" height="10" rx="2.5"/><rect class="c-t1" x="11" y="37" width="42" height="22" rx="5"/><rect class="c-surf" x="15" y="41" width="2.6" height="14" rx="1.3" opacity=".5"/>';
+  function lineup(names, s, cxs, bottom) { return names.map(function (n, i) { return sub(n, cxs[i] - 32 * s, bottom - 60 * s, s); }).join(''); }
+  I.n1 = lineup(['bottle'], 0.95, [32], 62);
+  I.n2 = lineup(['dropper', 'tube'], 0.7, [20, 44], 62);
+  I.n3 = lineup(['dropper', 'bottle', 'tube'], 0.55, [13, 32, 51], 62);
+  I.n4 = lineup(['dropper', 'bottle', 'tube', 'pump'], 0.45, [9, 24, 40, 55], 62);
+  I.n6 = lineup(['dropper', 'bottle', 'tube'], 0.42, [13, 32, 51], 31) + lineup(['pump', 'dropper', 'bottle'], 0.42, [13, 32, 51], 62);
+  function skinArt() {
+    var items = [['dropper', 100, 2.3], ['tube', 195, 2.4], ['pump', 290, 2.3], ['bottle', 385, 2.3], ['jar', 478, 2.0]], tones = '';
+    for (var i = 0; i < 6; i++) tones += '<circle class="c-t' + (i + 1) + '" cx="' + (165 + i * 46) + '" cy="258" r="11"/>';
+    return '<svg viewBox="0 0 560 290" role="img" aria-label="A shelf of skincare products: a serum dropper, a tube, a pump bottle, a toner bottle and a cream jar">' +
+      '<rect class="c-panel" x="0" y="0" width="560" height="290"/>' +
+      items.map(function (it) { return sub(it[0], it[1] - 32 * it[2], 222 - 59.5 * it[2], it[2]); }).join('') +
+      '<rect class="c-line" x="30" y="222" width="500" height="3"/>' + tones +
+    '</svg>';
+  }
+
+  /* fragrance illustrations (ScentCheck) */
+    I.perfume = '<rect class="c-metal" x="26" y="4" width="12" height="10" rx="2"/><rect class="c-ink" x="29" y="13" width="6" height="6"/><rect class="c-t2" x="14" y="19" width="36" height="40" rx="6"/><rect class="c-surf" x="22" y="31" width="20" height="12" rx="1" opacity=".8"/><rect class="c-surf" x="18" y="24" width="2.6" height="30" rx="1.3" opacity=".45"/>';
+  I.flacon = '<rect class="c-ink" x="27" y="4" width="10" height="12" rx="2"/><rect class="c-metal" x="29" y="15" width="6" height="6"/><circle class="c-t3" cx="32" cy="41" r="20"/><path class="c-surf" opacity=".4" d="M19 38a13 13 0 0 1 11-11v4a9 9 0 0 0-7 7z"/>';
+  I.tall = '<rect class="c-ink" x="25" y="2" width="14" height="14" rx="1"/><rect class="c-metal" x="29" y="15" width="6" height="4"/><rect class="c-t1" x="22" y="18" width="20" height="44" rx="3"/><rect class="c-surf" x="26" y="23" width="2.4" height="34" rx="1.2" opacity=".5"/>';
+  I.atomizer = '<rect class="c-ink" x="36" y="24" width="12" height="2" rx="1"/><rect class="c-ink" x="46" y="24" width="2" height="8"/><circle class="c-lip" cx="47" cy="36" r="6"/><rect class="c-metal" x="27" y="21" width="10" height="10"/><path class="c-t4" d="M20 30h24v24a6 6 0 0 1-6 6H26a6 6 0 0 1-6-6z"/><rect class="c-surf" x="24" y="35" width="2.4" height="18" rx="1.2" opacity=".45"/>';
+  I.mini = '<rect class="c-ink" x="27" y="10" width="10" height="10" rx="2"/><rect class="c-t5" x="25" y="20" width="14" height="36" rx="4"/><rect class="c-surf" x="28" y="25" width="2" height="26" rx="1" opacity=".4"/>';
+    function fragArt() {
+    var mist = '';
+    for (var i = 0; i < 34; i++) {
+      var d = 16 + (i * 37 % 128), a = (172 + (i * 53 % 44)) * Math.PI / 180;
+      mist += '<circle class="c-metal" cx="' + (236 + Math.cos(a) * d).toFixed(1) + '" cy="' + (98 + Math.sin(a) * d).toFixed(1) + '" r="' + (1.6 + (i % 4) * 0.9).toFixed(1) + '" opacity="' + Math.max(0.15, 0.9 - d / 170).toFixed(2) + '"/>';
+    }
+    return '<svg viewBox="0 0 560 400" role="img" aria-label="A perfume bottle spraying a fine mist, surrounded by scent notes: a lemon slice, a rose, a sprig of lavender and vanilla beans">' +
+      '<rect class="c-panel" x="0" y="0" width="560" height="400"/>' +
+      '<circle class="c-surf" cx="290" cy="205" r="150" opacity=".55"/>' +
+      /* mist */
+      mist +
+      /* lemon slice */
+      '<circle class="c-metal" cx="440" cy="104" r="34"/><circle class="c-surf" cx="440" cy="104" r="29"/><circle class="c-t1" cx="440" cy="104" r="26"/>' +
+      '<path class="s-t2" stroke-width="3" d="M414 104h52M440 78v52M421.6 85.6l36.8 36.8M458.4 85.6l-36.8 36.8"/><circle class="c-surf" cx="440" cy="104" r="4"/>' +
+      /* rose */
+      '<ellipse class="c-acc" cx="446" cy="252" rx="18" ry="7" transform="rotate(32 446 252)" opacity=".7"/><ellipse class="c-acc" cx="498" cy="250" rx="16" ry="6" transform="rotate(-30 498 250)" opacity=".7"/>' +
+      '<circle class="c-lip" cx="472" cy="218" r="31"/><circle class="c-surf" cx="472" cy="218" r="23" opacity=".18"/><circle class="c-lip" cx="470" cy="216" r="17"/><circle class="c-surf" cx="469" cy="215" r="10" opacity=".25"/><circle class="c-lip" cx="468" cy="214" r="5"/>' +
+      /* lavender */
+      '<rect class="c-acc" x="399" y="262" width="2.5" height="72" rx="1.2" opacity=".6"/>' +
+      '<ellipse class="c-acc" cx="396" cy="268" rx="4" ry="6" opacity=".55"/><ellipse class="c-acc" cx="405" cy="276" rx="4" ry="6" opacity=".55"/><ellipse class="c-acc" cx="396" cy="284" rx="4" ry="6" opacity=".55"/><ellipse class="c-acc" cx="405" cy="292" rx="4" ry="6" opacity=".55"/><ellipse class="c-acc" cx="400" cy="258" rx="3.5" ry="5.5" opacity=".55"/>' +
+      /* vanilla beans */
+      '<rect class="c-t5" x="62" y="300" width="118" height="10" rx="5" transform="rotate(-12 121 305)"/><rect class="c-t6" x="74" y="318" width="104" height="9" rx="4.5" transform="rotate(-5 126 322)"/>' +
+      /* hero bottle */
+      '<ellipse class="c-line" cx="280" cy="336" rx="108" ry="10"/>' +
+      '<rect class="c-t1" x="208" y="150" width="144" height="182" rx="22"/>' +
+      '<path class="c-t3" opacity=".8" d="M208 196h144v114a22 22 0 0 1-22 22H230a22 22 0 0 1-22-22z"/>' +
+      '<rect class="c-surf" x="222" y="164" width="7" height="152" rx="3.5" opacity=".5"/>' +
+      '<rect class="c-surf" x="242" y="234" width="76" height="46" rx="3" opacity=".94"/>' +
+      '<text class="c-label" x="280" y="254" text-anchor="middle" style="font-size:10px">EAU DE</text><text class="c-label" x="280" y="269" text-anchor="middle" style="font-size:10px">PARFUM</text>' +
+      '<rect class="c-ink" x="262" y="132" width="36" height="20" rx="3"/>' +
+      '<rect class="c-metal" x="246" y="72" width="68" height="62" rx="8"/><rect class="c-surf" x="254" y="80" width="6" height="46" rx="3" opacity=".35"/>' +
+      '<rect class="c-ink" x="234" y="94" width="14" height="8" rx="2"/>' +
+      /* mini bottle */
+      place('mini', 482, 282, 1.1) +
+      '<text class="c-label" x="280" y="380" text-anchor="middle">CITRUS · FLORAL · HERBAL · WARM</text>' +
+    '</svg>';
+  }
+
+  function bgArt() {
+    var chips = '', g = ['9', '10', '11', '12'], fills = ['var(--rose1)', 'var(--rose2)', 'var(--rose3)', 'var(--rose4)'];
+    for (var i = 0; i < 4; i++) chips += '<circle cx="' + (205 + i * 50) + '" cy="250" r="19" style="fill:' + fills[i] + '"/><text x="' + (205 + i * 50) + '" y="255.5" text-anchor="middle" style="font:600 15px var(--sans);fill:' + (i > 1 ? '#fff' : 'var(--ink)') + '">' + g[i] + '</text>';
+    return '<svg viewBox="0 0 560 290" role="img" aria-label="A student ID card with a portrait and lines of details, above four grade badges: 9, 10, 11 and 12">' +
+      '<rect class="c-panel" x="0" y="0" width="560" height="290"/>' +
+      '<rect x="156" y="40" width="260" height="164" rx="20" style="fill:var(--line)"/>' +
+      '<rect class="c-surf" x="150" y="34" width="260" height="164" rx="20"/>' +
+      '<rect x="150" y="34" width="260" height="34" rx="20" style="fill:var(--rose1)"/><rect x="150" y="52" width="260" height="16" style="fill:var(--rose1)"/>' +
+      '<text x="170" y="56" style="font:600 11px var(--sans);letter-spacing:.18em;fill:var(--accent)">STUDENT</text>' +
+      '<rect class="c-panel" x="170" y="84" width="76" height="94" rx="12"/>' +
+      '<circle class="c-t3" cx="208" cy="118" r="17"/><path class="c-t4" d="M181 178c0-19 12-31 27-31s27 12 27 31z"/>' +
+      '<rect class="c-line" x="264" y="92" width="122" height="11" rx="5.5"/><rect class="c-line" x="264" y="114" width="92" height="11" rx="5.5"/>' +
+      '<rect class="c-line" x="264" y="136" width="108" height="11" rx="5.5"/><rect x="264" y="158" width="58" height="11" rx="5.5" style="fill:var(--rose2)"/>' +
+      '<g transform="rotate(38 455 120)"><rect class="c-metal" x="446" y="60" width="16" height="96" rx="3"/><rect class="c-ink" x="446" y="60" width="16" height="12" rx="3"/><path class="c-t1" d="M446 156h16l-8 20z"/><path class="c-ink" d="M451 168h6l-3 8z"/></g>' +
+      chips +
+    '</svg>';
+  }
+  function makeupArt() {
+    // [icon, center x, scale, bottom of the drawing inside its 64px box]
+    var items = [['gloss', 82, 2.4, 59], ['compact', 180, 2.0, 59], ['mascara', 282, 2.6, 61], ['palette', 390, 2.0, 50], ['lipstick', 484, 2.3, 58]], tones = '';
+    for (var i = 0; i < 6; i++) tones += '<circle class="c-t' + (i + 1) + '" cx="' + (165 + i * 46) + '" cy="318" r="13"/>';
+    return '<svg viewBox="0 0 560 360" role="img" aria-label="A shelf of makeup: lip gloss, a powder compact, a mascara, an eyeshadow palette and a lipstick">' +
+      '<rect class="c-panel" x="0" y="0" width="560" height="360"/>' +
+      items.map(function (it) { return sub(it[0], it[1] - 32 * it[2], 268 - it[3] * it[2], it[2]); }).join('') +
+      '<rect class="c-line" x="30" y="268" width="500" height="3"/>' + tones +
+    '</svg>';
+  }
+  function mixArt() {
+    var items = [['dropper', 92, 2.3], ['lipstick', 182, 2.3], ['perfume', 280, 2.7], ['mascara', 378, 2.3], ['jar', 470, 2.1]], tones = '';
+    for (var i = 0; i < 6; i++) tones += '<circle class="c-t' + (i + 1) + '" cx="' + (165 + i * 46) + '" cy="318" r="13"/>';
+    return '<svg viewBox="0 0 560 400" role="img" aria-label="A shelf with a skincare serum, a lipstick, a perfume bottle, a mascara and a cream jar, above a range of skin-tone shades">' +
+      '<rect class="c-panel" x="0" y="0" width="560" height="400"/>' +
+      '<circle class="c-surf" cx="280" cy="170" r="128" opacity=".55"/>' +
+      items.map(function (it) { return sub(it[0], it[1] - 32 * it[2], 268 - 59.5 * it[2], it[2]); }).join('') +
+      '<rect class="c-line" x="30" y="268" width="500" height="3"/>' + tones +
+      '<text class="c-label" x="280" y="368" text-anchor="middle">MAKEUP · SKINCARE · FRAGRANCE</text>' +
+    '</svg>';
+  }
+
+  /* ---------- Part 1: makeup (Face Value) ---------- */
+    var WEAR = ['Every day', 'A few times a week', 'Only for special occasions'];
+  var STOPPED = 'I’ve tried it, but I stopped', NEVER = 'Never';
+  function isW() { return WEAR.indexOf(A.freq) !== -1; }
+  function isL() { return A.freq === STOPPED; }
+  function isN() { return A.freq === NEVER; }
+
+  var PRODUCTS = [
+    { v: 'Concealer', icon: 'stick', s: 'concealer' },
+    { v: 'Foundation or skin tint', icon: 'bottle', s: 'foundation' },
+    { v: 'Tinted moisturizer or BB cream', icon: 'tube', s: 'tinted moisturizer' },
+    { v: 'Powder or setting spray', icon: 'compact', s: 'powder' },
+    { v: 'Mascara', icon: 'mascara', s: 'mascara' },
+    { v: 'Brow products', icon: 'brow', s: 'brow products' },
+    { v: 'Eyeliner or eyeshadow', icon: 'palette', s: 'eye makeup' },
+    { v: 'Blush or bronzer', icon: 'blush', s: 'blush or bronzer' },
+    { v: 'Lip products', icon: 'gloss', s: 'lip products', note: 'Balm, tint, gloss, liner' }
+  ];
+  function hero() { if (A.w_hero) return A.w_hero; var p = A.w_products || []; return p.length === 1 ? p[0] : null; }
+  function short(v) { for (var i = 0; i < PRODUCTS.length; i++) if (PRODUCTS[i].v === v) return PRODUCTS[i].s; return String(v).toLowerCase(); }
+
+  var L_TIME = 'It took too long', L_LOOK = 'I didn’t like how it looked on me', L_SKIN = 'It broke me out or irritated my skin',
+      L_COMMENTS = 'People made comments', L_COST = 'It was too expensive to keep buying', L_SPORT = 'Sports or practice made it pointless', L_BORED = 'I lost interest';
+  var N_NEED = 'I don’t feel I need it', N_HOW = 'I don’t know how to use it', N_OTHERS = 'I’m worried about what people would think',
+      N_COST = 'It’s too expensive', N_NOTME = 'It doesn’t feel like it’s made for people like me', N_SKIN = 'It’s bad for my skin, or my skin is sensitive', N_NEVER = 'I’ve never really thought about it';
+  var SET_YES = 'Yes', SET_MAYBE = 'No, but I’d consider one', SET_NO = 'No, and I’m not interested';
+  var TRY_NONE = 'None, I’m not interested';
+  var BRANDS = ['e.l.f.', 'Rare Beauty', 'Rhode', 'Glossier', 'Fenty Beauty', 'Maybelline', 'NYX', 'Charlotte Tilbury', 'Too Faced', 'Benefit', 'YSL Beauty', 'Armani Beauty', 'Dior', 'Lancôme', 'Kosas'];
+  var SCALE = ['Definitely not', 'Probably not', 'Maybe', 'Probably', 'Definitely'];
+
+  /* ---------- Part 2: skincare ---------- */
+  var LUXURY = ['Estée Lauder', 'Lancôme', 'YSL', 'Dior Beauty', 'Tatcha', 'Shiseido', 'SK-II', 'La Mer', 'La Prairie'];
+  var HAS_STORE = ['Sephora', 'Ulta', 'Target', 'Drugstores (CVS, Walgreens, etc.)', 'Other'];
+  var NO_PAY = 'I don’t pay for it myself', S_NONE = 'I don’t use any of these';
+  var OM_NO = 'Haven’t heard of it', OM_HEARD = 'Heard of it, haven’t used it', OM_USED = 'Have used it';
+  var ACCURACY = ['Very inaccurate', 'Somewhat inaccurate', 'Neutral', 'Somewhat accurate', 'Very accurate'];
+  var S_TWICE = 'Twice a day (morning and night)';
+  function isSN() { return A.s_freq === NEVER; }
+  function isSU() { return !!A.s_freq && A.s_freq !== NEVER; }
+  function lux() { return (A.s_brands || []).filter(function (b) { return LUXURY.indexOf(b) !== -1; }); }
+
+  /* ---------- Part 3: fragrance (ScentCheck) ---------- */
+    var OTHER = 'Other';
+  var BLIND_YES = 'Yes', BLIND_NO = 'No';
+  var NO_SHOP = 'I would likely not shop for a fragrance';
+  var ONLINE = ['Amazon', 'TikTok', 'Instagram', 'Other online'];
+  var TRUST = ['Not at all', 'A little', 'Somewhat', 'Mostly', 'Completely'];
+  var BOUGHT_YES = 'Yes', BOUGHT_NO = 'No, not yet';
+  var STORES = ['Gyms', 'Pop-up shop', 'Amazon', 'Retail stores', 'Sephora', 'Ulta', 'TikTok', 'Instagram', 'Other online', 'Other'];
+  var STORE_PRICES = ['$50', '$100', '$150', '$200+'];
+  function boughtYes() { return A.bought === BOUGHT_YES; }
+  function boughtNo() { return A.bought === BOUGHT_NO; }
+
+  var Q = [
+        { id: 'about', type: 'about', label: 'About you', title: 'A little about you' },
+    { id: 'freq', type: 'freq', label: 'Your routine', title: 'How often do you wear makeup?',
+      help: 'This counts even if it’s just concealer on a breakout, brow gel or tinted lip balm.',
+      options: [{ v: 'Every day', d: 7, l: 'Daily' }, { v: 'A few times a week', d: 3, l: 'Some days' }, { v: 'Only for special occasions', d: 1, l: 'Occasionally' }, { v: STOPPED, d: -1, l: 'Used to' }, { v: NEVER, d: 0, l: 'Never' }] },
+
+    /* people who wear makeup */
+    { id: 'w_products', type: 'cardsMulti', show: isW, label: 'Your routine', title: 'Which of these do you use at least once a month?', help: 'Select all that apply.', options: PRODUCTS },
+    { id: 'w_hero', type: 'cards', show: function () { return isW() && (A.w_products || []).length > 1; }, label: 'Your routine', title: 'If you could keep only one, which would it be?',
+      options: function () { return PRODUCTS.filter(function (p) { return has(A.w_products, p.v); }); } },
+    { id: 'w_hero_why', type: 'chipsMulti', max: 2, show: function () { return isW() && !!hero(); }, label: 'Your routine',
+      title: function () { return 'Why the ' + esc(short(hero())) + '?'; }, help: 'Select up to 2.',
+      options: ['It covers things I don’t want seen', 'It makes me look awake', 'It’s quick', 'It feels like me', 'People notice when I skip it', 'It’s the one I’m best at'] },
+    { id: 'w_why', type: 'chipsMulti', max: 3, show: isW, label: 'Your routine', title: 'Why do you wear makeup?', help: 'Select up to 3.',
+      options: ['To cover acne, redness or uneven skin', 'To look put-together', 'To feel more confident', 'To express myself', 'For photos or social media', 'It’s part of my routine'] },
+    { id: 'w_when', type: 'chipsMulti', show: isW, label: 'Your routine', title: 'When do you wear it?', help: 'Select all that apply.',
+      options: ['School', 'Sports or practice', 'Hanging out with friends', 'Dances, parties or events', 'Work', 'Photos or videos'] },
+    { id: 'w_pairs', type: 'pairs', show: isW, label: 'Your style', title: 'Which best describes you?', help: 'Pick one in each row.',
+      pairs: [{ id: 'w_look', q: 'Your usual look', a: { v: 'Natural', icon: 'natural', note: 'Looks like your skin, just better' }, b: { v: 'Full glam', icon: 'glam', note: 'Bold and noticeable' } },
+              { id: 'w_shop', q: 'When you shop', a: { v: 'Drugstore finds', icon: 'tag', note: 'Affordable and easy to grab' }, b: { v: 'Worth the splurge', icon: 'gift', note: 'Paying more for the good stuff' } },
+              { id: 'w_first', q: 'If you could only keep one', a: { v: 'Skincare first', icon: 'skincare', note: 'Cleanser, moisturizer, SPF' }, b: { v: 'Makeup first', icon: 'makeup', note: 'Concealer, mascara and the rest' } }] },
+    { id: 'w_brand', type: 'brand', show: isW, label: 'Brands', title: 'What’s your go-to makeup brand right now?', help: 'Type it, or select one.', options: shuffle(BRANDS) },
+    { id: 'w_brand_why', type: 'chipsMulti', max: 3, show: function () { return isW() && !!A.w_brand && A.w_brand !== 'No go-to brand'; }, label: 'Brands',
+      title: function () { return 'What makes ' + esc(A.w_brand) + ' your go-to?'; }, help: 'Select up to 3.',
+      options: ['The price', 'How well it works', 'How it makes me feel', 'A creator I follow uses it', 'My friends use it', 'The packaging', 'The ingredients', 'It’s made for people like me'] },
+    { id: 'w_price', type: 'slider', show: isW, label: 'Price', title: 'What’s the most you’d pay for one makeup product?', min: 5, max: 60, step: 5, start: 20 },
+    { id: 'w_matters', type: 'chipsMulti', max: 3, show: isW, label: 'Choosing products', title: 'What matters most when you choose a product?', help: 'Select up to 3.',
+      options: ['Price', 'How well it works', 'Looks natural', 'Good for my skin', 'Shade match', 'Brand name', 'Packaging', 'Reviews or recommendations'] },
+    { id: 'w_sets', type: 'chips', stack: true, show: isW, label: 'Sets and bundles', title: 'Have you bought a makeup set or bundle in the past year?', help: 'Several products sold together, such as a holiday set.',
+      options: [SET_YES, SET_MAYBE, SET_NO] },
+    { id: 'w_sets_why', type: 'chipsMulti', show: function () { return isW() && A.w_sets === SET_YES; }, label: 'Sets and bundles', title: 'Why did you buy it?', help: 'Select all that apply.',
+      options: ['To try several products at once', 'The value or discount', 'It was a gift', 'The extras, like a bag or minis', 'It was a holiday or limited edition'] },
+    { id: 'w_sets_worth', type: 'chipsMulti', max: 2, show: function () { return isW() && A.w_sets === SET_MAYBE; }, label: 'Sets and bundles', title: 'What would make a set worth buying?', help: 'Select up to 2.',
+      options: ['Only products I’d actually use', 'Under $30 for the whole set', 'Mini sizes to try things', 'A bag or case I’d keep', 'A limited edition'] },
+    { id: 'w_where', type: 'chipsMulti', show: isW, label: 'Shopping', title: 'Where do you usually buy makeup?', help: 'Select all that apply.',
+      options: ['Sephora', 'Ulta', 'Drugstore (CVS, Walgreens)', 'Target', 'Amazon', 'TikTok Shop', 'Brand websites', 'Department stores'] },
+
+    /* people who stopped */
+    { id: 'l_stop', type: 'chipsMulti', stack: true, show: isL, label: 'Why you stopped', title: 'What made you stop?', help: 'Select all that apply.', options: [L_TIME, L_LOOK, L_SKIN, L_COMMENTS, L_COST, L_SPORT, L_BORED] },
+    { id: 'l_look_off', type: 'chipsMulti', show: function () { return isL() && has(A.l_stop, L_LOOK); }, label: 'Why you stopped', title: 'What didn’t look right?', help: 'Select all that apply.',
+      options: ['Too obvious or cakey', 'Wrong shade', 'I didn’t know how to apply it', 'It didn’t last'] },
+    { id: 'l_acne', type: 'chips', show: function () { return isL() && has(A.l_stop, L_SKIN); }, label: 'Why you stopped', title: 'Would a product labeled acne-safe, with skincare ingredients, change your mind?', options: ['Yes', 'Maybe', 'No'] },
+    { id: 'l_time', type: 'chips', show: function () { return isL() && has(A.l_stop, L_TIME); }, label: 'Why you stopped', title: 'How much time would you spend on makeup in the morning?', options: ['Under 1 minute', '1–3 minutes', '3–5 minutes', 'More than 5 minutes'] },
+
+    /* people who never wear it */
+    { id: 'n_why', type: 'chipsMulti', stack: true, show: isN, label: 'Why not', title: 'Why don’t you wear makeup?', help: 'Select all that apply.', options: [N_NEED, N_HOW, N_OTHERS, N_COST, N_NOTME, N_SKIN, N_NEVER] },
+    { id: 'n_skincare', type: 'chips', show: function () { return isN() && has(A.n_why, N_NEED); }, label: 'Why not', title: 'Do you use any skincare?', options: ['Nothing', 'Just face wash', 'A few products', 'A full routine'] },
+    { id: 'n_learn', type: 'chipsMulti', max: 2, show: function () { return isN() && has(A.n_why, N_HOW); }, label: 'Why not', title: 'If you wanted to learn, where would you go?', help: 'Select up to 2.',
+      options: ['A friend showing me', 'A TikTok or YouTube tutorial', 'Someone in a store', 'Instructions on the product', 'I wouldn’t bother'] },
+    { id: 'n_for_me', type: 'chipsMulti', show: function () { return isN() && has(A.n_why, N_NOTME); }, label: 'Why not', title: 'What would make a product feel like it’s made for you?', help: 'Select all that apply.',
+      options: ['Made for guys', 'Gender-neutral packaging', 'Athletes using it', 'Creators I follow using it', 'Called skincare, not makeup', 'Simple packaging'] },
+    { id: 'n_need_see', type: 'chipsMulti', show: function () { return isN() && has(A.n_why, N_SKIN); }, label: 'Why not', title: 'What would you need to see on the label?', help: 'Select all that apply.',
+      options: ['Dermatologist-tested', 'Won’t clog pores', 'Fragrance-free', 'Short ingredient list', 'Fights acne'] },
+
+    /* follow-ups shared by both groups */
+    { id: 'invisible', type: 'chips', show: function () { return (isN() && has(A.n_why, N_OTHERS)) || (isL() && has(A.l_stop, L_COMMENTS)); }, label: 'Trying something new', title: 'Would you try something no one could tell you’re wearing?', options: ['Yes', 'Maybe', 'No'] },
+    { id: 'fair_price', type: 'slider', show: function () { return (isN() && has(A.n_why, N_COST)) || (isL() && has(A.l_stop, L_COST)); }, label: 'Price', title: 'What’s a fair price for one product?', min: 5, max: 60, step: 5, start: 15 },
+    { id: 'try_one', type: 'cards', show: function () { return isL() || isN(); }, label: 'Trying something new', title: 'If you tried one product, which would it be?',
+      options: [{ v: 'Something to cover a breakout', icon: 'stick', note: 'Like a concealer stick' }, { v: 'Tinted moisturizer or BB cream', icon: 'tube' }, { v: 'Brow gel', icon: 'brow' }, { v: 'Tinted lip balm', icon: 'balm' }, { v: 'Mascara', icon: 'mascara' }, { v: TRY_NONE, icon: 'none' }] },
+    { id: 'try_what', type: 'chipsMulti', max: 3, show: function () { return (isL() || isN()) && !!A.try_one && A.try_one !== TRY_NONE; }, label: 'Trying something new', title: 'What would get you to try it?', help: 'Select up to 3.',
+      options: ['A free sample', 'A friend recommending it', 'A creator I follow using it', 'Skincare benefits, like fighting acne', 'Made for guys, or gender-neutral', 'It looks invisible', 'Quick to apply, like a stick', 'A low price'] },
+
+    /* everyone */
+    { id: 'check', type: 'check', label: 'Attention check', title: 'To show you’re reading, select the mascara.', options: shuffle([{ v: 'Lipstick', icon: 'lipstick' }, { v: 'Mascara', icon: 'mascara' }, { v: 'Powder', icon: 'compact' }, { v: 'Brush', icon: 'brush' }]) },
+    { id: 'concept_try', type: 'concept', label: 'New product idea', title: 'Would you try this?' },
+    { id: 'concept_price', type: 'chips', show: function () { return Number(A.concept_try) >= 3; }, label: 'New product idea', title: 'What would you pay for it?', options: ['Under $15', '$15–$25', '$25–$35', '$35–$45', 'More than $45'] },
+    { id: 'discover', type: 'chipsMulti', label: 'Discovery', title: 'Where do you hear about new beauty or grooming products?', help: 'Select all that apply.',
+      options: ['TikTok', 'Instagram', 'YouTube', 'Snapchat', 'Pinterest', 'Friends or family', 'In stores', 'Amazon'] },
+
+    { id: 'sec2', type: 'interlude', part: 2 },
+
+    { id: 's_freq', type: 'freq', part: 2, label: 'Your routine', title: 'How often do you use skincare products?',
+      options: [{ v: S_TWICE, d: 14, l: 'AM + PM' }, { v: 'Once a day', d: 7, l: 'Daily' }, { v: 'A few times a week', d: 3, l: 'Some days' },
+                { v: 'Occasionally', d: 1, l: 'Sometimes' }, { v: 'Once a month or less', d: -1, l: 'Rarely' }, { v: NEVER, d: 0, l: 'Never' }] },
+
+    /* people who never use skincare */
+    { id: 's_why_not', type: 'chipsMulti', part: 2, stack: true, other: true, show: isSN, label: 'Why not', title: 'Why don’t you use skincare?', help: 'Select all that apply.',
+      options: ['I don’t see the point', 'My skin is fine', 'It’s too expensive', 'I don’t know where to start', 'It feels like it’s not for me', 'Other'] },
+    { id: 's_start', type: 'chipsMulti', part: 2, stack: true, max: 2, exclusive: ['Nothing'], show: isSN, label: 'Why not', title: 'What would get you to start?', help: 'Select up to 2.',
+      options: ['A friend recommending something', 'Knowing exactly what to buy', 'Free samples', 'An app that tells me what my skin needs', 'Nothing'] },
+
+    /* people who use skincare */
+    { id: 's_count', type: 'cards', part: 2, show: isSU, label: 'Your routine', title: 'How many products are in your routine?',
+      options: [{ v: '1', t: '1 product', icon: 'n1' }, { v: '2', t: '2 products', icon: 'n2' }, { v: '3', t: '3 products', icon: 'n3' }, { v: '4-5', t: '4-5 products', icon: 'n4' }, { v: '6+', t: '6+ products', icon: 'n6' }] },
+    { id: 's_spend', type: 'chips', part: 2, stack: true, show: isSU, label: 'Spending', title: 'How much do you spend on skincare per month?',
+      options: ['Under $15', '$15-30', '$31-50', '$51-100', 'Over $100', NO_PAY] },
+    { id: 's_picks', type: 'chips', part: 2, stack: true, show: function () { return isSU() && A.s_spend === NO_PAY; }, label: 'Spending', title: 'Who picks your products?',
+      options: ['I pick, someone else pays', 'A parent picks', 'A mix of both', 'They’re mostly gifts'] },
+    { id: 's_where', type: 'chipsMulti', part: 2, other: true, show: isSU, label: 'Shopping', title: 'Where do you typically buy skincare?', help: 'Select all that apply.',
+      options: ['Sephora', 'Ulta', 'Target', 'Drugstores (CVS, Walgreens, etc.)', 'Amazon', 'TikTok Shop', 'Brand websites', 'Other'] },
+    { id: 's_online', type: 'chips', part: 2, stack: true, label: 'Shopping', title: 'Do you buy most of your skincare online or in-store?',
+      show: function () { return isSU() && (A.s_where || []).some(function (x) { return HAS_STORE.indexOf(x) !== -1; }); },
+      options: ['Mostly online', 'Mostly in-store', 'About half and half'] },
+    { id: 's_brands', type: 'chipsMulti', part: 2, other: true, exclusive: [S_NONE], show: isSU, label: 'Brands', title: 'Which of these skincare brands do you currently use?', help: 'Select all that apply.',
+      groups: [
+        { name: 'Drugstore / Affordable', options: ['CeraVe', 'The Ordinary', 'Nivea', 'Eucerin', 'Medicube'] },
+        { name: 'Mid-range', options: ['Glow Recipe', 'Summer Fridays', 'Youth to the People', 'Topicals', 'Rhode', 'Drunk Elephant', 'Paula’s Choice', 'Dr. Jart+', 'Medik8', 'Kiehl’s', 'Clinique', 'Origins'] },
+        { name: 'Luxury', options: LUXURY },
+        { name: 'Other', options: ['Other'] },
+        { name: 'Or', options: [S_NONE] }
+      ] },
+    { id: 's_lux_why', type: 'chipsMulti', part: 2, stack: true, other: true, show: function () { return isSU() && lux().length > 0; }, label: 'Brands', rl: 'Why they use luxury skincare brands',
+      title: function () { var l = lux(); return l.length === 1 ? 'Why do you use ' + esc(l[0]) + '?' : 'Why do you use those luxury brands?'; }, help: 'Select all that apply.',
+      options: ['It actually works', 'It was a gift', 'A parent uses it', 'I saw it online', 'The packaging or status', 'Other'] },
+    { id: 's_video', type: 'chips', part: 2, stack: true, label: 'Discovery', title: 'Have you ever bought skincare because of a video you saw?',
+      show: function () { return isSU() && (has(A.discover, 'TikTok') || has(A.discover, 'Instagram') || has(A.discover, 'YouTube')); },
+      options: ['Yes, more than once', 'Once', 'No'] },
+
+    /* everyone */
+    { id: 's_matters', type: 'chipsMulti', part: 2, max: 3, label: 'Choosing products', help: 'Select up to 3.', rl: 'What matters most when choosing skincare',
+      title: function () { return isSN() ? 'If you started using skincare, what would matter most?' : 'What matters most when choosing skincare?'; },
+      options: ['Price', 'Ingredients', 'Effectiveness', 'Brand reputation', 'Packaging', 'Influencer recommendations', 'Reviews'] },
+    { id: 's_lux_avoid', type: 'chipsMulti', part: 2, stack: true, other: true, exclusive: ['No reason to avoid them'], label: 'Luxury skincare', help: 'Select all that apply.', rl: 'Why they avoid (or don’t buy more) luxury skincare',
+      title: function () { return lux().length ? 'What stops you from buying more luxury skincare?' : 'Why might you avoid luxury skincare brands?'; },
+      options: ['Too expensive', 'Not designed for my age group', 'I prefer affordable alternatives', 'I don’t understand the benefits', 'Other', 'No reason to avoid them'] },
+    { id: 's_lux_more', type: 'chipsMulti', part: 2, stack: true, max: 3, other: true, label: 'Luxury skincare', help: 'Select up to 3.', rl: 'What would make them buy luxury skincare',
+      title: function () { return lux().length ? 'What would make you buy more from luxury brands?' : 'What would make you more likely to buy from a luxury brand?'; },
+      options: ['More affordable products', 'Better ingredients', 'Evidence that it works', 'Products designed for Gen Z', 'Personalized recommendations', 'Influencer endorsements', 'Smaller trial sizes', 'Other'] },
+    { id: 'omoggle', type: 'chips', part: 2, stack: true, label: 'Appearance-scoring apps', title: 'Have you heard of or used Omoggle?', help: 'Not Omegle.',
+      options: [OM_NO, OM_HEARD, OM_USED] },
+    { id: 'omoggle_why', type: 'chipsMulti', part: 2, stack: true, show: function () { return A.omoggle === OM_HEARD; }, label: 'Appearance-scoring apps', title: 'Why haven’t you tried it?', help: 'Select all that apply.',
+      options: ['Not interested', 'I don’t want to be rated', 'It seems mean or toxic', 'Never got around to it'] },
+    { id: 'omoggle_acc', type: 'scale', part: 2, show: function () { return A.omoggle === OM_USED; }, label: 'Appearance-scoring apps', title: 'How accurate do you think the score Omoggle gave you was?', options: ACCURACY },
+    { id: 'omoggle_change', type: 'chips', part: 2, stack: true, show: function () { return A.omoggle === OM_USED; }, label: 'Appearance-scoring apps', title: 'Did your score make you change anything about your routine?',
+      options: ['Yes, I changed my routine', 'I thought about it', 'No'] },
+
+    { id: 'sec3', type: 'interlude', part: 3 },
+        { part: 3, id: 'bought', type: 'chips', label: 'Your purchases', title: 'Have you ever bought a fragrance yourself?', options: [BOUGHT_YES, BOUGHT_NO] },
+
+    /* people who have bought one */
+    { part: 3, id: 'spend', type: 'chips', show: boughtYes, label: 'Your purchases', title: 'How much are you willing to spend on a fragrance?', options: STORE_PRICES },
+    { part: 3, id: 'bought_why', type: 'chipsMulti', other: true, show: boughtYes, label: 'Your purchases', title: 'Why did you buy it?', help: 'Select all that apply.',
+      options: ['To wear every day', 'For a special occasion', 'As a gift for someone', 'I liked it when I smelled it in person', 'A friend recommended it', 'I saw it on TikTok or Instagram', 'A celebrity or ad campaign', 'It was on sale', OTHER] },
+    { part: 3, id: 'bought_where', type: 'chipsMulti', other: true, show: boughtYes, label: 'Your purchases', title: 'Where did you buy it?', help: 'Select all that apply.', options: STORES },
+
+    /* people who haven't */
+    { part: 3, id: 'not_why', type: 'chipsMulti', other: true, show: boughtNo, label: 'Your purchases', title: 'Why haven’t you bought a fragrance?', help: 'Select all that apply.',
+      options: ['It’s too expensive', 'Someone else buys it for me', 'I don’t wear fragrance', 'I don’t know what I’d like', 'I can’t smell it before buying online', 'I’ve never really thought about it', OTHER] },
+    { part: 3, id: 'no_where', type: 'chipsMulti', other: true, show: boughtNo, label: 'Your purchases', title: 'If you were to buy a fragrance, where would you buy it from?', help: 'Select all that apply.', options: STORES },
+    { part: 3, id: 'no_price', type: 'chips', show: boughtNo, label: 'Your purchases', title: 'And at what price?', help: 'The most you’d spend on one fragrance.', options: STORE_PRICES },
+
+    /* wrapping up (from Face Value, moved to the end of all three parts) */
+    { id: 'grade', type: 'chips', part: 0, label: 'About you', title: 'What grade are you in?', options: ['9th grade', '10th grade', '11th grade', '12th grade'] },
+    { id: 'wish', type: 'text', part: 4, optional: true, label: 'Your ideas', title: 'What do you wish makeup, skincare or fragrance did that nothing does right now?', help: 'Optional. Think about how it works, how it’s packaged or how it’s sold.' }
+  ];
+  function byIdRaw(id) { for (var i = 0; i < Q.length; i++) if (Q[i].id === id) return Q[i]; }
+  var PART_NAMES = { 0: 'Background', 1: 'Makeup', 2: 'Skincare', 3: 'Fragrance' };
+  var AGES = ['Under 13', '13', '14', '15', '16', '17', '18', '19 or older'], GENDERS = ['Male', 'Female', 'Non-binary'];
+  var RL = { w_hero_why: 'Why they’d keep that product', w_brand_why: 'Why that brand is their go-to' };
+  (function () {
+    var i = Q.indexOf(byIdRaw('grade')); Q.splice(1, 0, Q.splice(i, 1)[0]);
+    Q.unshift({ id: 'sec0', type: 'interlude', part: 0 });
+    Q.splice(3, 0, { id: 'sec1', type: 'interlude', part: 1 });
+  })();
+  Q.forEach(function (q) { if (q.id === 'about') q.part = 0; if (q.part == null) q.part = 1; if (q.groups) q.options = q.groups.reduce(function (a, g) { return a.concat(g.options); }, []); });
+
+  function byId(id) { for (var i = 0; i < Q.length; i++) if (Q[i].id === id) return Q[i]; return null; }
+  function shown() { return Q.filter(function (q) { return !q.show || q.show(); }); }
+  function optList(q) { var o = typeof q.options === 'function' ? q.options() : (q.options || []); return o.map(function (x) { return typeof x === 'string' ? { v: x } : x; }); }
+  function titleOf(q) { return typeof q.title === 'function' ? q.title() : esc(q.title); }
+  function answered(q) {
+    if (q.type === 'interlude') return true;
+    if (q.type === 'pairs') return q.pairs.every(function (p) { return A[p.id] != null; });
+    if (q.type === 'about') return A.age != null && A.gender != null;
+    var v = A[q.id];
+    if (Array.isArray(v)) return v.length > 0;
+    return v != null && v !== '';
+  }
+  function nextOf(q) { var v = shown(); return v[v.indexOf(q) + 1] || null; }
+  /* one sub-bar per section; the optional last question counts toward Fragrance */
+  var SEG_EST = { 1: 18, 2: 13, 3: 5 };
+  function progress(final) {
+    var v = shown().filter(function (q) { return q.type !== 'interlude'; });
+    document.querySelectorAll('#segs .seg').forEach(function (el) {
+      var p = Number(el.getAttribute('data-p'));
+      var qs = v.filter(function (q) { return Math.min(q.part, 3) === p; });
+      var done = qs.filter(function (q) { return trail.indexOf(q.id) !== -1; }).length, total = qs.length;
+      var known = p === 0 || (p === 1 ? !!A.freq : p === 2 ? !!A.s_freq : !!A.bought);
+      if (!known) total = Math.max(total, SEG_EST[p]);
+      el.querySelector('i').style.width = (final ? 100 : total ? Math.round(done / total * 100) : 0) + '%';
+      el.querySelector('.seg-n').textContent = final ? 'Done' : known ? done + '/' + total : '';
+    });
+  }
+
+  /* ---------- rendering ---------- */
+  function setView(v) { app.dataset.view = v; }
+  function setStep(s) {
+    document.querySelectorAll('#segs .seg').forEach(function (el) {
+      el.classList.toggle('on', Number(el.getAttribute('data-p')) === s);
+    });
+  }
+  function toTop() { try { window.scrollTo(0, 0); } catch (e) { } }
+  function clearReset() { clearTimeout(resetTimer); resetTimer = null; }
+
+  function renderIntro() {
+    clearReset(); setView('intro'); A = {}; trail = []; progress();
+    screen.innerHTML =
+      '<div class="intro fade">' +
+        '<div>' +
+          '<p class="label">Greenwich Country Day School · Student research</p>' +
+          '<h1 class="intro-title">ADV Applied Economics + Engineering <em>Survey</em></h1>' +
+          '<p class="lede">We’re students at Greenwich Country Day School researching what people our age want from makeup, skincare and fragrance. Guys, girls, everyone: whether you have a full routine or have never touched any of it, your answers count the same. The survey is <strong>anonymous</strong>, and we don’t collect names or emails.</p>' +
+          '<p class="time-est"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>About 8 minutes</p>' +
+          '<div class="sections-bar" role="list" aria-label="Survey sections"><span role="listitem">Background</span><span role="listitem">Makeup</span><span role="listitem">Skincare</span><span role="listitem">Fragrance</span></div>' +
+          '<button class="btn primary" id="start">Start the survey</button>' +
+          '<p class="fine">Answers save when you finish all four sections.</p>' +
+        '</div>' +
+        '<div class="art">' + mixArt() + '</div>' +
+      '</div>';
+    document.getElementById('start').addEventListener('click', function () {
+      A = {}; trail = []; t0 = Date.now();
+      render(Q[0]);
+    });
+    toTop();
+  }
+
+  function chip(v, on) { return '<button class="chip" data-v="' + esc(v) + '" aria-pressed="' + !!on + '">' + esc(v) + '</button>'; }
+
+  function render(q) {
+    setView('q'); setStep(Math.min(q.part, 3));
+    if (q.type === 'interlude') return renderInterlude(q);
+    var partList = shown().filter(function (x) { return x.part === q.part && x.type !== 'interlude'; });
+    var n = partList.indexOf(q) + 1;
+    var body = '', needsNext = true, opts = optList(q);
+
+    switch (q.type) {
+      case 'about':
+        body = '<div class="group"><p class="label">Age</p><div class="chips" data-key="age">' + AGES.map(function (o) { return chip(o, A.age === o); }).join('') + '</div></div>' +
+               '<div class="group"><p class="label">Gender</p><div class="chips" data-key="gender">' + GENDERS.map(function (o) { return chip(o, A.gender === o); }).join('') + '</div></div>';
+        break;
+      case 'freq':
+        body = '<div class="rows">' + opts.map(function (o) {
+          var dots = '', cnt = Math.max(7, o.d);
+          for (var i = 0; i < cnt; i++) dots += '<i class="' + (o.d === -1 ? (i === 0 ? 'x' : '') : (i < o.d ? 'f' : '')) + '"></i>';
+          return '<button class="card" data-v="' + esc(o.v) + '" aria-pressed="' + (A[q.id] === o.v) + '"><span>' + esc(o.v) + '</span><span><span class="dots" style="flex-wrap:wrap;max-width:87px;margin-left:auto">' + dots + '</span><span class="dots-label">' + esc(o.l) + '</span></span></button>';
+        }).join('') + '</div>';
+        break;
+      case 'cards': case 'check':
+        body = '<div class="cards' + (q.type === 'check' ? ' check' : '') + '">' + opts.map(function (o) {
+          var lab = q.type === 'check' ? '' : '<span>' + esc(o.t || o.v) + (o.note ? '<small>' + esc(o.note) + '</small>' : '') + '</span>';
+          return '<button class="card" data-v="' + esc(o.v) + '" aria-pressed="' + (A[q.id] === o.v) + '"' + (q.type === 'check' ? ' aria-label="' + esc(o.v) + '"' : '') + '>' + icon(o.icon) + lab + TICK + '</button>';
+        }).join('') + '</div>';
+        break;
+      case 'cardsMulti':
+        body = '<div class="cards">' + opts.map(function (o) {
+          return '<button class="card" data-v="' + esc(o.v) + '" aria-pressed="' + has(A[q.id], o.v) + '">' + icon(o.icon) + '<span>' + esc(o.v) + (o.note ? '<small>' + esc(o.note) + '</small>' : '') + '</span>' + TICK + '</button>';
+        }).join('') + '</div>';
+        break;
+      case 'chips':
+        body = '<div class="chips' + (q.stack ? ' stack' : '') + '">' + opts.map(function (o) { return chip(o.v, A[q.id] === o.v); }).join('') + '</div>';
+        break;
+      case 'chipsMulti':
+        if (q.groups) body = q.groups.map(function (g) { return '<div class="group"><p class="label">' + esc(g.name) + '</p><div class="chips">' + g.options.map(function (o) { return chip(o, has(A[q.id], o)); }).join('') + '</div></div>'; }).join('');
+        else body = '<div class="chips' + (q.stack ? ' stack' : '') + '">' + opts.map(function (o) { return chip(o.v, has(A[q.id], o.v)); }).join('') + '</div>';
+        break;
+      case 'pairs':
+        body = '<div class="pairs">' + q.pairs.map(function (p) {
+          var val = A[p.id];
+          return '<div><p class="pair-q" id="pq-' + p.id + '">' + esc(p.q) + '</p><div class="pair" data-pair="' + p.id + '" role="group" aria-labelledby="pq-' + p.id + '">' +
+            [p.a, p.b].map(function (o) {
+              return '<button class="card" data-v="' + esc(o.v) + '" aria-pressed="' + (val === o.v) + '">' + icon(o.icon) + '<span><b>' + esc(o.v) + '</b><small>' + esc(o.note) + '</small></span>' + TICK + '</button>';
+            }).join('') + '</div></div>';
+        }).join('') + '</div>';
+        break;
+      case 'slider':
+        var cur = A[q.id] != null ? A[q.id] : q.start;
+        body = '<p class="price-read" id="priceRead"></p>' +
+          '<input class="range" id="rng" type="range" min="' + q.min + '" max="' + q.max + '" step="' + q.step + '" value="' + cur + '" aria-label="Price in dollars">' +
+          '<div class="ticks"><span>$' + q.min + '</span><span>$20</span><span>$40</span><span>$' + q.max + '+</span></div>';
+        break;
+      case 'concept':
+        body = '<div class="concept">' + conceptCard() +
+          '<div><p class="label">How likely are you to try it?</p><div class="scale">' + SCALE.map(function (s, i) {
+            return '<button data-v="' + (i + 1) + '" aria-pressed="' + (String(A.concept_try) === String(i + 1)) + '"><b>' + (i + 1) + '</b>' + esc(s) + '</button>';
+          }).join('') + '</div></div></div>';
+        break;
+      case 'scale':
+        body = '<div class="scale">' + q.options.map(function (s, i) {
+          return '<button data-v="' + esc(s) + '" aria-pressed="' + (A[q.id] === s) + '"><b>' + (i + 1) + '</b>' + esc(s) + '</button>';
+        }).join('') + '</div>';
+        break;
+      case 'brand':
+        body = '<div class="stack-gap"><input class="field" id="brandIn" type="text" maxlength="60" autocomplete="off" placeholder="Brand name" value="' + esc(A.w_brand && A.w_brand !== 'No go-to brand' ? A.w_brand : '') + '" aria-label="Brand name">' +
+          '<div class="chips">' + opts.concat([{ v: 'No go-to brand' }]).map(function (o) { return chip(o.v, A.w_brand === o.v); }).join('') + '</div></div>';
+        break;
+      case 'school':
+        var known = [], seen = {};
+        loadAll().forEach(function (r) { var s = r.school; if (s && s !== 'Not given' && !seen[s.toLowerCase()]) { seen[s.toLowerCase()] = 1; known.push(s); } });
+        body = '<input class="field" id="schoolIn" type="text" maxlength="80" autocomplete="off" list="schoolList" placeholder="School name" value="' + esc(A.school && A.school !== 'Not given' ? A.school : '') + '" aria-label="School name">' +
+          '<datalist id="schoolList">' + known.map(function (s) { return '<option value="' + esc(s) + '"></option>'; }).join('') + '</datalist>' +
+          '<p class="hint">Please write the full name, for example “Greenwich High School.”</p>';
+        break;
+      case 'text':
+        body = '<textarea class="field" id="txt" maxlength="500" placeholder="For example: a concealer that also treats the breakout">' + esc(A[q.id] || '') + '</textarea><p class="hint" id="txtCount"></p>';
+        break;
+    }
+    if (q.other) body += '<div class="other-wrap" id="otherWrap" hidden><input class="field" id="otherIn" type="text" maxlength="100" autocomplete="off" placeholder="Other: tell us what (optional)" aria-label="Other, please specify" value="' + esc(A[q.id + '_other'] || '') + '"></div>';
+
+    var right = needsNext ? '<div class="nav-right"><span class="count" id="count"></span>' + (q.type === 'school' ? '<button class="text-btn" id="skip">Prefer not to say</button>' : '') + '<button class="btn primary" id="next">Next</button></div>' : '';
+    var tag = q.part === 4 ? '<span class="n">Almost done</span> · ' + esc(q.label) : '<span class="n">' + PART_NAMES[q.part] + ' · Question ' + n + '</span> · ' + esc(q.label || '');
+    screen.innerHTML = '<div class="col-q fade" data-type="' + q.type + '">' +
+      '<p class="label">' + tag + '</p>' +
+      '<h1 class="q-title" id="qt" tabindex="-1">' + titleOf(q) + '</h1>' +
+      (q.help ? '<p class="q-help">' + esc(q.help) + '</p>' : '') +
+      '<div class="answers">' + body + '</div>' +
+      '<div class="nav"><button class="text-btn" id="back">Back</button>' + right + '</div></div>';
+
+    bind(q);
+    progress();
+    toTop();
+    var h = document.getElementById('qt'); if (h) try { h.focus({ preventScroll: true }); } catch (e) { }
+  }
+
+  var SECTIONS = {
+    sec0: { n: 1, name: 'Background', count: '2 questions', time: 'Under a minute', art: function () { return bgArt(); },
+            blurb: 'A couple of quick questions about you, so we can compare answers across grades.' },
+    sec1: { n: 2, name: 'Makeup', count: 'Up to 18 questions', time: 'About 3 minutes', art: function () { return makeupArt(); },
+            blurb: 'What you wear (or don’t), why, what you’d pay, and a new product idea we want your honest take on.' },
+    sec2: { n: 3, name: 'Skincare', count: 'Up to 15 questions', time: 'About 3 minutes', art: function () { return skinArt(); },
+            blurb: 'What you put on your skin, where you buy it and what you think of luxury brands.' },
+    sec3: { n: 4, name: 'Fragrance', count: '5 questions', time: 'About a minute', art: function () { return fragArt(); },
+            blurb: 'Whether you’ve bought a fragrance, where and for how much. The very last question is optional.' }
+  };
+  var ICO_LIST = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5h7M5.5 8h7M5.5 11.5h7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="3" cy="4.5" r="1" fill="currentColor"/><circle cx="3" cy="8" r="1" fill="currentColor"/><circle cx="3" cy="11.5" r="1" fill="currentColor"/></svg>';
+  var ICO_TIME = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  function renderInterlude(q) {
+    var s = SECTIONS[q.id];
+    screen.innerHTML = '<div class="col-q fade interlude">' +
+      '<p class="label"><span class="n">Section ' + s.n + ' of 4</span></p>' +
+      '<h1 class="sec-title" id="qt" tabindex="-1">' + s.name + '</h1>' +
+      '<div class="sec-meta"><span>' + ICO_LIST + s.count + '</span><span>' + ICO_TIME + s.time + '</span></div>' +
+      '<p class="q-help">' + s.blurb + '</p>' +
+      '<div class="art">' + s.art() + '</div>' +
+      '<div class="nav"><button class="text-btn" id="back">Back</button><div class="nav-right"><button class="btn primary" id="next">Start ' + s.name.toLowerCase() + '</button></div></div></div>';
+    document.getElementById('back').addEventListener('click', goBack);
+    document.getElementById('next').addEventListener('click', function () { advance(q); });
+    progress(); toTop();
+    var h = document.getElementById('qt'); if (h) try { h.focus({ preventScroll: true }); } catch (e) { }
+  }
+
+  function bind(q) {
+    var root = screen.querySelector('.col-q');
+    var next = document.getElementById('next');
+    var count = document.getElementById('count');
+    var otherWrap = document.getElementById('otherWrap'), otherIn = document.getElementById('otherIn');
+    var multi = q.type === 'cardsMulti' || q.type === 'chipsMulti';
+    var locked = false;
+    document.getElementById('back').addEventListener('click', goBack);
+
+    function refresh() {
+      if (next) { next.disabled = !(q.optional || answered(q)); if (q.type !== 'slider') next.textContent = nextOf(q) ? 'Next' : 'Submit'; }
+      if (count && q.max) count.textContent = (A[q.id] || []).length + ' of ' + q.max;
+      if (otherWrap) {
+        var on = multi ? has(A[q.id], 'Other') : A[q.id] === 'Other', wasHidden = otherWrap.hidden;
+        otherWrap.hidden = !on;
+        if (!on) delete A[q.id + '_other'];
+        else if (wasHidden) otherIn.focus();
+      }
+    }
+    if (otherIn) {
+      otherIn.addEventListener('input', function () { A[q.id + '_other'] = otherIn.value.trim(); });
+      otherIn.addEventListener('keydown', function (e) { if (e.key === 'Enter' && next && !next.disabled) next.click(); });
+    }
+
+    if (q.type === 'about') {
+      root.querySelectorAll('.chips').forEach(function (g) {
+        var key = g.getAttribute('data-key');
+        g.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-v]'); if (!b) return;
+          A[key] = b.getAttribute('data-v');
+          g.querySelectorAll('[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+          refresh();
+        });
+      });
+    }
+    if (['freq', 'cards', 'check', 'chips', 'concept', 'scale'].indexOf(q.type) !== -1) {
+      root.querySelector('.answers').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-v]'); if (!b) return;
+        var v = b.getAttribute('data-v');
+        A[q.id] = q.type === 'concept' ? Number(v) : v;
+        root.querySelectorAll('.answers [data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        refresh();
+      });
+    }
+    if (multi) {
+      root.querySelector('.answers').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-v]'); if (!b) return;
+        var v = b.getAttribute('data-v'), cur = (A[q.id] || []).slice(), ex = q.exclusive || [];
+        if (cur.indexOf(v) !== -1) cur.splice(cur.indexOf(v), 1);
+        else if (ex.indexOf(v) !== -1) cur = [v];
+        else {
+          cur = cur.filter(function (x) { return ex.indexOf(x) === -1; });
+          if (q.max && cur.length >= q.max) {
+            b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+            if (count) { count.classList.add('warn'); setTimeout(function () { count.classList.remove('warn'); }, 900); }
+            return;
+          }
+          cur.push(v);
+        }
+        A[q.id] = cur;
+        root.querySelectorAll('.answers [data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(has(cur, x.getAttribute('data-v')))); });
+        refresh();
+      });
+    }
+    if (q.type === 'pairs') {
+      root.querySelectorAll('.pair').forEach(function (p) {
+        p.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-v]'); if (!b) return;
+          A[p.getAttribute('data-pair')] = b.getAttribute('data-v');
+          p.querySelectorAll('[data-v]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+          refresh();
+        });
+      });
+    }
+    if (q.type === 'slider') {
+      var rng = document.getElementById('rng'), read = document.getElementById('priceRead');
+      var upd = function () {
+        var val = Number(rng.value);
+        read.innerHTML = '$' + val + (val >= q.max ? '<small>or more</small>' : '');
+        rng.style.setProperty('--p', ((val - q.min) / (q.max - q.min) * 100) + '%');
+      };
+      rng.addEventListener('input', upd); upd();
+      next.addEventListener('click', function () { A[q.id] = Number(rng.value); advance(q); });
+      next.disabled = false;
+      return;
+    }
+    if (q.type === 'brand') {
+      var inp = document.getElementById('brandIn');
+      inp.addEventListener('input', function () {
+        A.w_brand = inp.value.trim();
+        root.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-v') === A.w_brand)); });
+        refresh();
+      });
+      root.querySelector('.chips').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-v]'); if (!b) return;
+        var v = b.getAttribute('data-v');
+        A.w_brand = v; inp.value = v === 'No go-to brand' ? '' : v;
+        root.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); });
+        refresh();
+      });
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !next.disabled) next.click(); });
+    }
+    if (q.type === 'school') {
+      var si = document.getElementById('schoolIn');
+      var setS = function () { A.school = si.value.trim().length >= 2 ? si.value.trim() : ''; refresh(); };
+      si.addEventListener('input', setS); setS();
+      si.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !next.disabled) next.click(); });
+      document.getElementById('skip').addEventListener('click', function () { A.school = 'Not given'; advance(q); });
+    }
+    if (q.type === 'text') {
+      var ta = document.getElementById('txt'), tc = document.getElementById('txtCount');
+      var setT = function () { A[q.id] = ta.value.trim(); tc.textContent = ta.value.length + ' / 500'; };
+      ta.addEventListener('input', setT); setT();
+    }
+    if (next) next.addEventListener('click', function () { if (!next.disabled) advance(q); });
+    refresh();
+  }
+
+  function advance(q) {
+    trail.push(q.id);
+    var nxt = nextOf(q);
+    if (!nxt) return submit();
+    render(nxt);
+  }
+  function goBack() {
+    var prev = trail.pop();
+    if (prev) render(byId(prev)); else renderIntro();
+  }
+
+  /* ---------- makeup type (Face Value) ---------- */
+    var TYPES = {
+    minimal: ['Everyday Minimalist', 'You wear makeup most days and keep it simple.'],
+    full: ['Full Routine', 'Makeup is a real part of your day, and it shows.'],
+    occasion: ['Occasion Only', 'You save makeup for the moments that matter.'],
+    skin: ['Skincare First', 'Skincare does most of the work. Makeup finishes it.'],
+    pause: ['Taking a Break', 'You’ve used makeup before and stepped back.'],
+    open: ['Open to Trying', 'You don’t wear makeup now, but the right product could change that.'],
+    no: ['Not for Me', 'You skip makeup and plan to keep it that way. That’s useful to know too.']
+  };
+  function routineType() {
+    var k;
+    if (isW()) {
+      if (A.freq === 'Only for special occasions') k = 'occasion';
+      else if (A.w_look === 'Full glam') k = 'full';
+      else if (A.w_first === 'Skincare first') k = 'skin';
+      else k = 'minimal';
+    } else if (isL()) k = 'pause';
+    else k = A.try_one && A.try_one !== TRY_NONE ? 'open' : 'no';
+    return { key: k, name: TYPES[k][0], line: TYPES[k][1] };
+  }
+  function glance(a) {
+    var rows = [['Wears makeup', a.freq]];
+    if (a.w_hero) rows.push(['Would keep', a.w_hero]);
+    if (a.w_brand) rows.push(['Go-to brand', a.w_brand]);
+    if (a.w_price != null) rows.push(['Most you’d pay', '$' + a.w_price + (a.w_price >= 60 ? '+' : '')]);
+    if (a.l_stop) rows.push(['Why you stopped', a.l_stop[0]]);
+    if (a.n_why) rows.push(['Main reason', a.n_why[0]]);
+    if (a.try_one) rows.push(['Would try', a.try_one]);
+    if (a.concept_try) rows.push(['The concealer stick', SCALE[a.concept_try - 1]]);
+    if (a.discover) rows.push(['Hears about products on', a.discover.slice(0, 2).join(', ')]);
+    return rows;
+  }
+
+  /* ---------- skincare type ---------- */
+  var S_TYPES = {
+    full: ['Full Routine', 'Morning and night, four or more steps. You take it seriously.'],
+    basics: ['Daily Basics', 'You have a skincare routine and keep it simple.'],
+    casual: ['When I Remember', 'Skincare happens, just not on a schedule.'],
+    open: ['Open to Starting', 'You don’t use skincare yet, but the right push could change that.'],
+    no: ['Skipping It', 'You skip skincare and plan to keep it that way. That’s useful to know too.']
+  };
+  function skinType(a) {
+    var k;
+    if (a.s_freq === NEVER) k = a.s_start && !has(a.s_start, 'Nothing') ? 'open' : 'no';
+    else if (a.s_freq === S_TWICE && (a.s_count === '4-5' || a.s_count === '6+')) k = 'full';
+    else if (a.s_freq === S_TWICE || a.s_freq === 'Once a day') k = 'basics';
+    else k = 'casual';
+    return { key: k, name: S_TYPES[k][0], line: S_TYPES[k][1] };
+  }
+  function skinGlance(a) {
+    var rows = [['Uses skincare', a.s_freq]];
+    if (a.s_count) rows.push(['Skincare products', a.s_count]);
+    if (a.s_spend) rows.push(['Spends per month', a.s_spend]);
+    if (a.s_brands && !has(a.s_brands, S_NONE)) rows.push(['Skincare brands', a.s_brands.slice(0, 2).join(', ') + (a.s_brands.length > 2 ? ' +' + (a.s_brands.length - 2) : '')]);
+    if (a.s_why_not) rows.push(['Why no skincare', a.s_why_not[0]]);
+    if (a.s_matters) rows.push(['Matters most', a.s_matters[0]]);
+    return rows;
+  }
+
+  /* ---------- scent profile (ScentCheck) ---------- */
+    var F_TYPES = {
+    pass: ['Fragrance-Free', 'You’d rather skip the fragrance aisle. That’s useful to know too.'],
+    luxe: ['Luxe Collector', 'You’re ready to spend real money on the right bottle.'],
+    soon: ['Not Yet', 'You haven’t bought one yet, but you already know where you’d look.'],
+    gifted: ['Gifted Collection', 'Your fragrances mostly come from the people around you.'],
+    online: ['Click to Cart', 'You’d buy a scent online without smelling it first.'],
+    sniff: ['Smell First', 'A fragrance has to win you over in person before it comes home.'],
+    explorer: ['Scent Explorer', 'You’re open to finding fragrance in all kinds of places.']
+  };
+  function fragType() {
+    var k, nw = A.not_why || [], bw = A.bought_where || [], online = function (w) { return ONLINE.indexOf(w) !== -1; };
+    if (boughtNo()) {
+      if (has(nw, 'I don’t wear fragrance')) k = 'pass';
+      else if (has(nw, 'Someone else buys it for me')) k = 'gifted';
+      else k = 'soon';
+    } else if (A.spend === '$150' || A.spend === '$200+') k = 'luxe';
+    else if (bw.length && bw.every(online)) k = 'online';
+    else if (has(A.bought_why, 'I liked it when I smelled it in person')) k = 'sniff';
+    else k = 'explorer';
+    return { key: k, name: F_TYPES[k][0], line: F_TYPES[k][1] };
+  }
+  function fragList(a, id) { return (a[id] || []).map(function (x) { return x === OTHER && a[id + '_other'] ? a[id + '_other'] : x; }).slice(0, 2).join(', '); }
+  function fragGlance(a) {
+    var rows = [['Bought a fragrance', a.bought]];
+    if (a.spend) rows.push(['Would spend', a.spend]);
+    if (a.bought_where) rows.push(['Bought it at', fragList(a, 'bought_where')]);
+    if (a.not_why) rows.push(['Why not yet', fragList(a, 'not_why')]);
+    if (a.no_price) rows.push(['Would spend', a.no_price]);
+    return rows;
+  }
+
+  /* ---------- saving ---------- */
+  function collect() {
+    var out = {};
+    shown().forEach(function (q) {
+      if (q.type === 'interlude') return;
+      if (q.type === 'pairs') { q.pairs.forEach(function (p) { if (A[p.id] != null) out[p.id] = A[p.id]; }); return; }
+      if (q.type === 'about') { out.age = A.age; out.gender = A.gender; return; }
+      var v = A[q.id];
+      if (v == null || v === '' || (Array.isArray(v) && !v.length)) return;
+      out[q.id] = v;
+      if (A[q.id + '_other']) out[q.id + '_other'] = A[q.id + '_other'];
+    });
+    if (!out.w_hero && isW() && hero()) out.w_hero = hero();
+    if (out.s_where && out.s_online === undefined) out.s_online = 'Mostly online (inferred: online-only stores)';
+    return out;
+  }
+
+  function submit() {
+    var a = collect(), mt = routineType(), st = skinType(a), ft = fragType();
+    var rec = Object.assign({
+      submitted: new Date().toISOString(),
+      seconds: Math.round((Date.now() - t0) / 1000),
+      attention_ok: a.check === 'Mascara' ? 'yes' : 'no',
+      makeup_path: isW() ? 'Wears makeup' : isL() ? 'Stopped' : 'Never',
+      makeup_type: mt.name,
+      skincare_type: st.name,
+      fragrance_type: ft.name
+    }, a);
+    // simple yes/no flags so the Sheet can work out the comparison stats without the survey's code
+    rec.would_try_concept = Number(a.concept_try) >= 4 ? 'yes' : 'no';
+    rec.luxury_user = Array.isArray(a.s_brands) ? (a.s_brands.some(function (b) { return LUXURY.indexOf(b) !== -1; }) ? 'yes' : 'no') : '';
+    rec.omoggle_aware = a.omoggle && a.omoggle !== OM_NO ? 'yes' : 'no';
+    if (TEST_MODE) return renderResult(rec, mt, st, ft, null);
+    if (!LIVE) { var all = loadAll(); all.push(rec); saveAll(all); return renderResult(rec, mt, st, ft, summarize(all, rec)); }
+    sendToSheet(rec, mt, st, ft);
+  }
+  function summarize(all, rec) {
+    function c(f) { return all.filter(f).length; }
+    return { n: all.length, freq: c(function (x) { return x.freq === rec.freq; }), s_freq: c(function (x) { return x.s_freq === rec.s_freq; }),
+      concept: c(function (x) { return x.would_try_concept === 'yes'; }), users: c(function (x) { return x.luxury_user === 'yes' || x.luxury_user === 'no'; }),
+      lux: c(function (x) { return x.luxury_user === 'yes'; }), omoggle: c(function (x) { return x.omoggle_aware === 'yes'; }), bought: c(function (x) { return x.bought === BOUGHT_YES; }) };
+  }
+  function sendToSheet(rec, mt, st, ft) {
+    setView('result'); setStep(-1); progress(true);
+    screen.innerHTML = '<div class="col-q fade"><p class="label"><span class="n">Almost there</span></p><h1 class="q-title">Saving your answers…</h1></div>';
+    fetch(SHEET_URL, { method: 'POST', body: JSON.stringify({ action: 'submit', response: rec }) })
+      .then(function (r) { return r.json(); })
+      .then(function (res) { if (!res || !res.ok) throw new Error(res && res.error); renderResult(rec, mt, st, ft, res.summary || null); })
+      .catch(function () {
+        screen.innerHTML = '<div class="col-q fade"><p class="label"><span class="n">Not saved yet</span></p><h1 class="q-title">Your answers didn’t send.</h1>' +
+          '<p class="q-help">Check your internet connection and try again. Your answers are still here.</p><div class="nav"><span></span><button class="btn primary" id="retry">Try again</button></div></div>';
+        document.getElementById('retry').addEventListener('click', function () { sendToSheet(rec, mt, st, ft); });
+      });
+  }
+
+  /* ---------- thank-you screen ---------- */
+  function pct(part, whole) { return whole ? Math.round(part / whole * 100) : 0; }
+  function renderResult(rec, mt, st, ft, s) {
+    setView('result'); setStep(-1); progress(true);
+    var n = s ? s.n : 0, stats = '';
+    if (!s) stats = '<p class="mini">Test mode is on, so this response wasn’t saved and there’s nothing to compare yet.</p>';
+    else {
+      stats = '<div class="stat"><b>' + n + '</b><span>' + (n === 1 ? 'response' : 'responses') + ' so far, including yours.</span></div>';
+      if (n >= 5) {
+        stats += '<div class="stat"><b>' + pct(s.freq, n) + '%</b><span>also answered <q>' + esc(rec.freq) + '</q> for makeup.</span></div>';
+        stats += '<div class="stat"><b>' + pct(s.s_freq, n) + '%</b><span>also answered <q>' + esc(rec.s_freq) + '</q> for skincare.</span></div>';
+        stats += '<div class="stat"><b>' + pct(s.concept, n) + '%</b><span>would probably or definitely try the concealer stick. You said <q>' + esc(SCALE[(rec.concept_try || 1) - 1]) + '</q>.</span></div>';
+        if (s.users) stats += '<div class="stat"><b>' + pct(s.lux, s.users) + '%</b><span>of skincare users use at least one luxury skincare brand.</span></div>';
+        stats += '<div class="stat"><b>' + pct(s.omoggle, n) + '%</b><span>have heard of or used Omoggle.</span></div>';
+        stats += '<div class="stat"><b>' + pct(s.bought, n) + '%</b><span>have bought a fragrance themselves.</span></div>';
+      } else stats += '<p class="mini">Comparisons show up once 5 people have finished.</p>';
+    }
+    var rows = glance(rec).concat(skinGlance(rec), fragGlance(rec));
+    screen.innerHTML = '<div class="result fade">' +
+      '<div class="col"><div class="summary">' +
+        '<div class="summary-head"><p class="label">Your makeup type</p><p class="type-name">' + esc(mt.name) + '</p><p class="type-line">' + esc(mt.line) + '</p></div>' +
+        '<div class="summary-head"><p class="label">Your skincare type</p><p class="type-name">' + esc(st.name) + '</p><p class="type-line">' + esc(st.line) + '</p></div>' +
+        '<div class="summary-head"><p class="label">Your scent profile</p><p class="type-name">' + esc(ft.name) + '</p><p class="type-line">' + esc(ft.line) + '</p></div>' +
+        '<div class="shade-strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>' +
+        '<dl class="glance">' + rows.map(function (r) { return '<div><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl>' +
+        (n ? '<p class="mini" style="padding:0 24px 18px;margin:0">Response ' + n + '</p>' : '') +
+      '</div></div>' +
+      '<div class="col">' +
+        '<div><p class="label">All done · Thank you</p><h1 class="q-title">How your answers compare</h1></div>' +
+        '<div class="stats">' + stats + '</div>' +
+        '<div class="share"><h2 class="h2">Passing this on?</h2><p>Start a fresh survey for the next person.' + (s ? ' Your answers are already saved.' : '') + '</p>' +
+          '<button class="btn primary" id="again">Start a new response</button><p class="mini" id="resetNote"></p></div>' +
+      '</div></div>';
+    document.getElementById('again').addEventListener('click', renderIntro);
+    var left = RESET_SECONDS, note = document.getElementById('resetNote');
+    (function tick() {
+      if (!document.getElementById('resetNote')) return;
+      note.textContent = 'Resets automatically in ' + left + 's.';
+      if (left-- <= 0) return renderIntro();
+      resetTimer = setTimeout(tick, 1000);
+    })();
+    toTop();
+  }
+
+  /* ---------- results page (#results) ---------- */
+  function plainTitle(q) { return q.rl || RL[q.id] || String(typeof q.title === 'function' ? q.id : q.title); }
+  var REPORT = [];
+  Q.forEach(function (q) {
+    var part = q.part;
+    if (q.type === 'interlude') return;
+    if (q.type === 'about') { REPORT.push({ id: 'age', part: 0, label: 'Age', options: AGES }, { id: 'gender', part: 0, label: 'Gender', options: GENDERS }); return; }
+    if (q.type === 'pairs') { q.pairs.forEach(function (p) { REPORT.push({ id: p.id, part: 1, label: 'Which best describes you: ' + p.q.toLowerCase(), options: [p.a.v, p.b.v] }); }); return; }
+    var r = { id: q.id, part: part, label: plainTitle(q), options: q.options && typeof q.options !== 'function' ? optList(q).map(function (o) { return o.v; }) : [], other: !!q.other, multi: q.type === 'cardsMulti' || q.type === 'chipsMulti', type: q.type };
+    if (q.type === 'concept') { r.label = 'Would try the 10-second concealer stick'; r.options = SCALE.map(function (s, i) { return String(i + 1); }); r.fmt = function (v) { return v + ' · ' + SCALE[v - 1]; }; }
+    if (q.type === 'slider') { r.numeric = true; r.fmt = function (v) { return '$' + v + (Number(v) >= q.max ? '+' : ''); }; }
+    if (q.type === 'text') r.textOnly = true;
+    REPORT.push(r);
+  });
+
+  /* ---------- login (results are for the survey team only) ---------- */
+  var LOGIN_HASH = 3183140352271974; // hash of "USERNAME:password", so the login isn't sitting in the code as plain text
+  function cyrb53(s) { var h1 = 0xdeadbeef, h2 = 0x41c6ce57; for (var i = 0, ch; i < s.length; i++) { ch = s.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909); return 4294967296 * (2097151 & h2) + (h1 >>> 0); }
+  var authed = false;
+  try { authed = sessionStorage.getItem('adv-admin') === '1'; } catch (e) { }
+  var adminPw = '';
+  try { adminPw = sessionStorage.getItem('adv-admin-pw') || ''; } catch (e) { }
+  function setAuthed(v, pw) { authed = v; adminPw = v ? (pw || adminPw) : ''; try { if (v) { sessionStorage.setItem('adv-admin', '1'); sessionStorage.setItem('adv-admin-pw', adminPw); } else { sessionStorage.removeItem('adv-admin'); sessionStorage.removeItem('adv-admin-pw'); } } catch (e) { } }
+
+  function renderLogin() {
+    clearReset(); setView('admin'); A = {}; trail = [];
+    screen.innerHTML = '<div class="login fade">' +
+      '<p class="label"><span class="n">Survey team</span></p>' +
+      '<h1 class="sec-title" style="font-size:clamp(44px,6vw,64px)">Log in</h1>' +
+      '<p class="q-help">Results are only for the survey team.</p>' +
+      '<div id="loginForm" class="login-form">' +
+        '<label>Username<input class="field" id="lu" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" required></label>' +
+        '<label>Password<input class="field" id="lp" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></label>' +
+        '<p class="login-err" id="lerr" role="alert" hidden>That username or password isn’t right.</p>' +
+        '<div class="nav"><a class="text-btn" href="#" id="lback">Back to survey</a><button class="btn primary" type="button" id="lgo">Log in</button></div>' +
+      '</div></div>';
+    var f = document.getElementById('loginForm'), u = document.getElementById('lu'), pw = document.getElementById('lp'), err = document.getElementById('lerr');
+    function tryLogin() {
+      var pass = pw.value.trim().toLowerCase();
+      if (cyrb53(u.value.trim().toUpperCase() + ':' + pass) === LOGIN_HASH) {
+        setAuthed(true, pass);
+        if (location.hash === '#results') renderAdmin(); else location.hash = 'results';
+      } else {
+        err.hidden = false; pw.value = ''; pw.focus();
+        f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake');
+      }
+    }
+    document.getElementById('lgo').addEventListener('click', tryLogin);
+    [u, pw].forEach(function (el) { el.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); tryLogin(); } }); });
+    document.getElementById('lback').addEventListener('click', function (e) { e.preventDefault(); location.hash = ''; });
+    toTop(); u.focus();
+  }
+
+  var adminRows = [];
+  function renderAdmin() {
+    if (!authed) return renderLogin();
+    clearReset(); setView('admin'); A = {}; trail = [];
+    if (TEST_MODE) return drawAdmin([]);
+    if (!LIVE) return drawAdmin(loadAll());
+    if (!adminPw) { setAuthed(false); return renderLogin(); }
+    screen.innerHTML = '<div class="admin fade"><p class="label">Results</p><h1 class="q-title">Loading responses…</h1></div>';
+    fetch(SHEET_URL + '?action=list&key=' + encodeURIComponent(adminPw))
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok) { if (res && res.error === 'wrong password') { setAuthed(false); return renderLogin(); } throw new Error(); }
+        drawAdmin(res.rows || []);
+      })
+      .catch(function () {
+        screen.innerHTML = '<div class="admin fade"><p class="label">Results</p><h1 class="q-title">Couldn’t load responses.</h1><p class="q-help">Check your internet connection, then try again.</p><div class="tools"><button class="btn primary" id="reload">Try again</button></div></div>';
+        document.getElementById('reload').addEventListener('click', renderAdmin);
+      });
+  }
+  function drawAdmin(all) {
+    adminRows = all;
+    var where = TEST_MODE ? 'Test mode is on, so nothing is being saved yet.' : LIVE ? 'Responses come from your Google Sheet. Edit or delete them there.' : 'Saved in this browser on this computer only. Export a CSV to back them up.';
+    var html = '<div class="admin fade"><p class="label">Results</p>' +
+      '<p class="big-num">' + all.length + '<small>finished ' + (all.length === 1 ? 'response' : 'responses') + '</small></p>' +
+      '<p class="q-help" style="margin:0">' + where + ' ' +
+        (all.length ? all.filter(function (r) { return r.attention_ok === 'yes'; }).length + ' of ' + all.length + ' passed the attention check.' : '') + '</p>' +
+      '<div class="tools"><button class="btn primary" id="csv"' + (all.length ? '' : ' disabled') + '>Export CSV</button>' +
+      (LIVE || TEST_MODE ? '' : '<button class="btn secondary" id="wipe"' + (all.length ? '' : ' disabled') + '>Delete all</button>') +
+      '<a class="text-btn" href="#" id="exit" style="margin-left:auto">Back to survey</a><button class="btn secondary" id="logout">Log out</button></div>';
+
+    if (all.length) {
+      var mt = {}, st = {};
+      var ftc = {};
+      all.forEach(function (r) { mt[r.makeup_type] = (mt[r.makeup_type] || 0) + 1; st[r.skincare_type] = (st[r.skincare_type] || 0) + 1; if (r.fragrance_type) ftc[r.fragrance_type] = (ftc[r.fragrance_type] || 0) + 1; });
+      html += section('Makeup types', Object.keys(TYPES).map(function (k) { return TYPES[k][0]; }), mt, all.length, false, null, []);
+      html += section('Skincare types', Object.keys(S_TYPES).map(function (k) { return S_TYPES[k][0]; }), st, all.length, false, null, []);
+      html += section('Scent profiles', Object.keys(F_TYPES).map(function (k) { return F_TYPES[k][0]; }), ftc, all.length, false, null, []);
+    }
+    var lastPart = -1;
+    REPORT.forEach(function (q) {
+      if (q.part !== lastPart) { lastPart = q.part; html += '<h2 class="part-h">' + (q.part === 4 ? 'Wrapping up' : q.part === 0 ? 'Background' : 'Part ' + q.part + ' · ' + PART_NAMES[q.part]) + '</h2>'; }
+      var got = all.filter(function (r) { return r[q.id] !== undefined; });
+      if (q.textOnly) {
+        html += '<div class="res"><h2 class="h2">' + esc(q.label) + '</h2><p class="mini" style="margin:0">' + got.length + ' answered</p>' +
+          (got.length ? '<ul class="others">' + got.map(function (r) { return '<li>' + esc(r[q.id]) + '</li>'; }).join('') + '</ul>' : '') + '</div>';
+        return;
+      }
+      var counts = {}, order = q.numeric ? [] : q.options.slice();
+      got.forEach(function (r) {
+        var v = r[q.id];
+        (Array.isArray(v) ? v : [v]).forEach(function (x) { x = String(x); if (order.indexOf(x) === -1) order.push(x); counts[x] = (counts[x] || 0) + 1; });
+      });
+      if (q.numeric) order.sort(function (a, b) { return a - b; });
+      var others = got.map(function (r) { return r[q.id + '_other']; }).filter(Boolean);
+      html += section(q.label, order, counts, got.length, q.multi, q.fmt, others);
+    });
+    screen.innerHTML = html + '</div>';
+
+    document.getElementById('exit').addEventListener('click', function (e) { e.preventDefault(); location.hash = ''; });
+    document.getElementById('logout').addEventListener('click', function () { setAuthed(false); location.hash = ''; });
+    document.getElementById('csv').addEventListener('click', exportCsv);
+    var wipe = document.getElementById('wipe'), armed = false;
+    if (wipe) wipe.addEventListener('click', function () {
+      if (!armed) { armed = true; wipe.textContent = 'Click again to delete'; setTimeout(function () { armed = false; if (wipe.isConnected) wipe.textContent = 'Delete all'; }, 3000); return; }
+      saveAll([]); renderAdmin();
+    });
+    toTop();
+  }
+  function section(title, order, counts, total, multi, fmt, others) {
+    var max = Math.max.apply(null, order.map(function (o) { return counts[o] || 0; }).concat([1]));
+    return '<div class="res"><h2 class="h2">' + esc(title) + '</h2><p class="mini" style="margin:0">' + total + ' answered' + (multi ? ' · multi-select, so it can add past 100%' : '') + '</p>' +
+      (total ? '<ol class="board">' + order.map(function (o) {
+        var c = counts[o] || 0;
+        return '<li><span class="nm"><span>' + esc(fmt ? fmt(o) : o) + '</span><span class="bar"><i style="width:' + Math.round(c / max * 100) + '%"></i></span></span><span class="n">' + c + ' · ' + pct(c, total) + '%</span></li>';
+      }).join('') + '</ol>' : '') +
+      (others.length ? '<ul class="others">' + others.map(function (t) { return '<li>Other: ' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
+    '</div>';
+  }
+  function exportCsv() {
+    var cols = ['submitted', 'seconds', 'attention_ok', 'makeup_path', 'makeup_type', 'skincare_type', 'fragrance_type'], heads = cols.slice();
+    REPORT.forEach(function (q) {
+      cols.push(q.id); heads.push(q.id + ': ' + q.label);
+      if (q.other) { cols.push(q.id + '_other'); heads.push(q.id + ': other (text)'); }
+    });
+    function cell(v) {
+      var s = v == null ? '' : Array.isArray(v) ? v.join('; ') : String(v);
+      return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+    var lines = [heads.map(cell).join(',')];
+    adminRows.forEach(function (r) { lines.push(cols.map(function (c) { return cell(r[c]); }).join(',')); });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'adv-survey-responses-' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  }
+
+  /* ---------- start ---------- */
+  function route() {
+    if (location.hash === '#results') renderAdmin();
+    else if (location.hash === '#login') { if (authed) location.hash = 'results'; else renderLogin(); }
+    else renderIntro();
+  }
+  if (TEST_MODE) document.getElementById('testBand').hidden = false;
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+</body>
+</html>
