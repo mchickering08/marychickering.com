@@ -293,11 +293,11 @@ textarea.field{min-height:130px;resize:vertical;line-height:1.45}
 
 /* ================= look ================= */
 :root[data-theme="light"]{
-  --bg:#F5F7FA; --surface:#FFFFFF; --panel:#E8EDF4; --ink:#141C2B; --ink-2:#5A6578; --line:#DCE2EB;
-  --accent:#1F3A5F; --accent-ink:#FFFFFF; --tint:#E9EFF7; --metal:#B89B6A; --lip:#B4463F;
+  --bg:#F5F7FA; --surface:#FFFFFF; --panel:#E8EDF4; --ink:#0D1525; --ink-2:#5A6578; --line:#DCE2EB;
+  --accent:#0F2342; --accent-ink:#FFFFFF; --tint:#E5EBF4; --metal:#B89B6A; --lip:#B4463F;
   --serif:"Cormorant Garamond","Cormorant",Garamond,Georgia,serif;
   --sans:"Jost","Futura","Avenir Next","Helvetica Neue",Arial,sans-serif;
-  --rose1:#DDE6F1; --rose2:#AFC1D8; --rose3:#5B78A1; --rose4:#2C4870;
+  --rose1:#DDE6F1; --rose2:#A6B8D1; --rose3:#435F8A; --rose4:#18305A;
   --shadow:0 1px 2px rgba(16,26,44,.04),0 8px 24px rgba(16,26,44,.06);
   color-scheme:light;
 }
@@ -326,13 +326,13 @@ body{font-family:var(--sans);background:
 
 .chip{border-radius:999px;padding:12px 20px;border-color:var(--line);background:var(--surface);box-shadow:0 1px 2px rgba(16,26,44,.04);font-weight:400;font-size:16px;transition:background .18s,border-color .18s,box-shadow .18s,transform .12s}
 .chip:hover{border-color:#B4C3D7;transform:translateY(-1px)}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(31,58,95,.25)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(15,35,66,.25)}
 .chips.stack .chip{border-radius:16px;padding:16px 20px}
 .group .label{font-size:14px;margin-bottom:12px}
 
 .card{border-radius:20px;border-color:var(--line);box-shadow:var(--shadow);font-weight:400;font-size:16px;transition:border-color .18s,background .18s,transform .12s,box-shadow .18s}
 .card:hover{border-color:#B4C3D7;transform:translateY(-1px)}
-.card[aria-pressed="true"]{border-color:var(--accent);background:var(--tint);box-shadow:inset 0 0 0 1px var(--accent),0 8px 22px rgba(31,58,95,.12)}
+.card[aria-pressed="true"]{border-color:var(--accent);background:var(--tint);box-shadow:inset 0 0 0 1px var(--accent),0 8px 22px rgba(15,35,66,.12)}
 .tick{border-radius:50%;background:var(--accent)}
 .rows .card{padding:18px 22px}
 .dots i.f{background:var(--accent)}
@@ -341,17 +341,17 @@ body{font-family:var(--sans);background:
 
 .scale button{border-radius:18px;border-color:var(--line);box-shadow:var(--shadow);font-weight:400;font-size:14px}
 .scale b{font-size:32px;font-weight:500}
-.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 8px 22px rgba(31,58,95,.25)}
+.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 8px 22px rgba(15,35,66,.25)}
 
 .btn{border-radius:999px;font-weight:500;letter-spacing:.02em;padding:16px 32px}
-.primary{background:var(--accent);box-shadow:0 8px 22px rgba(31,58,95,.22)}
-.primary:hover:not(:disabled){background:#162B48}
+.primary{background:var(--accent);box-shadow:0 8px 22px rgba(15,35,66,.22)}
+.primary:hover:not(:disabled){background:#081830}
 .secondary{border-radius:999px}
 .text-btn{text-decoration:none;color:var(--ink-2);font-size:16px}
 .text-btn:hover{color:var(--ink)}
 .count{font-size:14px}
 .field{border-radius:16px;border-color:var(--line);font-family:var(--sans);font-weight:400}
-.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,58,95,.12)}
+.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,35,66,.12)}
 .range{background:linear-gradient(90deg,var(--accent) var(--p,30%),var(--line) var(--p,30%))}
 .range::-webkit-slider-thumb{border-color:var(--accent)}
 .price-read{font-weight:500}
@@ -436,7 +436,7 @@ body{font-family:var(--sans);background:
 .win-name{font-family:var(--serif);font-weight:500;font-size:clamp(40px,7.5vw,84px);line-height:1.08;letter-spacing:-.01em}
 .win-go{background:var(--accent);color:#fff;font-size:18px;padding:19px 40px;box-shadow:0 12px 30px rgba(14,26,46,.28);opacity:0;transition:opacity .4s ease .55s,background .2s}
 .win.open .win-go{opacity:1}
-.win-go:hover{background:#162B48}
+.win-go:hover{background:#081830}
 .band-wrap{position:fixed;inset:0;z-index:40;display:grid;align-items:center;pointer-events:auto;background:rgba(245,247,250,0);transition:background .35s ease}
 .band-wrap.in{background:rgba(245,247,250,.55)}
 .band-wrap.out{background:rgba(245,247,250,0)}
