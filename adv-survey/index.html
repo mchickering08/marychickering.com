@@ -298,6 +298,9 @@ textarea.field{min-height:130px;resize:vertical;line-height:1.45}
   --serif:"Cormorant Garamond","Cormorant",Garamond,Georgia,serif;
   --sans:"Jost","Futura","Avenir Next","Helvetica Neue",Arial,sans-serif;
   --rose1:#DDE6F1; --rose2:#A6B8D1; --rose3:#435F8A; --rose4:#18305A;
+  /* drawings use the same navy family (these replace the old skin-tone, gold and red pigments) */
+  --t1:#E2E9F3; --t2:#C2D0E2; --t3:#8CA3C3; --t4:#567399; --t5:#2B4670; --t6:#132A4C;
+  --metal:#7D93B3; --lip:#3D5A86;
   --shadow:0 1px 2px rgba(16,26,44,.04),0 8px 24px rgba(16,26,44,.06);
   color-scheme:light;
 }
@@ -473,6 +476,7 @@ body{font-family:var(--sans);background:
 @media (max-width:860px){.tally-k{display:none}.tally{padding:5px;gap:4px}.tally-g{padding:3px 7px;font-size:12px}}
 @media (max-width:640px){.top-in{flex-wrap:wrap;row-gap:8px}.mark{font-size:19px}}
 .done-btn{background:var(--ink-2)!important;box-shadow:none!important;cursor:default}
+.login-err,.count.warn{color:#B4463F!important}
 .test-band{background:var(--accent);color:#fff;text-align:center;font-size:14px;font-weight:500;letter-spacing:.02em;padding:7px 16px}
 .fade{animation:fade .35s cubic-bezier(.2,.7,.2,1) both}
 </style>
