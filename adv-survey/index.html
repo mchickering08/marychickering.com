@@ -836,8 +836,8 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   var RL = { w_hero_why: 'Why they’d keep that product', w_brand_why: 'Why that brand is their go-to' };
   (function () {
     var i = Q.indexOf(byIdRaw('grade')); Q.splice(1, 0, Q.splice(i, 1)[0]);
-    Q.unshift({ id: 'sec0', type: 'interlude', part: 0 });
-    Q.splice(3, 0, { id: 'draw', type: 'draw', part: 0 }, { id: 'sec1', type: 'interlude', part: 1 });
+    Q.unshift({ id: 'draw', type: 'draw', part: 0 }, { id: 'sec0', type: 'interlude', part: 0 });
+    Q.splice(4, 0, { id: 'sec1', type: 'interlude', part: 1 });
   })();
   Q.forEach(function (q) { if (q.id === 'about') q.part = 0; if (q.part == null) q.part = 1; if (q.groups) q.options = q.groups.reduce(function (a, g) { return a.concat(g.options); }, []); });
 
@@ -1035,7 +1035,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     screen.innerHTML = '<div class="col-q fade interlude draw">' +
       '<p class="label"><span class="n">The draw</span></p>' +
       '<h1 class="sec-title draw-title" id="qt" tabindex="-1">Shuffling…</h1>' +
-      '<p class="q-help">Makeup, skincare and fragrance come in a random order for everyone, so no topic always goes first.</p>' +
+      '<p class="q-help">Everyone starts with a quick background section. After that, makeup, skincare and fragrance come in a random order, so no topic always goes first.</p>' +
       '<div class="draw-slots">' + [0, 1, 2].map(function (i) {
         return '<div class="slot spinning" id="slot' + i + '"><span class="slot-n">Section ' + (i + 2) + '</span><span class="slot-ico">' + icon('none') + '</span><span class="slot-name">?</span></div>';
       }).join('') + '</div>' +
@@ -1049,7 +1049,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
       el.querySelector('.slot-name').textContent = SEC_NAMES[p];
       el.querySelector('.slot-ico').innerHTML = icon(SEC_ICONS[p]);
     }
-    function done() { title.textContent = 'Your order'; next.disabled = false; next.textContent = 'Start ' + SEC_NAMES[drawOrder[0]].toLowerCase(); }
+    function done() { title.textContent = 'Your order'; next.disabled = false; next.textContent = 'Next'; }
     if (!fresh || calm) { [0, 1, 2].forEach(settle); done(); }
     else {
       var tick = 0, names = ['Makeup', 'Skincare', 'Fragrance'];
