@@ -421,6 +421,17 @@ body{font-family:var(--sans);background:
 .sections-bar span{transition:transform .2s}
 .sections-bar span.spin{opacity:.75}
 .sections-bar span.set{animation:pop .4s cubic-bezier(.2,.7,.2,1)}
+.sections-bar .dash{display:inline-block;width:22px;height:2px;border-radius:2px;background:currentColor;opacity:.55;vertical-align:middle}
+.win{position:fixed;inset:0;z-index:50;display:grid;place-items:center;text-align:center;padding:24px}
+.win.grow{inset:auto;border-radius:0;transition:left .55s cubic-bezier(.7,0,.2,1),top .55s cubic-bezier(.7,0,.2,1),width .55s cubic-bezier(.7,0,.2,1),height .55s cubic-bezier(.7,0,.2,1)}
+.win-in{opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease}
+.win.open .win-in{opacity:1;transform:none}
+.win.leave{opacity:0;transition:opacity .3s ease}
+.win-k{margin:0 0 6px;font-size:16px;font-weight:500;opacity:.8}
+.win-name{font-family:var(--serif);font-weight:500;font-size:clamp(64px,13vw,150px);line-height:1;margin:0;letter-spacing:-.01em}
+.win-rest{margin:14px 0 34px;font-size:18px;opacity:.85}
+.win-go{background:var(--accent);color:#fff;font-size:18px;padding:19px 40px;box-shadow:0 12px 30px rgba(74,20,32,.28)}
+.win-go:hover{background:#65202F}
 .test-band{background:var(--accent);color:#fff;text-align:center;font-size:14px;font-weight:500;letter-spacing:.02em;padding:7px 16px}
 .fade{animation:fade .35s cubic-bezier(.2,.7,.2,1) both}
 </style>
@@ -901,7 +912,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   function clearReset() { clearTimeout(resetTimer); resetTimer = null; }
 
   function renderIntro() {
-    clearReset(); drawTimers.forEach(clearTimeout); drawTimers = []; setView('intro'); A = {}; trail = []; progress();
+    clearReset(); drawTimers.forEach(clearTimeout); drawTimers = []; var ow = document.getElementById('win'); if (ow) ow.remove(); setView('intro'); A = {}; trail = []; progress();
     screen.innerHTML =
       '<div class="intro fade">' +
         '<div>' +
@@ -909,7 +920,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
           '<h1 class="intro-title">ADV Applied Economics + Engineering <em>Survey</em></h1>' +
           '<p class="lede">The survey is <strong>anonymous</strong>, and we don’t collect names or emails.</p>' +
           '<p class="time-est"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>About 9 minutes</p>' +
-          '<div class="sections-bar" id="sbar" role="list" aria-label="Survey sections" aria-live="polite"><span role="listitem">Background</span><span role="listitem">Makeup</span><span role="listitem">Skincare</span><span role="listitem">Fragrance</span></div>' +
+          '<div class="sections-bar" id="sbar" role="list" aria-label="Survey sections" aria-live="polite"><span role="listitem">Background</span><span role="listitem" aria-label="To be drawn"><i class="dash"></i></span><span role="listitem" aria-label="To be drawn"><i class="dash"></i></span><span role="listitem" aria-label="To be drawn"><i class="dash"></i></span></div>' +
           '<button class="btn primary" id="start"><svg class="shuf" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h3.2c1.6 0 2.6.6 3.5 1.9l1.6 2.3c.9 1.3 1.9 1.9 3.5 1.9H17M14.5 9.6 17 12.1l-2.5 2.5M3 14h3.2c1.2 0 2-.4 2.7-1.1M11.1 7.1c.7-.7 1.5-1.1 2.7-1.1H17M14.5 3.5 17 6l-2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Shuffle &amp; start</button>' +
           '<p class="fine">Answers save when you finish all four sections.</p>' +
         '</div>' +
@@ -921,10 +932,9 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
       A = {}; trail = []; drawOrder = shuffle([1, 2, 3]); applyOrder(drawOrder);
       startBtn.disabled = true; startBtn.lastChild.textContent = 'Shuffling…';
       var slots = [].slice.call(document.querySelectorAll('#sbar span')).slice(1), names = ['Makeup', 'Skincare', 'Fragrance'];
-      function go() { t0 = Date.now(); render(Q[0]); }
-      function settle(i) { slots[i].textContent = SEC_NAMES[drawOrder[i]]; slots[i].classList.remove('spin'); slots[i].classList.add('set'); }
+      function settle(i) { slots[i].textContent = SEC_NAMES[drawOrder[i]]; slots[i].removeAttribute('aria-label'); slots[i].classList.remove('spin'); slots[i].classList.add('set'); }
       var calm = false; try { calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { }
-      if (calm) { [0, 1, 2].forEach(settle); startBtn.lastChild.textContent = 'Here we go'; drawTimers.push(setTimeout(go, 700)); return; }
+      if (calm) { [0, 1, 2].forEach(settle); startBtn.lastChild.textContent = 'Shuffled'; showWinner(slots[0], calm); return; }
       slots.forEach(function (s) { s.classList.add('spin'); });
       var tick = 0, spin = setInterval(function () {
         tick++;
@@ -932,10 +942,38 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
       }, 80);
       drawTimers.push(spin);
       [0, 1, 2].forEach(function (i) { drawTimers.push(setTimeout(function () { settle(i); }, 800 + i * 350)); });
-      drawTimers.push(setTimeout(function () { clearInterval(spin); startBtn.lastChild.textContent = 'Here we go'; }, 800 + 2 * 350 + 100));
-      drawTimers.push(setTimeout(go, 800 + 2 * 350 + 1000));
+      drawTimers.push(setTimeout(function () { clearInterval(spin); startBtn.lastChild.textContent = 'Shuffled'; }, 800 + 2 * 350 + 100));
+      drawTimers.push(setTimeout(function () { showWinner(slots[0], false); }, 800 + 2 * 350 + 700));
     });
     toTop();
+  }
+
+  /* the first drawn section grows from its slot in the bar to fill the screen */
+  function showWinner(slot, calm) {
+    var old = document.getElementById('win'); if (old) old.remove();
+    var r = slot.getBoundingClientRect(), color = getComputedStyle(slot).backgroundColor, ink = getComputedStyle(slot).color;
+    var first = SEC_NAMES[drawOrder[0]], rest = drawOrder.slice(1).map(function (p) { return SEC_NAMES[p].toLowerCase(); });
+    var w = document.createElement('div');
+    w.id = 'win'; w.className = 'win'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-labelledby', 'winName');
+    w.style.background = color; w.style.color = ink;
+    w.innerHTML = '<div class="win-in">' +
+      '<p class="win-k">First up after Background</p>' +
+      '<h2 class="win-name" id="winName">' + first + '</h2>' +
+      '<p class="win-rest">Then ' + rest[0] + ', then ' + rest[1] + '.</p>' +
+      '<button class="btn win-go" id="winGo">Confirm &amp; start</button>' +
+    '</div>';
+    if (!calm) { w.style.left = r.left + 'px'; w.style.top = r.top + 'px'; w.style.width = r.width + 'px'; w.style.height = r.height + 'px'; w.classList.add('grow'); }
+    document.body.appendChild(w);
+    if (!calm) {
+      void w.offsetWidth;
+      w.style.left = '0px'; w.style.top = '0px'; w.style.width = '100vw'; w.style.height = '100vh';
+      drawTimers.push(setTimeout(function () { w.classList.add('open'); var b = document.getElementById('winGo'); if (b) b.focus(); }, 520));
+    } else { w.classList.add('open'); document.getElementById('winGo').focus(); }
+    document.getElementById('winGo').addEventListener('click', function () {
+      w.classList.add('leave');
+      setTimeout(function () { w.remove(); }, 320);
+      t0 = Date.now(); render(Q[0]);
+    });
   }
 
   function chip(v, on) { return '<button class="chip" data-v="' + esc(v) + '" aria-pressed="' + !!on + '">' + esc(v) + '</button>'; }
