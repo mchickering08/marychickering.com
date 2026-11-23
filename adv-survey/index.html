@@ -437,16 +437,56 @@ body{font-family:var(--sans);background:
 .win-go{background:var(--accent);color:#fff;font-size:18px;padding:19px 40px;box-shadow:0 12px 30px rgba(74,20,32,.28);opacity:0;transition:opacity .4s ease .55s,background .2s}
 .win.open .win-go{opacity:1}
 .win-go:hover{background:#65202F}
+.band-wrap{position:fixed;inset:0;z-index:40;display:grid;align-items:center;pointer-events:auto;background:rgba(251,248,244,0);transition:background .35s ease}
+.band-wrap.in{background:rgba(251,248,244,.55)}
+.band-wrap.out{background:rgba(251,248,244,0)}
+.band{width:100%;min-height:150px;display:grid;place-items:center;color:var(--ink);transform:translateX(-102%);transition:transform .5s cubic-bezier(.7,0,.2,1);box-shadow:0 20px 50px rgba(74,38,28,.14)}
+.band.light{color:#fff}
+.band-wrap.in .band{transform:none}
+.band-wrap.out .band{transform:translateX(102%)}
+.band-in{display:flex;align-items:center;gap:22px;padding:26px 24px}
+.tick-wrap{position:relative;width:58px;height:58px;flex:none}
+.tick-svg{width:58px;height:58px;display:block}
+.tick-c{fill:none;stroke:currentColor;stroke-width:3;stroke-dasharray:145;stroke-dashoffset:145;transform:rotate(-90deg);transform-origin:center;opacity:.9}
+.tick-p{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:36;stroke-dashoffset:36}
+.band-wrap.checked .tick-c{animation:draw .45s cubic-bezier(.6,0,.3,1) forwards}
+.band-wrap.checked .tick-p{animation:draw .3s cubic-bezier(.5,0,.2,1) .35s forwards}
+.band-wrap.checked .tick-svg{animation:tickpop .5s cubic-bezier(.2,.8,.2,1.4) .55s both}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes tickpop{0%{transform:scale(1)}45%{transform:scale(1.18)}100%{transform:scale(1)}}
+.burst{position:absolute;inset:0;pointer-events:none}
+.burst i{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:currentColor;opacity:0;transform:rotate(var(--a)) translateY(0)}
+.band-wrap.checked .burst i{animation:burst .6s cubic-bezier(.2,.7,.2,1) .6s forwards}
+@keyframes burst{0%{opacity:.9;transform:rotate(var(--a)) translateY(-10px) scale(1)}100%{opacity:0;transform:rotate(var(--a)) translateY(-44px) scale(.4)}}
+.band-text{display:grid;text-align:left}
+.band-done{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,56px);line-height:1.05}
+.band-next{font-size:18px;font-weight:500;opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;margin-top:6px}
+.band-wrap.next .band-next{opacity:.85;transform:none}
+.top-in{flex-wrap:nowrap}
+.tally{display:flex;align-items:center;gap:6px;flex:none;font-size:13px;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 14px;box-shadow:0 1px 2px rgba(74,38,28,.04)}
+.tally-k{font-weight:500;margin-right:4px}
+.tally-g{display:inline-flex;align-items:baseline;gap:5px;padding:3px 9px;border-radius:999px;background:var(--bg);font-weight:500;color:var(--ink);white-space:nowrap}
+.tally-g b{font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent)}
+.tally-g.lead{background:var(--accent);color:#fff}
+.tally-g.lead b{color:#fff}
+.tally-g.bump{animation:pop .45s cubic-bezier(.2,.7,.2,1)}
+@media (max-width:860px){.tally-k{display:none}.tally{padding:5px;gap:4px}.tally-g{padding:3px 7px;font-size:12px}}
+@media (max-width:640px){.top-in{flex-wrap:wrap;row-gap:8px}.mark{font-size:19px}}
+.done-btn{background:var(--ink-2)!important;box-shadow:none!important;cursor:default}
 .test-band{background:var(--accent);color:#fff;text-align:center;font-size:14px;font-weight:500;letter-spacing:.02em;padding:7px 16px}
 .fade{animation:fade .35s cubic-bezier(.2,.7,.2,1) both}
 </style>
 </head>
 <body>
 <div class="app" id="app" data-view="intro">
-  <div class="test-band" id="testBand" hidden>Test mode: answers are not being saved.</div>
+  <div class="test-band" id="testBand" hidden>Test mode: answers aren’t saved, and you can take it more than once.</div>
   <header class="top">
     <div class="wrap top-in">
       <span class="mark">ADV Applied Economics + Engineering Survey</span>
+      <div class="tally" id="tally" aria-label="Responses so far by grade">
+        <span class="tally-k">Responses</span>
+        <span class="tally-g" data-g="9th grade">9th <b>–</b></span><span class="tally-g" data-g="10th grade">10th <b>–</b></span><span class="tally-g" data-g="11th grade">11th <b>–</b></span><span class="tally-g" data-g="12th grade">12th <b>–</b></span>
+      </div>
     </div>
     <div class="segs" aria-hidden="true"><div class="wrap segs-in" id="segs">
       <div class="seg" data-p="0"><div class="seg-top"><span>Background</span><span class="seg-n"></span></div><div class="seg-track"><i></i></div></div>
@@ -704,7 +744,10 @@ body{font-family:var(--sans);background:
   function lux() { return (A.s_brands || []).filter(function (b) { return LUXURY.indexOf(b) !== -1; }); }
 
   /* ---------- Part 3: fragrance (ScentCheck) ---------- */
-var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN = ['Yes, usually', 'Sometimes'];
+var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”';
+  var F_INPERSON = ['Sephora', 'Ulta', 'Department stores (Bloomingdale’s, Saks, etc.)', 'Brand stores (e.g., Dior, Aesop)', 'Pop-up shops', 'Other in-person store'];
+  function owns() { return A.f_own === 'Yes'; }
+  function ownsNot() { return A.f_own === 'No'; }
   var FC_SCALE = ['Not at all', 'Not really', 'Maybe', 'Interested', 'Very interested'];
 
   var Q = [
@@ -776,7 +819,6 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     { id: 'discover', type: 'chipsMulti', label: 'Discovery', title: 'Where do you hear about new beauty or grooming products?', help: 'Select all that apply.',
       options: ['TikTok', 'Instagram', 'YouTube', 'Snapchat', 'Pinterest', 'Friends or family', 'In stores', 'Amazon'] },
 
-    { id: 'sec2', type: 'interlude', part: 2 },
 
     { id: 's_freq', type: 'freq', part: 2, label: 'Your routine', title: 'How often do you use skincare products?',
       options: [{ v: S_TWICE, d: 14, l: 'AM + PM' }, { v: 'Once a day', d: 7, l: 'Daily' }, { v: 'A few times a week', d: 3, l: 'Some days' },
@@ -832,21 +874,38 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     { id: 'facecard', type: 'scale', part: 2, label: 'A new idea', title: 'Would you use Face Card?', card: function () { return faceCardCard(); }, ask: 'How interested would you be?',
       options: FC_SCALE },
 
-    { id: 'sec3', type: 'interlude', part: 3 },
-{ id: 'f_first', type: 'chips', part: 3, stack: true, other: true, label: 'First experience', title: 'Where did you first experience fragrance?',
-      options: ['A family member’s fragrance', 'A friend’s fragrance', 'In a store, like Sephora, Ulta or a department store', 'A free sample or tester', 'A fragrance I got as a gift', 'An ad or magazine sample', 'I can’t remember', 'Other'] },
-    { id: 'f_ads', type: 'chipsMulti', part: 3, other: true, label: 'Ads', title: 'Where do you see ads the most?', help: 'Select all that apply.',
+{ id: 'f_ads', type: 'chipsMulti', part: 3, other: true, optional: true, label: 'Ads', title: 'Where do you see ads the most and actually pay attention to them?', help: 'Select all that apply.',
       options: ['TikTok', 'Instagram', 'YouTube', 'Snapchat', 'TV or streaming', 'Billboards or subway ads', 'In stores', 'Other'] },
-    { id: 'f_confident', type: 'chipsMulti', part: 3, stack: true, other: true, exclusive: [F_NONE], label: 'Confidence', title: 'What makes you feel confident when you wear a fragrance?', help: 'Select all that apply.',
-      options: ['Getting compliments', F_ME, 'It lasts all day', 'It’s a brand I trust', 'My friends like it', 'It matches my style or outfit', F_NONE, 'Other'] },
-    { id: 'f_shop_with', type: 'chips', part: 3, stack: true, other: true, label: 'Shopping', title: 'Would you rather shop for fragrance with friends or on your own?',
-      options: ['With friends', 'On my own', 'It doesn’t matter', 'Other'] },
-    { id: 'f_hesitate', type: 'chipsMulti', part: 3, stack: true, other: true, exclusive: ['Nothing, I like going in'], label: 'Shopping', title: 'What makes you hesitate to go into a store to buy fragrance?', help: 'Select all that apply.',
+    { id: 'f_own', type: 'chips', part: 3, stack: true, label: 'Fragrance', title: 'Do you own any fragrance?', options: ['Yes', 'No'] },
+
+    /* owners */
+    { id: 'f_first', type: 'chips', part: 3, stack: true, other: true, optional: true, show: owns, label: 'First experience', title: 'Where did you first experience fragrance?',
+      options: ['A family member’s fragrance', 'A friend’s fragrance', 'In a store (Sephora, Ulta, or a department store)', 'A free sample or tester', 'A fragrance I got as a gift', 'An ad or magazine sample', 'I can’t remember', 'Other'] },
+    { id: 'f_wear', type: 'chipsMulti', part: 3, stack: true, exclusive: ['Never'], show: owns, label: 'Wearing it', title: 'How often do you wear fragrance?', help: 'Select all that apply.',
+      options: ['Daily', 'A couple of times a week', 'For special occasions', 'Hanging out with friends or at parties', 'On dates', 'Never'] },
+    { id: 'f_wear_never', type: 'short', part: 3, optional: true, show: function () { return owns() && has(A.f_wear, 'Never'); }, label: 'Wearing it', title: 'Why don’t you wear it?' },
+    { id: 'f_buy_why', type: 'chipsMulti', part: 3, stack: true, other: true, show: owns, label: 'Buying', title: 'Why did you buy your fragrance?', help: 'Select all that apply.',
+      options: ['To wear every day', 'For a special occasion', 'As a gift for someone', 'I liked it when I smelled it in person', 'A friend recommended it', 'A family member recommended it', 'I saw it on TikTok or Instagram', 'A celebrity or ad campaign', 'It was on sale', 'Other'] },
+    { id: 'f_where', type: 'chipsMulti', part: 3, show: owns, label: 'Buying', title: 'Where do you buy fragrance most often?', help: 'Select all that apply.',
+      others: [['Other online store', '_other_online'], ['Other in-person store', '_other_inperson']],
+      options: ['Sephora', 'Ulta', 'Department stores (Bloomingdale’s, Saks, etc.)', 'Brand stores (e.g., Dior, Aesop)', 'Pop-up shops', 'Gyms', 'Amazon', 'TikTok Shop', 'Instagram', 'Other online store', 'Other in-person store'] },
+    { id: 'f_inperson', type: 'chipsMulti', part: 3, stack: true, other: true, optional: true, label: 'Shopping in person', title: 'What makes you want to shop for fragrance in person?', help: 'Select all that apply.',
+      show: function () { return owns() && (A.f_where || []).some(function (x) { return F_INPERSON.indexOf(x) !== -1; }); },
+      options: ['Being able to smell the fragrance', 'Trying it on my skin before buying', 'Having a sales associate help me', 'Getting free samples or testers', 'Seeing new launches or limited editions', 'Gift wrapping or gift sets', 'Rewards points or in-store deals', 'Shopping is a fun outing with friends or family', 'I can take it home the same day', 'I don’t trust buying fragrance online without smelling it first', 'Other'] },
+    { id: 'f_hesitate', type: 'chipsMulti', part: 3, stack: true, other: true, optional: true, exclusive: ['Nothing, I like going in'], show: owns, label: 'Shopping in person', title: 'What makes you hesitate to buy fragrance in a store?', help: 'Select all that apply.',
       options: ['Pushy salespeople', 'Too many choices', 'Prices are too high', 'I don’t know what I’d like', 'Smelling too many scents at once', 'It’s easier to buy online', 'Nothing, I like going in', 'Other'] },
-    { id: 'f_in_store', type: 'chips', part: 3, stack: true, label: 'In stores', title: 'Do you buy fragrances in stores?',
-      options: ['Yes, usually', 'Sometimes', 'No, only online', 'I don’t buy fragrance'] },
-    { id: 'f_stores', type: 'chipsMulti', part: 3, other: true, show: function () { return F_IN.indexOf(A.f_in_store) !== -1; }, label: 'In stores', title: 'Which stores do you buy fragrance from?', help: 'Select all that apply.',
-      options: ['Sephora', 'Ulta', 'Macy’s', 'Nordstrom', 'Bloomingdale’s', 'Saks Fifth Avenue', 'A brand’s own store, like Dior or Chanel', 'Drugstores or Target', 'Other'] },
+    { id: 'f_confident', type: 'chipsMulti', part: 3, stack: true, other: true, optional: true, exclusive: [F_NONE], show: owns, label: 'Confidence', title: 'What makes you feel confident when you wear fragrance?', help: 'Select all that apply.',
+      options: ['Getting compliments', F_ME, 'It lasts all day', 'It’s a brand I trust', 'My friends like it', 'It matches my style or outfit', F_NONE, 'Other'] },
+    { id: 'f_shop_with', type: 'chips', part: 3, stack: true, other: true, optional: true, show: owns, label: 'Shopping', title: 'Who would you rather shop for fragrance with?',
+      options: ['Friends', 'Family', 'On my own', 'It doesn’t matter', 'Other'] },
+
+    /* non-owners */
+    { id: 'f_first_no', type: 'chips', part: 3, stack: true, other: true, optional: true, show: ownsNot, label: 'First experience', title: 'Where did you first experience fragrance?',
+      options: ['A family member’s fragrance', 'A friend’s fragrance', 'In a store (Sephora, Ulta, or a department store)', 'A free sample or tester', 'A fragrance I got as a gift', 'An ad or magazine sample', 'I can’t remember', 'I haven’t really experienced fragrance', 'Other'] },
+    { id: 'f_why_not', type: 'chipsMulti', part: 3, stack: true, other: true, optional: true, show: ownsNot, label: 'Not yet', title: 'Why haven’t you bought a fragrance?', help: 'Select all that apply.',
+      options: ['Pushy salespeople', 'Too many choices', 'Prices are too high', 'I don’t know what I’d like', 'Smelling too many scents at once', 'I’ve never really thought about it', 'I don’t think I need it', 'I would use it if I got it as a gift', 'I use other products', 'Fragrance gives me headaches or I’m sensitive to scents', 'I don’t know where to start or which brands are good', 'I’m not old enough or don’t have my own money to spend', 'Other'] },
+    { id: 'f_shop_with_no', type: 'chips', part: 3, stack: true, other: true, optional: true, show: ownsNot, label: 'Shopping', title: 'If you were to shop for fragrance, who would you rather go with?',
+      options: ['Friends', 'Family', 'On my own', 'It doesn’t matter', 'I’m not interested in shopping for fragrance', 'Other'] },
 
     /* wrapping up: always last, after whichever section was drawn last */
     { id: 'grade', type: 'chips', part: 0, label: 'About you', title: 'What grade are you in?', options: ['9th grade', '10th grade', '11th grade', '12th grade'] },
@@ -858,8 +917,6 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   var RL = { w_hero_why: 'Why they’d keep that product', w_brand_why: 'Why that brand is their go-to' };
   (function () {
     var i = Q.indexOf(byIdRaw('grade')); Q.splice(1, 0, Q.splice(i, 1)[0]);
-    Q.unshift({ id: 'sec0', type: 'interlude', part: 0 });
-    Q.splice(3, 0, { id: 'sec1', type: 'interlude', part: 1 });
   })();
   Q.forEach(function (q) { if (q.id === 'about') q.part = 0; if (q.part == null) q.part = 1; if (q.groups) q.options = q.groups.reduce(function (a, g) { return a.concat(g.options); }, []); });
 
@@ -878,6 +935,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   }
   function segOf(q) { return q.part === 4 ? (drawOrder ? drawOrder[2] : 3) : q.part; }
 
+  function othersOf(q) { return q.others || (q.other ? [['Other', '_other']] : []); }
   function byId(id) { for (var i = 0; i < Q.length; i++) if (Q[i].id === id) return Q[i]; return null; }
   function shown() { return Q.filter(function (q) { return !q.show || q.show(); }); }
   function optList(q) { var o = typeof q.options === 'function' ? q.options() : (q.options || []); return o.map(function (x) { return typeof x === 'string' ? { v: x } : x; }); }
@@ -892,14 +950,14 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   }
   function nextOf(q) { var v = shown(); return v[v.indexOf(q) + 1] || null; }
   /* one sub-bar per section; the optional last question counts toward Fragrance */
-  var SEG_EST = { 1: 18, 2: 14, 3: 7 };
+  var SEG_EST = { 1: 18, 2: 14, 3: 11 };
   function progress(final) {
     var v = shown().filter(function (q) { return q.type !== 'interlude' && q.type !== 'draw'; });
     document.querySelectorAll('#segs .seg').forEach(function (el) {
       var p = Number(el.getAttribute('data-p'));
       var qs = v.filter(function (q) { return segOf(q) === p; });
       var done = qs.filter(function (q) { return trail.indexOf(q.id) !== -1; }).length, total = qs.length;
-      var known = p === 0 || (p === 1 ? !!A.freq : p === 2 ? !!A.s_freq : !!A.f_in_store);
+      var known = p === 0 || (p === 1 ? !!A.freq : p === 2 ? !!A.s_freq : !!A.f_own);
       if (!known) total = Math.max(total, SEG_EST[p]);
       el.querySelector('i').style.width = (final ? 100 : total ? Math.round(done / total * 100) : 0) + '%';
       el.querySelector('.seg-n').textContent = final ? 'Done' : known ? done + '/' + total : '';
@@ -916,6 +974,39 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   function toTop() { try { window.scrollTo(0, 0); } catch (e) { } }
   function clearReset() { clearTimeout(resetTimer); resetTimer = null; }
 
+  /* one response per computer (switched off in test mode) */
+  var DONE_KEY = 'adv-survey-done-v1';
+  function alreadyDone() {
+    if (TEST_MODE) return false;
+    var d = false;
+    try { d = localStorage.getItem(DONE_KEY) === '1'; } catch (e) { }
+    return d || /(?:^|;\s*)advdone=1/.test(document.cookie);
+  }
+  function markDone() {
+    if (TEST_MODE) return;
+    try { localStorage.setItem(DONE_KEY, '1'); } catch (e) { }
+    try { document.cookie = 'advdone=1; max-age=31536000; path=/; SameSite=Lax'; } catch (e) { }
+  }
+
+  /* responses-by-grade counter in the top right */
+  var GRADES = ['9th grade', '10th grade', '11th grade', '12th grade'], testTally = {};
+  function countGrades(all) { var g = {}; all.forEach(function (r) { if (r.grade) g[r.grade] = (g[r.grade] || 0) + 1; }); return g; }
+  function updateTally(g) {
+    if (!g) return;
+    var max = Math.max.apply(null, GRADES.map(function (k) { return g[k] || 0; }));
+    document.querySelectorAll('#tally .tally-g').forEach(function (el) {
+      var k = el.getAttribute('data-g'), n = g[k] || 0, b = el.querySelector('b'), was = b.textContent;
+      b.textContent = n;
+      el.classList.toggle('lead', max > 0 && n === max);
+      if (was !== '–' && was !== String(n)) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+    });
+  }
+  function loadTally() {
+    if (TEST_MODE) return updateTally(testTally);
+    if (!LIVE) return updateTally(countGrades(loadAll()));
+    fetch(SHEET_URL + '?action=counts').then(function (r) { return r.json(); }).then(function (res) { if (res && res.ok) updateTally(res.grades); }).catch(function () { });
+  }
+
   function renderIntro() {
     clearReset(); drawTimers.forEach(clearTimeout); drawTimers = []; var ow = document.getElementById('win'); if (ow) ow.remove(); setView('intro'); A = {}; trail = []; progress();
     screen.innerHTML =
@@ -924,15 +1015,21 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
           '<p class="label">Greenwich Country Day School · Student research</p>' +
           '<h1 class="intro-title">ADV Applied Economics + Engineering <em>Survey</em></h1>' +
           '<p class="lede">The survey is <strong>anonymous</strong>, and we don’t collect names or emails.</p>' +
-          '<p class="time-est"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>About 9 minutes</p>' +
+          '<p class="time-est"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>About 10 minutes</p>' +
           '<div class="sections-bar" id="sbar" role="list" aria-label="Survey sections" aria-live="polite"><span role="listitem">Background</span><span role="listitem" aria-label="To be drawn"><i class="dash"></i></span><span role="listitem" aria-label="To be drawn"><i class="dash"></i></span><span role="listitem" aria-label="To be drawn"><i class="dash"></i></span></div>' +
           '<button class="btn primary" id="start"><svg class="shuf" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h3.2c1.6 0 2.6.6 3.5 1.9l1.6 2.3c.9 1.3 1.9 1.9 3.5 1.9H17M14.5 9.6 17 12.1l-2.5 2.5M3 14h3.2c1.2 0 2-.4 2.7-1.1M11.1 7.1c.7-.7 1.5-1.1 2.7-1.1H17M14.5 3.5 17 6l-2.5 2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Shuffle &amp; start</button>' +
-          '<p class="fine">Answers save when you finish all four sections.</p>' +
+          '<p class="fine" id="introNote">Answers save when you finish all four sections.</p>' +
         '</div>' +
         '<div class="art">' + mixArt() + '</div>' +
       '</div>';
     var startBtn = document.getElementById('start');
+    if (alreadyDone()) {
+      startBtn.disabled = true; startBtn.classList.add('done-btn');
+      startBtn.innerHTML = '<svg class="shuf" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Already completed';
+      document.getElementById('introNote').textContent = 'You’ve already taken this survey on this computer. Thank you!';
+    }
     startBtn.addEventListener('click', function () {
+      if (alreadyDone()) return;
       if (startBtn.disabled) return;
       A = {}; trail = []; drawOrder = shuffle([1, 2, 3]); applyOrder(drawOrder);
       startBtn.disabled = true; startBtn.lastChild.textContent = 'Shuffling…';
@@ -1063,7 +1160,10 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
         body = '<textarea class="field" id="txt" maxlength="500" placeholder="For example: a concealer that also treats the breakout">' + esc(A[q.id] || '') + '</textarea><p class="hint" id="txtCount"></p>';
         break;
     }
-    if (q.other) body += '<div class="other-wrap" id="otherWrap" hidden><input class="field" id="otherIn" type="text" maxlength="100" autocomplete="off" placeholder="Other: tell us what (optional)" aria-label="Other, please specify" value="' + esc(A[q.id + '_other'] || '') + '"></div>';
+    othersOf(q).forEach(function (o) {
+      body += '<div class="other-wrap" data-for="' + esc(o[0]) + '" hidden><input class="field other-in" data-suffix="' + o[1] + '" type="text" maxlength="100" autocomplete="off" placeholder="' + esc(o[0] === 'Other' ? 'Other: tell us what (optional)' : o[0] + ': which one? (optional)') + '" aria-label="' + esc(o[0]) + ', please specify" value="' + esc(A[q.id + o[1]] || '') + '"></div>';
+    });
+    if (q.type === 'short') body = '<input class="field" id="shortIn" type="text" maxlength="200" autocomplete="off" placeholder="Your answer" value="' + esc(A[q.id] || '') + '">';
 
     var right = needsNext ? '<div class="nav-right"><span class="count" id="count"></span>' + (q.type === 'school' ? '<button class="text-btn" id="skip">Prefer not to say</button>' : '') + '<button class="btn primary" id="next">Next</button></div>' : '';
     var tag = q.part === 4 ? '<span class="n">Almost done</span> · ' + esc(q.label) : '<span class="n">' + PART_NAMES[q.part] + ' · Question ' + n + '</span> · ' + esc(q.label || '');
@@ -1168,7 +1268,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     var root = screen.querySelector('.col-q');
     var next = document.getElementById('next');
     var count = document.getElementById('count');
-    var otherWrap = document.getElementById('otherWrap'), otherIn = document.getElementById('otherIn');
+    var otherWraps = [].slice.call(root.querySelectorAll('.other-wrap'));
     var multi = q.type === 'cardsMulti' || q.type === 'chipsMulti';
     var locked = false;
     document.getElementById('back').addEventListener('click', goBack);
@@ -1176,16 +1276,23 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     function refresh() {
       if (next) { next.disabled = !(q.optional || answered(q)); if (q.type !== 'slider') next.textContent = nextOf(q) ? 'Next' : 'Submit'; }
       if (count && q.max) count.textContent = (A[q.id] || []).length + ' of ' + q.max;
-      if (otherWrap) {
-        var on = multi ? has(A[q.id], 'Other') : A[q.id] === 'Other', wasHidden = otherWrap.hidden;
-        otherWrap.hidden = !on;
-        if (!on) delete A[q.id + '_other'];
-        else if (wasHidden) otherIn.focus();
-      }
+      otherWraps.forEach(function (w) {
+        var lab = w.getAttribute('data-for'), inp = w.querySelector('input'), suf = inp.getAttribute('data-suffix');
+        var on = multi ? has(A[q.id], lab) : A[q.id] === lab, wasHidden = w.hidden;
+        w.hidden = !on;
+        if (!on) delete A[q.id + suf];
+        else if (wasHidden) inp.focus();
+      });
     }
-    if (otherIn) {
-      otherIn.addEventListener('input', function () { A[q.id + '_other'] = otherIn.value.trim(); });
-      otherIn.addEventListener('keydown', function (e) { if (e.key === 'Enter' && next && !next.disabled) next.click(); });
+    otherWraps.forEach(function (w) {
+      var inp = w.querySelector('input'), suf = inp.getAttribute('data-suffix');
+      inp.addEventListener('input', function () { A[q.id + suf] = inp.value.trim(); });
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' && next && !next.disabled) next.click(); });
+    });
+    if (q.type === 'short') {
+      var si = document.getElementById('shortIn');
+      si.addEventListener('input', function () { A[q.id] = si.value.trim(); refresh(); });
+      si.addEventListener('keydown', function (e) { if (e.key === 'Enter' && next && !next.disabled) next.click(); });
     }
 
     if (q.type === 'about') {
@@ -1283,10 +1390,41 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   }
 
   function advance(q) {
+    if (document.getElementById('band')) return;
     trail.push(q.id);
     var nxt = nextOf(q);
     if (!nxt) return submit();
+    if (nxt.part !== q.part && q.part !== 4) return sectionDone(q.part, nxt, function () { render(nxt); });
     render(nxt);
+  }
+
+  /* between sections: a band sweeps across, a check draws itself, then "Next: ..." and on we go */
+  var PART_TEXT = { 0: 'Background', 1: 'Makeup', 2: 'Skincare', 3: 'Fragrance' };
+  var BAND_BG = { 0: 'var(--rose1)', 1: 'var(--rose2)', 2: 'var(--rose3)', 3: 'var(--rose4)' };
+  function sectionDone(part, nxt, then) {
+    var nextName = nxt.part === 4 ? 'one last question' : PART_TEXT[nxt.part];
+    var light = part >= 2, dots = '';
+    for (var i = 0; i < 8; i++) dots += '<i style="--a:' + (i * 45) + 'deg"></i>';
+    var o = document.createElement('div');
+    o.id = 'band'; o.className = 'band-wrap'; o.setAttribute('role', 'status');
+    o.innerHTML = '<div class="band' + (light ? ' light' : '') + '" style="background:' + BAND_BG[part] + '">' +
+      '<div class="band-in">' +
+        '<span class="tick-wrap"><svg class="tick-svg" viewBox="0 0 52 52" aria-hidden="true"><circle class="tick-c" cx="26" cy="26" r="23"/><path class="tick-p" d="M15 27.5l7.2 7.2L37.5 19"/></svg><span class="burst">' + dots + '</span></span>' +
+        '<span class="band-text"><span class="band-done">' + PART_TEXT[part] + ' done</span><span class="band-next">Next: ' + nextName + '</span></span>' +
+      '</div></div>';
+    document.body.appendChild(o);
+    var calm = false; try { calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { }
+    if (calm) {
+      o.classList.add('in', 'checked', 'next');
+      setTimeout(function () { then(); o.remove(); }, 1400);
+      return;
+    }
+    void o.offsetWidth;
+    o.classList.add('in');                                                  // band slides in
+    setTimeout(function () { o.classList.add('checked'); }, 380);          // check draws + burst
+    setTimeout(function () { o.classList.add('next'); }, 1150);            // "Next: ..."
+    setTimeout(function () { then(); o.classList.add('out'); }, 2050);     // next question behind, band slides away
+    setTimeout(function () { o.remove(); }, 2600);
   }
   function goBack() {
     var prev = trail.pop();
@@ -1364,7 +1502,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   };
   function fragType() {
     var c = A.f_confident || [], k;
-    if (has(c, F_NONE)) k = 'none';
+    if (A.f_own !== 'Yes' || has(c, F_NONE) || (has(A.f_wear, 'Never') && !c.length)) k = 'none';
     else if (has(c, F_ME)) k = 'sig';
     else if (has(c, 'Getting compliments') || has(c, 'My friends like it')) k = 'comp';
     else if (has(c, 'It lasts all day') || has(c, 'It’s a brand I trust')) k = 'loyal';
@@ -1374,12 +1512,12 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   }
   function firstTwo(a, id) { return (a[id] || []).map(function (x) { return x === 'Other' && a[id + '_other'] ? a[id + '_other'] : x; }).slice(0, 2).join(', '); }
   function fragGlance(a) {
-    var rows = [];
-    if (a.f_first) rows.push(['First fragrance', a.f_first === 'Other' && a.f_first_other ? a.f_first_other : a.f_first]);
-    if (a.f_ads) rows.push(['Sees ads on', firstTwo(a, 'f_ads')]);
-    if (a.f_shop_with) rows.push(['Shops for fragrance', a.f_shop_with]);
-    if (a.f_in_store) rows.push(['Buys in stores', a.f_in_store]);
-    if (a.f_stores) rows.push(['Stores', firstTwo(a, 'f_stores')]);
+    var rows = [['Owns a fragrance', a.f_own]], first = a.f_first || a.f_first_no, fid = a.f_first ? 'f_first' : 'f_first_no';
+    if (a.f_ads) rows.push(['Notices ads on', firstTwo(a, 'f_ads')]);
+    if (first) rows.push(['First fragrance', first === 'Other' && a[fid + '_other'] ? a[fid + '_other'] : first]);
+    if (a.f_wear) rows.push(['Wears it', a.f_wear.slice(0, 2).join(', ')]);
+    if (a.f_where) rows.push(['Buys at', a.f_where.slice(0, 2).join(', ')]);
+    if (a.f_why_not) rows.push(['Why not yet', firstTwo(a, 'f_why_not')]);
     return rows;
   }
 
@@ -1393,7 +1531,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
       var v = A[q.id];
       if (v == null || v === '' || (Array.isArray(v) && !v.length)) return;
       out[q.id] = v;
-      if (A[q.id + '_other']) out[q.id + '_other'] = A[q.id + '_other'];
+      othersOf(q).forEach(function (o) { if (A[q.id + o[1]]) out[q.id + o[1]] = A[q.id + o[1]]; });
     });
     if (!out.w_hero && isW() && hero()) out.w_hero = hero();
     if (out.s_where && out.s_online === undefined) out.s_online = 'Mostly online (inferred: online-only stores)';
@@ -1417,23 +1555,24 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     rec.luxury_user = Array.isArray(a.s_brands) ? (a.s_brands.some(function (b) { return LUXURY.indexOf(b) !== -1; }) ? 'yes' : 'no') : '';
     rec.omoggle_aware = a.omoggle && a.omoggle !== OM_NO ? 'yes' : 'no';
     rec.facecard_yes = FC_SCALE.indexOf(a.facecard) >= 3 ? 'yes' : 'no';
-    rec.buys_in_store = F_IN.indexOf(a.f_in_store) !== -1 ? 'yes' : 'no';
-    if (TEST_MODE) return renderResult(rec, mt, st, ft, null);
-    if (!LIVE) { var all = loadAll(); all.push(rec); saveAll(all); return renderResult(rec, mt, st, ft, summarize(all, rec)); }
+    rec.owns_fragrance = a.f_own === 'Yes' ? 'yes' : 'no';
+    rec.buys_in_store = (a.f_where || []).some(function (x) { return F_INPERSON.indexOf(x) !== -1; }) ? 'yes' : 'no';
+    if (TEST_MODE) { if (rec.grade) testTally[rec.grade] = (testTally[rec.grade] || 0) + 1; updateTally(testTally); return renderResult(rec, mt, st, ft, null); }
+    if (!LIVE) { var all = loadAll(); all.push(rec); saveAll(all); markDone(); updateTally(countGrades(all)); return renderResult(rec, mt, st, ft, summarize(all, rec)); }
     sendToSheet(rec, mt, st, ft);
   }
   function summarize(all, rec) {
     function c(f) { return all.filter(f).length; }
     return { n: all.length, freq: c(function (x) { return x.freq === rec.freq; }), s_freq: c(function (x) { return x.s_freq === rec.s_freq; }),
       concept: c(function (x) { return x.would_try_concept === 'yes'; }), users: c(function (x) { return x.luxury_user === 'yes' || x.luxury_user === 'no'; }),
-      lux: c(function (x) { return x.luxury_user === 'yes'; }), omoggle: c(function (x) { return x.omoggle_aware === 'yes'; }), facecard: c(function (x) { return x.facecard_yes === 'yes'; }), in_store: c(function (x) { return x.buys_in_store === 'yes'; }) };
+      lux: c(function (x) { return x.luxury_user === 'yes'; }), omoggle: c(function (x) { return x.omoggle_aware === 'yes'; }), facecard: c(function (x) { return x.facecard_yes === 'yes'; }), owns: c(function (x) { return x.owns_fragrance === 'yes'; }) };
   }
   function sendToSheet(rec, mt, st, ft) {
     setView('result'); setStep(-1); progress(true);
     screen.innerHTML = '<div class="col-q fade"><p class="label"><span class="n">Almost there</span></p><h1 class="q-title">Saving your answers…</h1></div>';
     fetch(SHEET_URL, { method: 'POST', body: JSON.stringify({ action: 'submit', response: rec }) })
       .then(function (r) { return r.json(); })
-      .then(function (res) { if (!res || !res.ok) throw new Error(res && res.error); renderResult(rec, mt, st, ft, res.summary || null); })
+      .then(function (res) { if (!res || !res.ok) throw new Error(res && res.error); markDone(); if (res.summary && res.summary.grades) updateTally(res.summary.grades); renderResult(rec, mt, st, ft, res.summary || null); })
       .catch(function () {
         screen.innerHTML = '<div class="col-q fade"><p class="label"><span class="n">Not saved yet</span></p><h1 class="q-title">Your answers didn’t send.</h1>' +
           '<p class="q-help">Check your internet connection and try again. Your answers are still here.</p><div class="nav"><span></span><button class="btn primary" id="retry">Try again</button></div></div>';
@@ -1456,7 +1595,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
         if (s.users) stats += '<div class="stat"><b>' + pct(s.lux, s.users) + '%</b><span>of skincare users use at least one luxury skincare brand.</span></div>';
         stats += '<div class="stat"><b>' + pct(s.omoggle, n) + '%</b><span>have heard of or used Omoggle.</span></div>';
         stats += '<div class="stat"><b>' + pct(s.facecard, n) + '%</b><span>are interested or very interested in Face Card.</span></div>';
-        stats += '<div class="stat"><b>' + pct(s.in_store, n) + '%</b><span>buy fragrance in stores at least sometimes.</span></div>';
+        stats += '<div class="stat"><b>' + pct(s.owns, n) + '%</b><span>own a fragrance.</span></div>';
       } else stats += '<p class="mini">Comparisons show up once 5 people have finished.</p>';
     }
     var rows = glance(rec).concat(skinGlance(rec), fragGlance(rec));
@@ -1472,9 +1611,12 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
       '<div class="col">' +
         '<div><p class="label">All done · Thank you</p><h1 class="q-title">How your answers compare</h1></div>' +
         '<div class="stats">' + stats + '</div>' +
-        '<div class="share"><h2 class="h2">Passing this on?</h2><p>Start a fresh survey for the next person.' + (s ? ' Your answers are already saved.' : '') + '</p>' +
-          '<button class="btn primary" id="again">Start a new response</button><p class="mini" id="resetNote"></p></div>' +
+        (TEST_MODE
+          ? '<div class="share"><h2 class="h2">Testing?</h2><p>Test mode lets you go again. Once the survey is live, each computer can only take it once.</p>' +
+            '<button class="btn primary" id="again">Start a new response</button><p class="mini" id="resetNote"></p></div>'
+          : '<div class="share"><h2 class="h2">You’re all set</h2><p>Your answers are saved. Thanks for helping with our research!</p></div>') +
       '</div></div>';
+    if (!TEST_MODE) { toTop(); return; }
     document.getElementById('again').addEventListener('click', renderIntro);
     var left = RESET_SECONDS, note = document.getElementById('resetNote');
     (function tick() {
@@ -1494,10 +1636,10 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     if (q.type === 'interlude' || q.type === 'draw') return;
     if (q.type === 'about') { REPORT.push({ id: 'age', part: 0, label: 'Age', options: AGES }, { id: 'gender', part: 0, label: 'Gender', options: GENDERS }); return; }
     if (q.type === 'pairs') { q.pairs.forEach(function (p) { REPORT.push({ id: p.id, part: 1, label: 'Which best describes you: ' + p.q.toLowerCase(), options: [p.a.v, p.b.v] }); }); return; }
-    var r = { id: q.id, part: part, label: plainTitle(q), options: q.options && typeof q.options !== 'function' ? optList(q).map(function (o) { return o.v; }) : [], other: !!q.other, multi: q.type === 'cardsMulti' || q.type === 'chipsMulti', type: q.type };
+    var r = { id: q.id, part: part, label: plainTitle(q), options: q.options && typeof q.options !== 'function' ? optList(q).map(function (o) { return o.v; }) : [], others: othersOf(q), multi: q.type === 'cardsMulti' || q.type === 'chipsMulti', type: q.type };
     if (q.type === 'concept') { r.label = 'Would try the 10-second concealer stick'; r.options = SCALE.map(function (s, i) { return String(i + 1); }); r.fmt = function (v) { return v + ' · ' + SCALE[v - 1]; }; }
     if (q.type === 'slider') { r.numeric = true; r.fmt = function (v) { return '$' + v + (Number(v) >= q.max ? '+' : ''); }; }
-    if (q.type === 'text') r.textOnly = true;
+    if (q.type === 'text' || q.type === 'short') r.textOnly = true;
     REPORT.push(r);
   });
 
@@ -1592,7 +1734,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
         (Array.isArray(v) ? v : [v]).forEach(function (x) { x = String(x); if (order.indexOf(x) === -1) order.push(x); counts[x] = (counts[x] || 0) + 1; });
       });
       if (q.numeric) order.sort(function (a, b) { return a - b; });
-      var others = got.map(function (r) { return r[q.id + '_other']; }).filter(Boolean);
+      var others = []; (q.others || []).forEach(function (o) { got.forEach(function (r) { if (r[q.id + o[1]]) others.push((o[0] === 'Other' ? '' : o[0] + ': ') + r[q.id + o[1]]); }); });
       html += section(q.label, order, counts, got.length, q.multi, q.fmt, others);
     });
     screen.innerHTML = html + '</div>';
@@ -1614,14 +1756,14 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
         var c = counts[o] || 0;
         return '<li><span class="nm"><span>' + esc(fmt ? fmt(o) : o) + '</span><span class="bar"><i style="width:' + Math.round(c / max * 100) + '%"></i></span></span><span class="n">' + c + ' · ' + pct(c, total) + '%</span></li>';
       }).join('') + '</ol>' : '') +
-      (others.length ? '<ul class="others">' + others.map(function (t) { return '<li>Other: ' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
+      (others.length ? '<ul class="others">' + others.map(function (t) { return '<li>' + (/^Other (online|in-person) store: /.test(t) ? '' : 'Other: ') + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
     '</div>';
   }
   function exportCsv() {
     var cols = ['submitted', 'seconds', 'section_order', 'attention_ok', 'makeup_path', 'makeup_type', 'skincare_type', 'fragrance_type'], heads = cols.slice();
     REPORT.forEach(function (q) {
       cols.push(q.id); heads.push(q.id + ': ' + q.label);
-      if (q.other) { cols.push(q.id + '_other'); heads.push(q.id + ': other (text)'); }
+      (q.others || []).forEach(function (o) { cols.push(q.id + o[1]); heads.push(q.id + ': ' + o[0].toLowerCase() + ' (text)'); });
     });
     function cell(v) {
       var s = v == null ? '' : Array.isArray(v) ? v.join('; ') : String(v);
@@ -1643,6 +1785,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
     else renderIntro();
   }
   if (TEST_MODE) document.getElementById('testBand').hidden = false;
+  loadTally();
   window.addEventListener('hashchange', route);
   route();
 })();
