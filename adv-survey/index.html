@@ -396,6 +396,25 @@ body{font-family:var(--sans);background:
 .login .nav{margin-top:8px}
 .foot .login-link{font-weight:500;text-decoration:none;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
 .foot .login-link:hover{border-color:var(--accent);color:var(--accent)}
+.draw-title{font-size:clamp(44px,6.5vw,68px)}
+.draw-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px}
+.slot{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px 12px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:200px;text-align:center}
+.slot-n{font-size:14px;font-weight:500;color:var(--ink-2)}
+.slot-ico svg{width:68px;height:68px;display:block}
+.slot-name{font-family:var(--serif);font-size:30px;font-weight:500;line-height:1.1;min-height:1.1em}
+.slot.spinning .slot-name{color:var(--ink-2)}
+.slot.set{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent),var(--shadow);animation:pop .4s cubic-bezier(.2,.7,.2,1)}
+.slot.set .slot-n{color:var(--accent)}
+@keyframes pop{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+@media (max-width:520px){.slot{min-height:160px;padding:16px 6px}.slot-name{font-size:21px}.slot-ico svg{width:52px;height:52px}.draw-slots{gap:8px}}
+.pitch{display:grid;gap:22px}
+.fc-card{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px}
+.fc-art svg{width:100%;height:auto;display:block}
+.fc-kicker{margin:0;font-size:14px;font-weight:500;color:var(--accent)}
+.fc-name{font-family:var(--serif);font-weight:500;font-size:38px;line-height:1;margin:4px 0 10px}
+.fc-body p{margin:0 0 10px;color:#4A3C36}
+.fc-list{margin:0;padding-left:18px;color:#4A3C36;display:grid;gap:5px;font-size:15px}
+@media (max-width:560px){.fc-card{grid-template-columns:96px 1fr;gap:14px;padding:16px}.fc-name{font-size:30px}.fc-list{font-size:14px}}
 .test-band{background:var(--accent);color:#fff;text-align:center;font-size:14px;font-weight:500;letter-spacing:.02em;padding:7px 16px}
 .fade{animation:fade .35s cubic-bezier(.2,.7,.2,1) both}
 </style>
@@ -663,16 +682,8 @@ body{font-family:var(--sans);background:
   function lux() { return (A.s_brands || []).filter(function (b) { return LUXURY.indexOf(b) !== -1; }); }
 
   /* ---------- Part 3: fragrance (ScentCheck) ---------- */
-    var OTHER = 'Other';
-  var BLIND_YES = 'Yes', BLIND_NO = 'No';
-  var NO_SHOP = 'I would likely not shop for a fragrance';
-  var ONLINE = ['Amazon', 'TikTok', 'Instagram', 'Other online'];
-  var TRUST = ['Not at all', 'A little', 'Somewhat', 'Mostly', 'Completely'];
-  var BOUGHT_YES = 'Yes', BOUGHT_NO = 'No, not yet';
-  var STORES = ['Gyms', 'Pop-up shop', 'Amazon', 'Retail stores', 'Sephora', 'Ulta', 'TikTok', 'Instagram', 'Other online', 'Other'];
-  var STORE_PRICES = ['$50', '$100', '$150', '$200+'];
-  function boughtYes() { return A.bought === BOUGHT_YES; }
-  function boughtNo() { return A.bought === BOUGHT_NO; }
+var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN = ['Yes, usually', 'Sometimes'];
+  var FC_SCALE = ['Not at all', 'Not really', 'Maybe', 'Interested', 'Very interested'];
 
   var Q = [
         { id: 'about', type: 'about', label: 'About you', title: 'A little about you' },
@@ -779,7 +790,7 @@ body{font-family:var(--sans);background:
       title: function () { var l = lux(); return l.length === 1 ? 'Why do you use ' + esc(l[0]) + '?' : 'Why do you use those luxury brands?'; }, help: 'Select all that apply.',
       options: ['It actually works', 'It was a gift', 'A parent uses it', 'I saw it online', 'The packaging or status', 'Other'] },
     { id: 's_video', type: 'chips', part: 2, stack: true, label: 'Discovery', title: 'Have you ever bought skincare because of a video you saw?',
-      show: function () { return isSU() && (has(A.discover, 'TikTok') || has(A.discover, 'Instagram') || has(A.discover, 'YouTube')); },
+      show: isSU,
       options: ['Yes, more than once', 'Once', 'No'] },
 
     /* everyone */
@@ -796,26 +807,26 @@ body{font-family:var(--sans);background:
       options: [OM_NO, OM_HEARD, OM_USED] },
     { id: 'omoggle_why', type: 'chipsMulti', part: 2, stack: true, show: function () { return A.omoggle === OM_HEARD; }, label: 'Appearance-scoring apps', title: 'Why haven’t you tried it?', help: 'Select all that apply.',
       options: ['Not interested', 'I don’t want to be rated', 'It seems mean or toxic', 'Never got around to it'] },
-    { id: 'omoggle_acc', type: 'scale', part: 2, show: function () { return A.omoggle === OM_USED; }, label: 'Appearance-scoring apps', title: 'How accurate do you think the score Omoggle gave you was?', options: ACCURACY },
-    { id: 'omoggle_change', type: 'chips', part: 2, stack: true, show: function () { return A.omoggle === OM_USED; }, label: 'Appearance-scoring apps', title: 'Did your score make you change anything about your routine?',
-      options: ['Yes, I changed my routine', 'I thought about it', 'No'] },
+    { id: 'facecard', type: 'scale', part: 2, label: 'A new idea', title: 'Would you use Face Card?', card: function () { return faceCardCard(); }, ask: 'How interested would you be?',
+      options: FC_SCALE },
 
     { id: 'sec3', type: 'interlude', part: 3 },
-        { part: 3, id: 'bought', type: 'chips', label: 'Your purchases', title: 'Have you ever bought a fragrance yourself?', options: [BOUGHT_YES, BOUGHT_NO] },
+{ id: 'f_first', type: 'chips', part: 3, stack: true, other: true, label: 'First experience', title: 'Where did you first experience fragrance?',
+      options: ['A family member’s fragrance', 'A friend’s fragrance', 'In a store, like Sephora, Ulta or a department store', 'A free sample or tester', 'A fragrance I got as a gift', 'An ad or magazine sample', 'I can’t remember', 'Other'] },
+    { id: 'f_ads', type: 'chipsMulti', part: 3, other: true, label: 'Ads', title: 'Where do you see ads the most?', help: 'Select all that apply.',
+      options: ['TikTok', 'Instagram', 'YouTube', 'Snapchat', 'TV or streaming', 'Billboards or subway ads', 'In stores', 'Other'] },
+    { id: 'f_confident', type: 'chipsMulti', part: 3, stack: true, other: true, exclusive: [F_NONE], label: 'Confidence', title: 'What makes you feel confident when you wear a fragrance?', help: 'Select all that apply.',
+      options: ['Getting compliments', F_ME, 'It lasts all day', 'It’s a brand I trust', 'My friends like it', 'It matches my style or outfit', F_NONE, 'Other'] },
+    { id: 'f_shop_with', type: 'chips', part: 3, stack: true, other: true, label: 'Shopping', title: 'Would you rather shop for fragrance with friends or on your own?',
+      options: ['With friends', 'On my own', 'It doesn’t matter', 'Other'] },
+    { id: 'f_hesitate', type: 'chipsMulti', part: 3, stack: true, other: true, exclusive: ['Nothing, I like going in'], label: 'Shopping', title: 'What makes you hesitate to go into a store to buy fragrance?', help: 'Select all that apply.',
+      options: ['Pushy salespeople', 'Too many choices', 'Prices are too high', 'I don’t know what I’d like', 'Smelling too many scents at once', 'It’s easier to buy online', 'Nothing, I like going in', 'Other'] },
+    { id: 'f_in_store', type: 'chips', part: 3, stack: true, label: 'In stores', title: 'Do you buy fragrances in stores?',
+      options: ['Yes, usually', 'Sometimes', 'No, only online', 'I don’t buy fragrance'] },
+    { id: 'f_stores', type: 'chipsMulti', part: 3, other: true, show: function () { return F_IN.indexOf(A.f_in_store) !== -1; }, label: 'In stores', title: 'Which stores do you buy fragrance from?', help: 'Select all that apply.',
+      options: ['Sephora', 'Ulta', 'Macy’s', 'Nordstrom', 'Bloomingdale’s', 'Saks Fifth Avenue', 'A brand’s own store, like Dior or Chanel', 'Drugstores or Target', 'Other'] },
 
-    /* people who have bought one */
-    { part: 3, id: 'spend', type: 'chips', show: boughtYes, label: 'Your purchases', title: 'How much are you willing to spend on a fragrance?', options: STORE_PRICES },
-    { part: 3, id: 'bought_why', type: 'chipsMulti', other: true, show: boughtYes, label: 'Your purchases', title: 'Why did you buy it?', help: 'Select all that apply.',
-      options: ['To wear every day', 'For a special occasion', 'As a gift for someone', 'I liked it when I smelled it in person', 'A friend recommended it', 'I saw it on TikTok or Instagram', 'A celebrity or ad campaign', 'It was on sale', OTHER] },
-    { part: 3, id: 'bought_where', type: 'chipsMulti', other: true, show: boughtYes, label: 'Your purchases', title: 'Where did you buy it?', help: 'Select all that apply.', options: STORES },
-
-    /* people who haven't */
-    { part: 3, id: 'not_why', type: 'chipsMulti', other: true, show: boughtNo, label: 'Your purchases', title: 'Why haven’t you bought a fragrance?', help: 'Select all that apply.',
-      options: ['It’s too expensive', 'Someone else buys it for me', 'I don’t wear fragrance', 'I don’t know what I’d like', 'I can’t smell it before buying online', 'I’ve never really thought about it', OTHER] },
-    { part: 3, id: 'no_where', type: 'chipsMulti', other: true, show: boughtNo, label: 'Your purchases', title: 'If you were to buy a fragrance, where would you buy it from?', help: 'Select all that apply.', options: STORES },
-    { part: 3, id: 'no_price', type: 'chips', show: boughtNo, label: 'Your purchases', title: 'And at what price?', help: 'The most you’d spend on one fragrance.', options: STORE_PRICES },
-
-    /* wrapping up (from Face Value, moved to the end of all three parts) */
+    /* wrapping up: always last, after whichever section was drawn last */
     { id: 'grade', type: 'chips', part: 0, label: 'About you', title: 'What grade are you in?', options: ['9th grade', '10th grade', '11th grade', '12th grade'] },
     { id: 'wish', type: 'text', part: 4, optional: true, label: 'Your ideas', title: 'What do you wish makeup, skincare or fragrance did that nothing does right now?', help: 'Optional. Think about how it works, how it’s packaged or how it’s sold.' }
   ];
@@ -826,16 +837,31 @@ body{font-family:var(--sans);background:
   (function () {
     var i = Q.indexOf(byIdRaw('grade')); Q.splice(1, 0, Q.splice(i, 1)[0]);
     Q.unshift({ id: 'sec0', type: 'interlude', part: 0 });
-    Q.splice(3, 0, { id: 'sec1', type: 'interlude', part: 1 });
+    Q.splice(3, 0, { id: 'draw', type: 'draw', part: 0 }, { id: 'sec1', type: 'interlude', part: 1 });
   })();
   Q.forEach(function (q) { if (q.id === 'about') q.part = 0; if (q.part == null) q.part = 1; if (q.groups) q.options = q.groups.reduce(function (a, g) { return a.concat(g.options); }, []); });
+
+  /* random section order: Background first, then makeup / skincare / fragrance in a drawn order, then the last question */
+  var SEC_NAMES = { 1: 'Makeup', 2: 'Skincare', 3: 'Fragrance' }, SEC_ICONS = { 1: 'lipstick', 2: 'dropper', 3: 'perfume' };
+  var HEAD = Q.filter(function (q) { return q.part === 0; }), TAIL = Q.filter(function (q) { return q.part === 4; }), BLOCKS = {};
+  [1, 2, 3].forEach(function (p) { BLOCKS[p] = Q.filter(function (q) { return q.part === p; }); });
+  var drawOrder = null, drawTimers = [];
+  function applyOrder(order) {
+    var next = HEAD.slice();
+    order.forEach(function (p) { next = next.concat(BLOCKS[p]); });
+    next = next.concat(TAIL);
+    Q.length = 0; next.forEach(function (q) { Q.push(q); });
+    var segs = document.getElementById('segs');
+    [0].concat(order).forEach(function (p) { segs.appendChild(segs.querySelector('.seg[data-p="' + p + '"]')); });
+  }
+  function segOf(q) { return q.part === 4 ? (drawOrder ? drawOrder[2] : 3) : q.part; }
 
   function byId(id) { for (var i = 0; i < Q.length; i++) if (Q[i].id === id) return Q[i]; return null; }
   function shown() { return Q.filter(function (q) { return !q.show || q.show(); }); }
   function optList(q) { var o = typeof q.options === 'function' ? q.options() : (q.options || []); return o.map(function (x) { return typeof x === 'string' ? { v: x } : x; }); }
   function titleOf(q) { return typeof q.title === 'function' ? q.title() : esc(q.title); }
   function answered(q) {
-    if (q.type === 'interlude') return true;
+    if (q.type === 'interlude' || q.type === 'draw') return true;
     if (q.type === 'pairs') return q.pairs.every(function (p) { return A[p.id] != null; });
     if (q.type === 'about') return A.age != null && A.gender != null;
     var v = A[q.id];
@@ -844,14 +870,14 @@ body{font-family:var(--sans);background:
   }
   function nextOf(q) { var v = shown(); return v[v.indexOf(q) + 1] || null; }
   /* one sub-bar per section; the optional last question counts toward Fragrance */
-  var SEG_EST = { 1: 18, 2: 13, 3: 5 };
+  var SEG_EST = { 1: 18, 2: 14, 3: 7 };
   function progress(final) {
-    var v = shown().filter(function (q) { return q.type !== 'interlude'; });
+    var v = shown().filter(function (q) { return q.type !== 'interlude' && q.type !== 'draw'; });
     document.querySelectorAll('#segs .seg').forEach(function (el) {
       var p = Number(el.getAttribute('data-p'));
-      var qs = v.filter(function (q) { return Math.min(q.part, 3) === p; });
+      var qs = v.filter(function (q) { return segOf(q) === p; });
       var done = qs.filter(function (q) { return trail.indexOf(q.id) !== -1; }).length, total = qs.length;
-      var known = p === 0 || (p === 1 ? !!A.freq : p === 2 ? !!A.s_freq : !!A.bought);
+      var known = p === 0 || (p === 1 ? !!A.freq : p === 2 ? !!A.s_freq : !!A.f_in_store);
       if (!known) total = Math.max(total, SEG_EST[p]);
       el.querySelector('i').style.width = (final ? 100 : total ? Math.round(done / total * 100) : 0) + '%';
       el.querySelector('.seg-n').textContent = final ? 'Done' : known ? done + '/' + total : '';
@@ -875,8 +901,8 @@ body{font-family:var(--sans);background:
         '<div>' +
           '<p class="label">Greenwich Country Day School · Student research</p>' +
           '<h1 class="intro-title">ADV Applied Economics + Engineering <em>Survey</em></h1>' +
-          '<p class="lede">We’re students at Greenwich Country Day School researching what people our age want from makeup, skincare and fragrance. Guys, girls, everyone: whether you have a full routine or have never touched any of it, your answers count the same. The survey is <strong>anonymous</strong>, and we don’t collect names or emails.</p>' +
-          '<p class="time-est"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>About 8 minutes</p>' +
+          '<p class="lede">The survey is <strong>anonymous</strong>, and we don’t collect names or emails.</p>' +
+          '<p class="time-est"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>About 9 minutes</p>' +
           '<div class="sections-bar" role="list" aria-label="Survey sections"><span role="listitem">Background</span><span role="listitem">Makeup</span><span role="listitem">Skincare</span><span role="listitem">Fragrance</span></div>' +
           '<button class="btn primary" id="start">Start the survey</button>' +
           '<p class="fine">Answers save when you finish all four sections.</p>' +
@@ -884,7 +910,7 @@ body{font-family:var(--sans);background:
         '<div class="art">' + mixArt() + '</div>' +
       '</div>';
     document.getElementById('start').addEventListener('click', function () {
-      A = {}; trail = []; t0 = Date.now();
+      A = {}; trail = []; t0 = Date.now(); drawOrder = null;
       render(Q[0]);
     });
     toTop();
@@ -893,9 +919,11 @@ body{font-family:var(--sans);background:
   function chip(v, on) { return '<button class="chip" data-v="' + esc(v) + '" aria-pressed="' + !!on + '">' + esc(v) + '</button>'; }
 
   function render(q) {
-    setView('q'); setStep(Math.min(q.part, 3));
+    drawTimers.forEach(clearTimeout); drawTimers = [];
+    setView('q'); setStep(segOf(q));
     if (q.type === 'interlude') return renderInterlude(q);
-    var partList = shown().filter(function (x) { return x.part === q.part && x.type !== 'interlude'; });
+    if (q.type === 'draw') return renderDraw(q);
+    var partList = shown().filter(function (x) { return x.part === q.part && x.type !== 'interlude' && x.type !== 'draw'; });
     var n = partList.indexOf(q) + 1;
     var body = '', needsNext = true, opts = optList(q);
 
@@ -951,9 +979,10 @@ body{font-family:var(--sans);background:
           }).join('') + '</div></div></div>';
         break;
       case 'scale':
-        body = '<div class="scale">' + q.options.map(function (s, i) {
-          return '<button data-v="' + esc(s) + '" aria-pressed="' + (A[q.id] === s) + '"><b>' + (i + 1) + '</b>' + esc(s) + '</button>';
-        }).join('') + '</div>';
+        body = (q.card ? '<div class="pitch">' + q.card() + '<div><p class="label">' + esc(q.ask || 'Pick one') + '</p>' : '') +
+          '<div class="scale">' + q.options.map(function (s, i) {
+            return '<button data-v="' + esc(s) + '" aria-pressed="' + (A[q.id] === s) + '"><b>' + (i + 1) + '</b>' + esc(s) + '</button>';
+          }).join('') + '</div>' + (q.card ? '</div></div>' : '');
         break;
       case 'brand':
         body = '<div class="stack-gap"><input class="field" id="brandIn" type="text" maxlength="60" autocomplete="off" placeholder="Brand name" value="' + esc(A.w_brand && A.w_brand !== 'No go-to brand' ? A.w_brand : '') + '" aria-label="Brand name">' +
@@ -992,17 +1021,74 @@ body{font-family:var(--sans);background:
             blurb: 'A couple of quick questions about you, so we can compare answers across grades.' },
     sec1: { n: 2, name: 'Makeup', count: 'Up to 18 questions', time: 'About 3 minutes', art: function () { return makeupArt(); },
             blurb: 'What you wear (or don’t), why, what you’d pay, and a new product idea we want your honest take on.' },
-    sec2: { n: 3, name: 'Skincare', count: 'Up to 15 questions', time: 'About 3 minutes', art: function () { return skinArt(); },
+    sec2: { n: 3, name: 'Skincare', count: 'Up to 14 questions', time: 'About 3 minutes', art: function () { return skinArt(); },
             blurb: 'What you put on your skin, where you buy it and what you think of luxury brands.' },
-    sec3: { n: 4, name: 'Fragrance', count: '5 questions', time: 'About a minute', art: function () { return fragArt(); },
-            blurb: 'Whether you’ve bought a fragrance, where and for how much. The very last question is optional.' }
+    sec3: { n: 4, name: 'Fragrance', count: 'Up to 7 questions', time: 'About 2 minutes', art: function () { return fragArt(); },
+            blurb: 'Where you first came across fragrance, where you see ads, what makes you feel confident and how you like to shop.' }
   };
   var ICO_LIST = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5h7M5.5 8h7M5.5 11.5h7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="3" cy="4.5" r="1" fill="currentColor"/><circle cx="3" cy="8" r="1" fill="currentColor"/><circle cx="3" cy="11.5" r="1" fill="currentColor"/></svg>';
   var ICO_TIME = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 5.5v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  function renderDraw(q) {
+    var fresh = !drawOrder;
+    if (fresh) { drawOrder = shuffle([1, 2, 3]); applyOrder(drawOrder); }
+    var calm = false; try { calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { }
+    screen.innerHTML = '<div class="col-q fade interlude draw">' +
+      '<p class="label"><span class="n">The draw</span></p>' +
+      '<h1 class="sec-title draw-title" id="qt" tabindex="-1">Shuffling…</h1>' +
+      '<p class="q-help">Makeup, skincare and fragrance come in a random order for everyone, so no topic always goes first.</p>' +
+      '<div class="draw-slots">' + [0, 1, 2].map(function (i) {
+        return '<div class="slot spinning" id="slot' + i + '"><span class="slot-n">Section ' + (i + 2) + '</span><span class="slot-ico">' + icon('none') + '</span><span class="slot-name">?</span></div>';
+      }).join('') + '</div>' +
+      '<div class="nav"><button class="text-btn" id="back">Back</button><div class="nav-right"><button class="btn primary" id="next" disabled>Start</button></div></div></div>';
+    var title = document.getElementById('qt'), next = document.getElementById('next');
+    document.getElementById('back').addEventListener('click', goBack);
+    next.addEventListener('click', function () { if (!next.disabled) advance(q); });
+    function settle(i) {
+      var el = document.getElementById('slot' + i), p = drawOrder[i]; if (!el) return;
+      el.classList.remove('spinning'); el.classList.add('set');
+      el.querySelector('.slot-name').textContent = SEC_NAMES[p];
+      el.querySelector('.slot-ico').innerHTML = icon(SEC_ICONS[p]);
+    }
+    function done() { title.textContent = 'Your order'; next.disabled = false; next.textContent = 'Start ' + SEC_NAMES[drawOrder[0]].toLowerCase(); }
+    if (!fresh || calm) { [0, 1, 2].forEach(settle); done(); }
+    else {
+      var tick = 0, names = ['Makeup', 'Skincare', 'Fragrance'];
+      var spin = setInterval(function () {
+        tick++;
+        document.querySelectorAll('.slot.spinning .slot-name').forEach(function (el, k) { el.textContent = names[(tick + k) % 3]; });
+      }, 75);
+      drawTimers.push(spin);
+      [0, 1, 2].forEach(function (i) { drawTimers.push(setTimeout(function () { settle(i); }, 1100 + i * 550)); });
+      drawTimers.push(setTimeout(function () { clearInterval(spin); done(); }, 1100 + 2 * 550 + 150));
+    }
+    progress(); toTop();
+    try { title.focus({ preventScroll: true }); } catch (e) { }
+  }
+
+  function faceCardCard() {
+    var art = '<svg viewBox="0 0 200 250" aria-hidden="true" focusable="false">' +
+      '<rect class="c-ink" x="48" y="6" width="104" height="238" rx="20"/><rect class="c-panel" x="55" y="15" width="90" height="220" rx="14"/>' +
+      '<path class="c-t6" d="M70 86c0-26 14-40 30-40s30 14 30 40c-6-12-16-17-30-17s-24 5-30 17z"/>' +
+      '<ellipse class="c-t2" cx="100" cy="96" rx="27" ry="34"/>' +
+      '<path d="M66 60v-8h8M134 60v-8h-8M66 132v8h8M134 132v8h-8" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<rect x="62" y="100" width="76" height="2.5" rx="1.2" style="fill:var(--accent);opacity:.85"/>' +
+      '<rect x="72" y="150" width="56" height="32" rx="16" style="fill:var(--accent)"/>' +
+      '<text x="100" y="172" text-anchor="middle" style="font:600 19px var(--sans);fill:#fff">84</text>' +
+      '<text x="100" y="200" text-anchor="middle" style="font:500 11px var(--sans);fill:var(--ink-2)">glazed · lv 12</text>' +
+      '<rect class="c-line" x="70" y="210" width="60" height="5" rx="2.5"/><rect x="70" y="210" width="38" height="5" rx="2.5" style="fill:var(--rose3)"/>' +
+    '</svg>';
+    return '<div class="fc-card"><div class="fc-art">' + art + '</div><div class="fc-body">' +
+      '<p class="fc-kicker">An app our team is building</p><h3 class="fc-name">Face Card</h3>' +
+      '<p>Look at your phone’s camera and it scans your skin live, zone by zone. Nothing gets uploaded.</p>' +
+      '<ul class="fc-list"><li>A score out of 100, your rank and your skin age</li><li>A simple skincare routine to raise your score</li>' +
+      '<li>XP and 25 levels for scanning and showing up</li><li>Live duels: you and a friend scan for 30 seconds and the higher score wins</li></ul>' +
+    '</div></div>';
+  }
+
   function renderInterlude(q) {
-    var s = SECTIONS[q.id];
+    var s = SECTIONS[q.id], num = q.id === 'sec0' ? 1 : 2 + (drawOrder ? drawOrder.indexOf(q.part) : q.part - 1);
     screen.innerHTML = '<div class="col-q fade interlude">' +
-      '<p class="label"><span class="n">Section ' + s.n + ' of 4</span></p>' +
+      '<p class="label"><span class="n">Section ' + num + ' of 4</span></p>' +
       '<h1 class="sec-title" id="qt" tabindex="-1">' + s.name + '</h1>' +
       '<div class="sec-meta"><span>' + ICO_LIST + s.count + '</span><span>' + ICO_TIME + s.time + '</span></div>' +
       '<p class="q-help">' + s.blurb + '</p>' +
@@ -1204,34 +1290,32 @@ body{font-family:var(--sans);background:
   }
 
   /* ---------- scent profile (ScentCheck) ---------- */
-    var F_TYPES = {
-    pass: ['Fragrance-Free', 'You’d rather skip the fragrance aisle. That’s useful to know too.'],
-    luxe: ['Luxe Collector', 'You’re ready to spend real money on the right bottle.'],
-    soon: ['Not Yet', 'You haven’t bought one yet, but you already know where you’d look.'],
-    gifted: ['Gifted Collection', 'Your fragrances mostly come from the people around you.'],
-    online: ['Click to Cart', 'You’d buy a scent online without smelling it first.'],
-    sniff: ['Smell First', 'A fragrance has to win you over in person before it comes home.'],
-    explorer: ['Scent Explorer', 'You’re open to finding fragrance in all kinds of places.']
+  var F_TYPES = {
+    sig: ['Signature Scent', 'You wear fragrance to feel like yourself.'],
+    comp: ['Compliment Collector', 'You like a scent people notice.'],
+    loyal: ['Loyal Wearer', 'You find something that lasts and stick with it.'],
+    style: ['Outfit Matcher', 'Your scent is part of the look.'],
+    explore: ['Scent Explorer', 'You’re still figuring out what you like.'],
+    none: ['Not Yet Scented', 'Fragrance isn’t part of your routine, at least not yet.']
   };
   function fragType() {
-    var k, nw = A.not_why || [], bw = A.bought_where || [], online = function (w) { return ONLINE.indexOf(w) !== -1; };
-    if (boughtNo()) {
-      if (has(nw, 'I don’t wear fragrance')) k = 'pass';
-      else if (has(nw, 'Someone else buys it for me')) k = 'gifted';
-      else k = 'soon';
-    } else if (A.spend === '$150' || A.spend === '$200+') k = 'luxe';
-    else if (bw.length && bw.every(online)) k = 'online';
-    else if (has(A.bought_why, 'I liked it when I smelled it in person')) k = 'sniff';
-    else k = 'explorer';
+    var c = A.f_confident || [], k;
+    if (has(c, F_NONE)) k = 'none';
+    else if (has(c, F_ME)) k = 'sig';
+    else if (has(c, 'Getting compliments') || has(c, 'My friends like it')) k = 'comp';
+    else if (has(c, 'It lasts all day') || has(c, 'It’s a brand I trust')) k = 'loyal';
+    else if (has(c, 'It matches my style or outfit')) k = 'style';
+    else k = 'explore';
     return { key: k, name: F_TYPES[k][0], line: F_TYPES[k][1] };
   }
-  function fragList(a, id) { return (a[id] || []).map(function (x) { return x === OTHER && a[id + '_other'] ? a[id + '_other'] : x; }).slice(0, 2).join(', '); }
+  function firstTwo(a, id) { return (a[id] || []).map(function (x) { return x === 'Other' && a[id + '_other'] ? a[id + '_other'] : x; }).slice(0, 2).join(', '); }
   function fragGlance(a) {
-    var rows = [['Bought a fragrance', a.bought]];
-    if (a.spend) rows.push(['Would spend', a.spend]);
-    if (a.bought_where) rows.push(['Bought it at', fragList(a, 'bought_where')]);
-    if (a.not_why) rows.push(['Why not yet', fragList(a, 'not_why')]);
-    if (a.no_price) rows.push(['Would spend', a.no_price]);
+    var rows = [];
+    if (a.f_first) rows.push(['First fragrance', a.f_first === 'Other' && a.f_first_other ? a.f_first_other : a.f_first]);
+    if (a.f_ads) rows.push(['Sees ads on', firstTwo(a, 'f_ads')]);
+    if (a.f_shop_with) rows.push(['Shops for fragrance', a.f_shop_with]);
+    if (a.f_in_store) rows.push(['Buys in stores', a.f_in_store]);
+    if (a.f_stores) rows.push(['Stores', firstTwo(a, 'f_stores')]);
     return rows;
   }
 
@@ -1239,7 +1323,7 @@ body{font-family:var(--sans);background:
   function collect() {
     var out = {};
     shown().forEach(function (q) {
-      if (q.type === 'interlude') return;
+      if (q.type === 'interlude' || q.type === 'draw') return;
       if (q.type === 'pairs') { q.pairs.forEach(function (p) { if (A[p.id] != null) out[p.id] = A[p.id]; }); return; }
       if (q.type === 'about') { out.age = A.age; out.gender = A.gender; return; }
       var v = A[q.id];
@@ -1261,12 +1345,15 @@ body{font-family:var(--sans);background:
       makeup_path: isW() ? 'Wears makeup' : isL() ? 'Stopped' : 'Never',
       makeup_type: mt.name,
       skincare_type: st.name,
-      fragrance_type: ft.name
+      fragrance_type: ft.name,
+      section_order: drawOrder ? drawOrder.map(function (p) { return SEC_NAMES[p]; }).join(' > ') : ''
     }, a);
     // simple yes/no flags so the Sheet can work out the comparison stats without the survey's code
     rec.would_try_concept = Number(a.concept_try) >= 4 ? 'yes' : 'no';
     rec.luxury_user = Array.isArray(a.s_brands) ? (a.s_brands.some(function (b) { return LUXURY.indexOf(b) !== -1; }) ? 'yes' : 'no') : '';
     rec.omoggle_aware = a.omoggle && a.omoggle !== OM_NO ? 'yes' : 'no';
+    rec.facecard_yes = FC_SCALE.indexOf(a.facecard) >= 3 ? 'yes' : 'no';
+    rec.buys_in_store = F_IN.indexOf(a.f_in_store) !== -1 ? 'yes' : 'no';
     if (TEST_MODE) return renderResult(rec, mt, st, ft, null);
     if (!LIVE) { var all = loadAll(); all.push(rec); saveAll(all); return renderResult(rec, mt, st, ft, summarize(all, rec)); }
     sendToSheet(rec, mt, st, ft);
@@ -1275,7 +1362,7 @@ body{font-family:var(--sans);background:
     function c(f) { return all.filter(f).length; }
     return { n: all.length, freq: c(function (x) { return x.freq === rec.freq; }), s_freq: c(function (x) { return x.s_freq === rec.s_freq; }),
       concept: c(function (x) { return x.would_try_concept === 'yes'; }), users: c(function (x) { return x.luxury_user === 'yes' || x.luxury_user === 'no'; }),
-      lux: c(function (x) { return x.luxury_user === 'yes'; }), omoggle: c(function (x) { return x.omoggle_aware === 'yes'; }), bought: c(function (x) { return x.bought === BOUGHT_YES; }) };
+      lux: c(function (x) { return x.luxury_user === 'yes'; }), omoggle: c(function (x) { return x.omoggle_aware === 'yes'; }), facecard: c(function (x) { return x.facecard_yes === 'yes'; }), in_store: c(function (x) { return x.buys_in_store === 'yes'; }) };
   }
   function sendToSheet(rec, mt, st, ft) {
     setView('result'); setStep(-1); progress(true);
@@ -1304,7 +1391,8 @@ body{font-family:var(--sans);background:
         stats += '<div class="stat"><b>' + pct(s.concept, n) + '%</b><span>would probably or definitely try the concealer stick. You said <q>' + esc(SCALE[(rec.concept_try || 1) - 1]) + '</q>.</span></div>';
         if (s.users) stats += '<div class="stat"><b>' + pct(s.lux, s.users) + '%</b><span>of skincare users use at least one luxury skincare brand.</span></div>';
         stats += '<div class="stat"><b>' + pct(s.omoggle, n) + '%</b><span>have heard of or used Omoggle.</span></div>';
-        stats += '<div class="stat"><b>' + pct(s.bought, n) + '%</b><span>have bought a fragrance themselves.</span></div>';
+        stats += '<div class="stat"><b>' + pct(s.facecard, n) + '%</b><span>are interested or very interested in Face Card.</span></div>';
+        stats += '<div class="stat"><b>' + pct(s.in_store, n) + '%</b><span>buy fragrance in stores at least sometimes.</span></div>';
       } else stats += '<p class="mini">Comparisons show up once 5 people have finished.</p>';
     }
     var rows = glance(rec).concat(skinGlance(rec), fragGlance(rec));
@@ -1339,7 +1427,7 @@ body{font-family:var(--sans);background:
   var REPORT = [];
   Q.forEach(function (q) {
     var part = q.part;
-    if (q.type === 'interlude') return;
+    if (q.type === 'interlude' || q.type === 'draw') return;
     if (q.type === 'about') { REPORT.push({ id: 'age', part: 0, label: 'Age', options: AGES }, { id: 'gender', part: 0, label: 'Gender', options: GENDERS }); return; }
     if (q.type === 'pairs') { q.pairs.forEach(function (p) { REPORT.push({ id: p.id, part: 1, label: 'Which best describes you: ' + p.q.toLowerCase(), options: [p.a.v, p.b.v] }); }); return; }
     var r = { id: q.id, part: part, label: plainTitle(q), options: q.options && typeof q.options !== 'function' ? optList(q).map(function (o) { return o.v; }) : [], other: !!q.other, multi: q.type === 'cardsMulti' || q.type === 'chipsMulti', type: q.type };
@@ -1466,7 +1554,7 @@ body{font-family:var(--sans);background:
     '</div>';
   }
   function exportCsv() {
-    var cols = ['submitted', 'seconds', 'attention_ok', 'makeup_path', 'makeup_type', 'skincare_type', 'fragrance_type'], heads = cols.slice();
+    var cols = ['submitted', 'seconds', 'section_order', 'attention_ok', 'makeup_path', 'makeup_type', 'skincare_type', 'fragrance_type'], heads = cols.slice();
     REPORT.forEach(function (q) {
       cols.push(q.id); heads.push(q.id + ': ' + q.label);
       if (q.other) { cols.push(q.id + '_other'); heads.push(q.id + ': other (text)'); }
