@@ -428,6 +428,33 @@ body{font-family:var(--sans);background:
 .win.grow{inset:auto;border-radius:0;transition:left 1.1s cubic-bezier(.65,0,.25,1),top 1.1s cubic-bezier(.65,0,.25,1),width 1.1s cubic-bezier(.65,0,.25,1),height 1.1s cubic-bezier(.65,0,.25,1)}
 .win-in{opacity:0;transition:opacity .3s ease}
 .win.open .win-in{opacity:1}
+.win.open{background:#FFFFFF!important;color:var(--ink)!important;transition:background .6s ease,color .6s ease}
+.route{display:flex;flex-direction:column;align-items:center;gap:52px;width:100%;max-width:900px}
+.route-head{display:flex;flex-direction:column;align-items:center;gap:8px}
+.route-head .win-k{color:var(--accent);opacity:1;font-size:16px;margin:0}
+.route-title{font-family:var(--serif);font-weight:500;font-size:clamp(44px,7vw,66px);line-height:1;margin:0;outline:none}
+.route-title em{color:var(--accent)}
+.route-map{position:relative;width:100%}
+.route-line,.route-done{position:absolute;left:12.5%;top:52px;height:3px;border-radius:3px}
+.route-line{right:12.5%;background:var(--line)}
+.route-done{width:0;background:var(--accent);transition:width .7s cubic-bezier(.2,.7,.2,1) .7s}
+.win.open .route-done{width:25%}
+.route-stops{list-style:none;margin:0;padding:0;position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.route-stops li{display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;opacity:0;transform:translateY(14px);transition:opacity .45s ease var(--d),transform .5s cubic-bezier(.2,.7,.2,1) var(--d)}
+.win.open .route-stops li{opacity:1;transform:none}
+.route-dot{width:106px;height:106px;border-radius:50%;box-sizing:border-box;background:var(--bg);border:2px solid var(--line);display:grid;place-items:center}
+.route-dot svg{width:58px;height:58px}
+.route-stops li.here .route-dot{background:var(--rose1);border:4px solid var(--accent)}
+.route-tag{font-size:12px;font-weight:600;color:var(--ink-2);padding:4px 10px;border-radius:999px}
+.route-stops li.here .route-tag{background:var(--accent);color:#fff}
+.route-name{font-family:var(--serif);font-size:30px;font-weight:500;line-height:1}
+.route-time{font-size:14px;color:var(--ink-2)}
+@media (max-width:640px){
+  .route{gap:36px}
+  .route-dot{width:68px;height:68px}.route-dot svg{width:38px;height:38px}
+  .route-line,.route-done{top:34px}
+  .route-name{font-size:19px}.route-time{font-size:12px}.route-tag{font-size:10px;padding:3px 7px}
+}
 .win-list{list-style:none;margin:6px 0 40px;padding:0;display:grid;gap:6px}
 .win-list li{display:flex;align-items:baseline;justify-content:center;gap:18px;opacity:0;transform:translateY(12px);transition:opacity .45s ease var(--d),transform .45s cubic-bezier(.2,.7,.2,1) var(--d)}
 .win.open .win-list li{opacity:1;transform:none}
@@ -1060,11 +1087,26 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”';
     var w = document.createElement('div');
     w.id = 'win'; w.className = 'win'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-labelledby', 'winK');
     w.style.background = color; w.style.color = ink;
-    var list = ['Background'].concat(drawOrder.map(function (p) { return SEC_NAMES[p]; }));
-    w.innerHTML = '<div class="win-in">' +
-      '<p class="win-k" id="winK">Your order</p>' +
-      '<ol class="win-list">' + list.map(function (n, i) { return '<li style="--d:' + (i * 0.12) + 's"><span class="win-n">' + (i + 1) + '</span><span class="win-name">' + n + '</span></li>'; }).join('') + '</ol>' +
-      '<button class="btn win-go" id="winGo">Proceed to Background</button>' +
+    var ROUTE_ICON = {
+      0: '<rect x="8" y="14" width="48" height="36" rx="6" fill="#fff" stroke="#C9D3E1" stroke-width="2"/><circle cx="22" cy="29" r="6" fill="#C98F6B"/><path d="M13 44c0-6 4-9 9-9s9 3 9 9z" fill="#A26B4A"/><rect x="34" y="24" width="16" height="4" rx="2" fill="#C9D3E1"/><rect x="34" y="32" width="12" height="4" rx="2" fill="#C9D3E1"/>',
+      1: '<rect x="24" y="34" width="16" height="24" rx="2" fill="#1B1B22"/><rect x="25" y="28" width="14" height="8" fill="#B8975F"/><path d="M27 28V14l10-6v20z" fill="#B23A3A"/>',
+      2: '<rect x="28" y="6" width="8" height="14" rx="4" fill="#1B1B22"/><rect x="27" y="19" width="10" height="6" fill="#1B1B22"/><rect x="20" y="25" width="24" height="33" rx="5" fill="#C9A26B"/><rect x="24" y="34" width="16" height="12" rx="1" fill="#fff" opacity=".85"/>',
+      3: '<rect x="27" y="6" width="10" height="9" rx="2" fill="#B8975F"/><rect x="29" y="14" width="6" height="6" fill="#1B1B22"/><rect x="14" y="20" width="36" height="38" rx="8" fill="#E7BFA4"/><rect x="21" y="30" width="22" height="13" rx="1.5" fill="#fff" opacity=".75"/>'
+    };
+    var ROUTE_TIME = { 0: 'Under a minute', 1: 'About 3 minutes', 2: 'About 3 minutes', 3: 'About 2 minutes' };
+    var stops = [0].concat(drawOrder), tags = ['You start here', 'Stop 2', 'Stop 3', 'Finish line'];
+    w.innerHTML = '<div class="win-in route">' +
+      '<div class="route-head"><p class="win-k">About 10 minutes, four stops</p>' +
+      '<h2 class="route-title" id="winK">Here’s your <em>route</em></h2></div>' +
+      '<div class="route-map"><span class="route-line"></span><span class="route-done"></span>' +
+      '<ol class="route-stops">' + stops.map(function (p, i) {
+        return '<li style="--d:' + (0.15 + i * 0.14) + 's"' + (i === 0 ? ' class="here"' : '') + '>' +
+          '<span class="route-dot"><svg viewBox="0 0 64 64" aria-hidden="true">' + ROUTE_ICON[p] + '</svg></span>' +
+          '<span class="route-tag">' + tags[i] + '</span>' +
+          '<span class="route-name">' + (p === 0 ? 'Background' : SEC_NAMES[p]) + '</span>' +
+          '<span class="route-time">' + ROUTE_TIME[p] + '</span></li>';
+      }).join('') + '</ol></div>' +
+      '<button class="btn win-go" id="winGo">Proceed</button>' +
     '</div>';
     if (!calm) { w.style.left = r.left + 'px'; w.style.top = r.top + 'px'; w.style.width = r.width + 'px'; w.style.height = r.height + 'px'; w.classList.add('grow'); }
     document.body.appendChild(w);
