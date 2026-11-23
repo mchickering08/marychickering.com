@@ -423,14 +423,19 @@ body{font-family:var(--sans);background:
 .sections-bar span.set{animation:pop .4s cubic-bezier(.2,.7,.2,1)}
 .sections-bar .dash{display:inline-block;width:22px;height:2px;border-radius:2px;background:currentColor;opacity:.55;vertical-align:middle}
 .win{position:fixed;inset:0;z-index:50;display:grid;place-items:center;text-align:center;padding:24px}
-.win.grow{inset:auto;border-radius:0;transition:left .55s cubic-bezier(.7,0,.2,1),top .55s cubic-bezier(.7,0,.2,1),width .55s cubic-bezier(.7,0,.2,1),height .55s cubic-bezier(.7,0,.2,1)}
-.win-in{opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease}
-.win.open .win-in{opacity:1;transform:none}
+.win.grow{inset:auto;border-radius:0;transition:left 1.1s cubic-bezier(.65,0,.25,1),top 1.1s cubic-bezier(.65,0,.25,1),width 1.1s cubic-bezier(.65,0,.25,1),height 1.1s cubic-bezier(.65,0,.25,1)}
+.win-in{opacity:0;transition:opacity .3s ease}
+.win.open .win-in{opacity:1}
+.win-list{list-style:none;margin:6px 0 40px;padding:0;display:grid;gap:6px}
+.win-list li{display:flex;align-items:baseline;justify-content:center;gap:18px;opacity:0;transform:translateY(12px);transition:opacity .45s ease var(--d),transform .45s cubic-bezier(.2,.7,.2,1) var(--d)}
+.win.open .win-list li{opacity:1;transform:none}
+.win-n{font-size:18px;font-weight:600;opacity:.6;min-width:1ch}
+.win-list li:first-child .win-name{opacity:.7}
 .win.leave{opacity:0;transition:opacity .3s ease}
 .win-k{margin:0 0 6px;font-size:16px;font-weight:500;opacity:.8}
-.win-name{font-family:var(--serif);font-weight:500;font-size:clamp(64px,13vw,150px);line-height:1;margin:0;letter-spacing:-.01em}
-.win-rest{margin:14px 0 34px;font-size:18px;opacity:.85}
-.win-go{background:var(--accent);color:#fff;font-size:18px;padding:19px 40px;box-shadow:0 12px 30px rgba(74,20,32,.28)}
+.win-name{font-family:var(--serif);font-weight:500;font-size:clamp(40px,7.5vw,84px);line-height:1.08;letter-spacing:-.01em}
+.win-go{background:var(--accent);color:#fff;font-size:18px;padding:19px 40px;box-shadow:0 12px 30px rgba(74,20,32,.28);opacity:0;transition:opacity .4s ease .55s,background .2s}
+.win.open .win-go{opacity:1}
 .win-go:hover{background:#65202F}
 .test-band{background:var(--accent);color:#fff;text-align:center;font-size:14px;font-weight:500;letter-spacing:.02em;padding:7px 16px}
 .fade{animation:fade .35s cubic-bezier(.2,.7,.2,1) both}
@@ -952,22 +957,21 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”', F_IN 
   function showWinner(slot, calm) {
     var old = document.getElementById('win'); if (old) old.remove();
     var r = slot.getBoundingClientRect(), color = getComputedStyle(slot).backgroundColor, ink = getComputedStyle(slot).color;
-    var first = SEC_NAMES[drawOrder[0]], rest = drawOrder.slice(1).map(function (p) { return SEC_NAMES[p].toLowerCase(); });
     var w = document.createElement('div');
-    w.id = 'win'; w.className = 'win'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-labelledby', 'winName');
+    w.id = 'win'; w.className = 'win'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-labelledby', 'winK');
     w.style.background = color; w.style.color = ink;
+    var list = ['Background'].concat(drawOrder.map(function (p) { return SEC_NAMES[p]; }));
     w.innerHTML = '<div class="win-in">' +
-      '<p class="win-k">First up after Background</p>' +
-      '<h2 class="win-name" id="winName">' + first + '</h2>' +
-      '<p class="win-rest">Then ' + rest[0] + ', then ' + rest[1] + '.</p>' +
-      '<button class="btn win-go" id="winGo">Confirm &amp; start</button>' +
+      '<p class="win-k" id="winK">Your order</p>' +
+      '<ol class="win-list">' + list.map(function (n, i) { return '<li style="--d:' + (i * 0.12) + 's"><span class="win-n">' + (i + 1) + '</span><span class="win-name">' + n + '</span></li>'; }).join('') + '</ol>' +
+      '<button class="btn win-go" id="winGo">Proceed to Background</button>' +
     '</div>';
     if (!calm) { w.style.left = r.left + 'px'; w.style.top = r.top + 'px'; w.style.width = r.width + 'px'; w.style.height = r.height + 'px'; w.classList.add('grow'); }
     document.body.appendChild(w);
     if (!calm) {
       void w.offsetWidth;
       w.style.left = '0px'; w.style.top = '0px'; w.style.width = '100vw'; w.style.height = '100vh';
-      drawTimers.push(setTimeout(function () { w.classList.add('open'); var b = document.getElementById('winGo'); if (b) b.focus(); }, 520));
+      drawTimers.push(setTimeout(function () { w.classList.add('open'); var b = document.getElementById('winGo'); if (b) b.focus(); }, 1150));
     } else { w.classList.add('open'); document.getElementById('winGo').focus(); }
     document.getElementById('winGo').addEventListener('click', function () {
       w.classList.add('leave');
