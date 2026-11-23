@@ -438,21 +438,22 @@ body{font-family:var(--sans);background:
 .route-line,.route-done{position:absolute;left:12.5%;top:52px;height:3px;border-radius:3px}
 .route-line{right:12.5%;background:var(--line)}
 .route-done{width:0;background:var(--accent);transition:width .7s cubic-bezier(.2,.7,.2,1) .7s}
-.win.open .route-done{width:25%}
+.win.open .route-done{width:calc(12.5% - 6px)}
+.route-arrow{position:absolute;top:45.5px;left:calc(25% - 14px);width:0;height:0;border-left:14px solid var(--accent);border-top:8px solid transparent;border-bottom:8px solid transparent;opacity:0;transform:translateX(-10px);transition:opacity .3s ease 1.25s,transform .4s cubic-bezier(.2,.7,.2,1) 1.25s}
+.win.open .route-arrow{opacity:1;transform:none}
 .route-stops{list-style:none;margin:0;padding:0;position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .route-stops li{display:flex;flex-direction:column;align-items:center;gap:11px;text-align:center;opacity:0;transform:translateY(14px);transition:opacity .45s ease var(--d),transform .5s cubic-bezier(.2,.7,.2,1) var(--d)}
 .win.open .route-stops li{opacity:1;transform:none}
 .route-dot{width:106px;height:106px;border-radius:50%;box-sizing:border-box;background:var(--bg);border:2px solid var(--line);display:grid;place-items:center}
 .route-dot svg{width:58px;height:58px}
-.route-stops li.here .route-dot{background:var(--rose1);border:4px solid var(--accent)}
 .route-tag{font-size:12px;font-weight:600;color:var(--ink-2);padding:4px 10px;border-radius:999px}
-.route-stops li.here .route-tag{background:var(--accent);color:#fff}
 .route-name{font-family:var(--serif);font-size:30px;font-weight:500;line-height:1}
 .route-time{font-size:14px;color:var(--ink-2)}
 @media (max-width:640px){
   .route{gap:36px}
   .route-dot{width:68px;height:68px}.route-dot svg{width:38px;height:38px}
   .route-line,.route-done{top:34px}
+  .route-arrow{top:27.5px}
   .route-name{font-size:19px}.route-time{font-size:12px}.route-tag{font-size:10px;padding:3px 7px}
 }
 .win-list{list-style:none;margin:6px 0 40px;padding:0;display:grid;gap:6px}
@@ -1098,7 +1099,7 @@ var F_NONE = 'I don’t wear fragrance', F_ME = 'It smells like “me”';
     w.innerHTML = '<div class="win-in route">' +
       '<div class="route-head"><p class="win-k">About 10 minutes, four stops</p>' +
       '<h2 class="route-title" id="winK">Here’s your <em>route</em></h2></div>' +
-      '<div class="route-map"><span class="route-line"></span><span class="route-done"></span>' +
+      '<div class="route-map"><span class="route-line"></span><span class="route-done"></span><span class="route-arrow"></span>' +
       '<ol class="route-stops">' + stops.map(function (p, i) {
         return '<li style="--d:' + (0.15 + i * 0.14) + 's"' + (i === 0 ? ' class="here"' : '') + '>' +
           '<span class="route-dot"><svg viewBox="0 0 64 64" aria-hidden="true">' + ROUTE_ICON[p] + '</svg></span>' +
